@@ -1,0 +1,112 @@
+[
+ {
+  "file": "nuts2json/nutsrg_2_2024_3035_20M.json",
+  "url": "https://raw.githubusercontent.com/eurostat/Nuts2json/8186be451525164ea24b43560cb943fda7c5520c/pub/v2/2024/3035/20M/nutsrg_2.json",
+  "provider": "Eurostat GISCO via Nuts2json",
+  "description": "NUTS 2024 level-2 region polygons, EPSG:3035, 1:20M",
+  "used_in": "Step 1 regions; map geometry",
+  "licence": "© EuroGeographics for the administrative boundaries (GISCO terms of use)",
+  "retrieved": "2026-10-21",
+  "sha256": "b360d89dfb5f9927efd91347a7c7c2285342a5127005f8c0b1e19a59865c8c47",
+  "bytes": 294392
+ },
+ {
+  "file": "nuts2json/nutspt_2_2024_4326.json",
+  "url": "https://raw.githubusercontent.com/eurostat/Nuts2json/8186be451525164ea24b43560cb943fda7c5520c/pub/v2/2024/4326/nutspt_2.json",
+  "provider": "Eurostat GISCO via Nuts2json",
+  "description": "NUTS 2024 level-2 label points (WGS84) with region area (m²)",
+  "used_in": "Step 1 centroids and areas",
+  "licence": "© EuroGeographics for the administrative boundaries (GISCO terms of use)",
+  "retrieved": "2026-10-21",
+  "sha256": "be0480610ebaf823ecaf3365e434821548a9a2328d3932922509c0c19a5fbbf6",
+  "bytes": 47381
+ },
+ {
+  "file": "nuts2json/nutsbn_3_2024_3035_20M.json",
+  "url": "https://raw.githubusercontent.com/eurostat/Nuts2json/8186be451525164ea24b43560cb943fda7c5520c/pub/v2/2024/3035/20M/nutsbn_3.json",
+  "provider": "Eurostat GISCO via Nuts2json",
+  "description": "NUTS 2024 level-3 boundaries with coastal flag",
+  "used_in": "Step 4 coastline length and sea basin",
+  "licence": "© EuroGeographics for the administrative boundaries (GISCO terms of use)",
+  "retrieved": "2026-10-21",
+  "sha256": "a19538e4c05c58f2a01ca89432ffb99b21cb4a02af3516e6cc214cedb80f2f4a",
+  "bytes": 1147481
+ },
+ {
+  "file": "nuts2json/cntrg_2024_3035_20M.json",
+  "url": "https://raw.githubusercontent.com/eurostat/Nuts2json/8186be451525164ea24b43560cb943fda7c5520c/pub/v2/2024/3035/20M/cntrg.json",
+  "provider": "Eurostat GISCO via Nuts2json",
+  "description": "Country polygons, EPSG:3035, 1:20M",
+  "used_in": "Step 9 grey background countries on the map",
+  "licence": "© EuroGeographics for the administrative boundaries (GISCO terms of use)",
+  "retrieved": "2026-10-21",
+  "sha256": "0a17ee94d6648a1486ec0bdcc1aa963ff27e4b7f21663ae87ede150072e1ac74",
+  "bytes": 209073
+ },
+ {
+  "file": "powerplantmatching/powerplants.csv",
+  "url": "https://raw.githubusercontent.com/PyPSA/powerplantmatching/2889ad9d1754a7ee4368b9282d7af835bf572ca2/powerplants.csv",
+  "provider": "powerplantmatching (PyPSA)",
+  "description": "Matched European power plant database: fuel, technology, capacity, dates, coordinates",
+  "used_in": "Step 6 existing wind, solar and hydro by region",
+  "licence": "See provider repository for licence terms",
+  "retrieved": "2026-10-21",
+  "sha256": "ceccce02edd33813216a264fe6c8e3281ce2249435a259c1b1a1b729ce4f3d78",
+  "bytes": 39779419
+ },
+ {
+  "file": "pypsa_eur/ammonia_plants.csv",
+  "url": "https://raw.githubusercontent.com/PyPSA/pypsa-eur/0989251c65c81c7515100fdae7056240a3a9086d/data/ammonia_plants.csv",
+  "provider": "PyPSA-Eur",
+  "description": "European ammonia plants with capacities and coordinates (sources cited per row)",
+  "used_in": "Step 7 ammonia sites",
+  "licence": "See provider repository for licence terms",
+  "retrieved": "2026-10-21",
+  "sha256": "1c60c531339cca5ce92b0df220392943d6da1e2f6848536ff5db835d53cba5d5",
+  "bytes": 7952
+ },
+ {
+  "file": "pypsa_eur/entsoegridkit_buses.csv",
+  "url": "https://raw.githubusercontent.com/PyPSA/pypsa-eur/0989251c65c81c7515100fdae7056240a3a9086d/data/entsoegridkit/buses.csv",
+  "provider": "PyPSA-Eur (GridKit extract of the ENTSO-E interactive map)",
+  "description": "Transmission substations with voltage and coordinates",
+  "used_in": "Step 5 substations per region",
+  "licence": "See provider repository for licence terms",
+  "retrieved": "2026-10-21",
+  "sha256": "c52bab913d17585908798e28b02924e17cf05ed03ffb699d3cd24dcf025ecfb0",
+  "bytes": 1466411
+ },
+ {
+  "file": "pypsa_eur/entsoegridkit_lines.csv",
+  "url": "https://raw.githubusercontent.com/PyPSA/pypsa-eur/0989251c65c81c7515100fdae7056240a3a9086d/data/entsoegridkit/lines.csv",
+  "provider": "PyPSA-Eur (GridKit extract of the ENTSO-E interactive map)",
+  "description": "Transmission lines with voltage and geometry",
+  "used_in": "Step 5 lines drawn on the map",
+  "licence": "See provider repository for licence terms",
+  "retrieved": "2026-10-21",
+  "sha256": "ad46bd0093a0fdffdd11b721f510929d2f6f98c1b48a19ccb0ac9162245eda9a",
+  "bytes": 3952327
+ },
+ {
+  "file": "troendle_2019/energy-intensive-industries.xlsx",
+  "url": "https://raw.githubusercontent.com/timtroendle/possibility-for-electricity-autarky/a3d3c99ef90bbccd7232e2170317a259a77661d3/data/electricity-intensive-industry/energy-intensive-industries.xlsx",
+  "provider": "Tröndle et al. (2019), 'Home-made or imported: on the possibility for renewable electricity autarky on all scales in Europe'",
+  "description": "EU ETS installations (2013-14 verified emissions) for cement, steel, aluminium; chlor-alkali sites (Euro Chlor), with coordinates",
+  "used_in": "Step 7 cement kilns and chlor-alkali clusters",
+  "licence": "See provider repository for licence terms",
+  "retrieved": "2026-10-21",
+  "sha256": "1b03271493e3d80ae70ef68f16c8b308595672ecb04eada48f6c5e0b8316c6ba",
+  "bytes": 167521
+ },
+ {
+  "file": "geonames/cities15000_eu27.csv",
+  "url": "geonamescache 3.0.2 (Python package) -> GeoNames cities15000",
+  "provider": "GeoNames, packaged by geonamescache 3.0.2",
+  "description": "Towns above 15,000 inhabitants in EU27 countries: name, coordinates, population",
+  "used_in": "Step 2 population and urban share by region",
+  "licence": "GeoNames data, CC BY 4.0",
+  "retrieved": "2026-10-21",
+  "sha256": "9ff89bc69c4d4e0d30b67d47d891124a34a85ea74f50a4191d5e5f2cd31e7f8f",
+  "bytes": 243185
+ }
+]

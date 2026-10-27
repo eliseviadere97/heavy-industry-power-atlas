@@ -1,0 +1,8 @@
+# Tested with Python 3.12 and 3.13. Minimum versions; the GitHub workflow installs the latest that satisfy them.
+pandas>=2.1
+numpy>=1.26
+shapely>=2.0
+pyproj>=3.6
+openpyxl>=3.1
+scipy>=1.11
+geonamescache==3.0.2   # only used by src/data_prep/fetch_raw.py to regenerate the GeoNames subset

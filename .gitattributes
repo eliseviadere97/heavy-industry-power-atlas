@@ -1,0 +1,5 @@
+* text=auto eol=lf
+# raw downloads must stay byte-identical to their recorded SHA-256
+data/raw/** -text
+*.xlsx binary
+*.png binary

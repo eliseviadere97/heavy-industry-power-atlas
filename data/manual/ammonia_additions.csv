@@ -1,0 +1,4 @@
+name,country_code,lat,lon,ammonia_capacity_kt,reason,source,verification
+Grupa Azoty Police,PL,53.57,14.57,400,site missing from PyPSA-Eur list,"Author compilation from operator public information (company websites, annual reports, sector association lists), October 2026","not individually verified; capacity rounded, coordinates at town level"
+Grupa Azoty Kędzierzyn,PL,50.35,18.2,500,site missing from PyPSA-Eur list,"Author compilation from operator public information (company websites, annual reports, sector association lists), October 2026","not individually verified; capacity rounded, coordinates at town level"
+Grupa Azoty Tarnów,PL,50.01,20.95,300,site missing from PyPSA-Eur list,"Author compilation from operator public information (company websites, annual reports, sector association lists), October 2026","not individually verified; capacity rounded, coordinates at town level"

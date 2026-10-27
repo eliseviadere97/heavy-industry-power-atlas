@@ -1,0 +1,12 @@
+{
+  "name": "heavy-industry-power-atlas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Model and map: where clean power would put Europe's heavy industry",
+  "scripts": {
+    "model": "node src/run/run_scenarios.js"
+  },
+  "dependencies": {
+    "javascript-lp-solver": "0.4.24"
+  }
+}

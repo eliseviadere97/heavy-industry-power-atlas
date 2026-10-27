@@ -1,0 +1,259 @@
+{
+ "_readme": "Single source of truth for every default. 'data_prep' is read by src/data_prep (Python); 'model' is read by src/model (JavaScript, also embedded in the web page). Units are given in each key name or in docs/ASSUMPTIONS.md, which references these keys by ID.",
+ "data_prep": {
+  "eu27": [
+   "AT",
+   "BE",
+   "BG",
+   "CY",
+   "CZ",
+   "DE",
+   "DK",
+   "EE",
+   "EL",
+   "ES",
+   "FI",
+   "FR",
+   "HR",
+   "HU",
+   "IE",
+   "IT",
+   "LT",
+   "LU",
+   "LV",
+   "MT",
+   "NL",
+   "PL",
+   "PT",
+   "RO",
+   "SE",
+   "SI",
+   "SK"
+  ],
+  "excluded_nuts_prefixes": [
+   "FRY",
+   "ES70",
+   "PT20",
+   "PT30",
+   "ES63",
+   "ES64"
+  ],
+  "projected_crs": 3035,
+  "population": {
+   "residual_min_share": 0.15
+  },
+  "weather_idw": {
+   "neighbours": 5,
+   "power": 2,
+   "min_distance_km": 15
+  },
+  "snap_km": {
+   "substation": 5,
+   "onshore_plant": 15,
+   "offshore_plant": 150,
+   "industrial_site": 25
+  },
+  "grid": {
+   "min_voltage_kv": 220,
+   "high_voltage_kv": 330,
+   "line_simplify_m": 2500
+  },
+  "existing_renewables": {
+   "commissioned_by": 2025,
+   "still_operating_in": 2025
+  },
+  "cement": {
+   "t_co2_per_t_clinker": 0.83
+  },
+  "geometry_simplify_m": {
+   "regions": 1500,
+   "countries": 3000
+  }
+ },
+ "model": {
+  "industries": [
+   {
+    "k": "steel",
+    "name": "Steel",
+    "unit": "Mt steel",
+    "out": 70,
+    "note": "EU27 primary (blast-furnace) output, ~55% of 126 Mt crude steel in 2023",
+    "routes": [
+     {
+      "name": "Hydrogen DRI + electric arc furnace",
+      "mwh_per_t": 3.5,
+      "flex_share": 0.75
+     },
+     {
+      "name": "Scrap-based electric arc furnace",
+      "mwh_per_t": 0.65,
+      "flex_share": 0
+     }
+    ]
+   },
+   {
+    "k": "cement",
+    "name": "Cement",
+    "unit": "Mt clinker",
+    "out": 118,
+    "note": "≈160 Mt cement at a 0.74 clinker ratio",
+    "routes": [
+     {
+      "name": "Electrified kiln + carbon capture",
+      "mwh_per_t": 1.3,
+      "flex_share": 0
+     },
+     {
+      "name": "Alternative fuels + carbon capture (capture power only)",
+      "mwh_per_t": 0.4,
+      "flex_share": 0
+     }
+    ]
+   },
+   {
+    "k": "ammonia",
+    "name": "Fertiliser (ammonia)",
+    "unit": "Mt NH₃",
+    "out": 13,
+    "note": "EU27 output after the 2022 gas shock; ~17 Mt capacity",
+    "routes": [
+     {
+      "name": "Electrolytic hydrogen + Haber-Bosch",
+      "mwh_per_t": 10.5,
+      "flex_share": 0.9
+     }
+    ]
+   },
+   {
+    "k": "chemicals",
+    "name": "Chemicals (olefins)",
+    "unit": "Mt HVC",
+    "out": 30,
+    "note": "High-value chemicals from ~21 Mt/yr of ethylene capacity",
+    "routes": [
+     {
+      "name": "Electric crackers (process heat only)",
+      "mwh_per_t": 2.2,
+      "flex_share": 0
+     },
+     {
+      "name": "Electric crackers + e-methanol feedstock",
+      "mwh_per_t": 25,
+      "flex_share": 0.9
+     }
+    ]
+   },
+   {
+    "k": "aluminium",
+    "name": "Aluminium",
+    "unit": "Mt primary Al",
+    "out": 1.0,
+    "note": "2023 output; ~2.4 Mt capacity incl. idle smelters, so sites run part-loaded",
+    "routes": [
+     {
+      "name": "Smelting with inert anodes + electrified alumina",
+      "mwh_per_t": 16.5,
+      "flex_share": 0
+     }
+    ]
+   }
+  ],
+  "slices": {
+   "solar_amp_base": 0.26,
+   "solar_amp_per_deg": 0.0175,
+   "solar_amp_min": 0.2,
+   "solar_amp_max": 0.8,
+   "wind_amp_base": 0.15,
+   "wind_amp_per_deg": 0.004,
+   "wind_amp_min": 0.1,
+   "wind_amp_max": 0.3,
+   "ref_lat": 37,
+   "onshore_calm_contrast": 0.75,
+   "offshore_calm_contrast": 0.6,
+   "max_cf": 0.95
+  },
+  "mix": {
+   "wacc": 0.06,
+   "pvCapex": 500,
+   "pvOm": 0.02,
+   "pvLife": 25,
+   "wCapex": 1400,
+   "wOm": 0.025,
+   "wLife": 25,
+   "offOm": 0.03,
+   "offLife": 25,
+   "offshore": true,
+   "batOn": true,
+   "batKwh": 200,
+   "batOm": 0.02,
+   "batLife": 15,
+   "batEta": 0.88,
+   "batHours": 4,
+   "h2On": true,
+   "elCapex": 1800,
+   "elOm": 0.03,
+   "elLife": 20,
+   "cavSeas": 35,
+   "cavShort": 10,
+   "tankSeas": 250,
+   "tankShort": 30,
+   "h2StoreEff": 0.97,
+   "h2PerMwhEl": 0.7,
+   "smrOn": true,
+   "smrBans": true,
+   "smrCapex": 8000,
+   "smrWacc": 0.07,
+   "smrFom": 110,
+   "smrVar": 12,
+   "smrLife": 60,
+   "smrAvail": 0.92,
+   "ccsOn": true,
+   "ccsCapex": 2000,
+   "ccsFom": 50,
+   "ccsEff": 0.5,
+   "ccsCapture": 0.9,
+   "ccsTs": 40,
+   "ccsLife": 30,
+   "ccsAvail": 0.9,
+   "ccsVom": 4,
+   "gasOn": true,
+   "gasCapex": 900,
+   "gasFom": 25,
+   "gasEff": 0.58,
+   "gasLife": 30,
+   "gasVom": 3,
+   "fossilCap": 0.1,
+   "gasPrice": 40,
+   "co2": 100,
+   "gasEf": 0.202,
+   "impOn": false,
+   "impPrice": 130
+  },
+  "plan": {
+   "pvLand": 0.015,
+   "pvDens": 50,
+   "wLand": 0.02,
+   "wDens": 20,
+   "offDens": 10,
+   "reserve": 7,
+   "relocPrem": 0,
+   "unserved": 300,
+   "urbanDensity": 3000,
+   "cGrid": true,
+   "cCong": true,
+   "h380": 500,
+   "h220": 150,
+   "bigMW": 300,
+   "cRE": true,
+   "reK": 1.5,
+   "cEco": true,
+   "ecoMode": "same",
+   "alpha": 0.5
+  },
+  "existing_re_cf": {
+   "offshore_if_no_basin": 0.4,
+   "hydro_reservoir": 0.3,
+   "hydro_run_of_river": 0.45
+  }
+ }
+}
