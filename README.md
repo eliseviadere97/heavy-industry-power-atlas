@@ -1,5 +1,7 @@
 # Heavy Industry Power Atlas
 
+**[Open the interactive map](https://eliseviadere97.github.io/heavy-industry-power-atlas/)**
+
 **Where clean power would put Europe's heavy industry.** Decarbonising the steel, cement, ammonia, chemicals and aluminium plants of the EU27, Norway, Switzerland and the UK needs about 654 TWh of clean electricity a year. This repository holds the data, code and interactive map behind one question: if a social planner could move whole plants, each powered by its own least-cost clean mix, where would it put them, and what do today's grid and industrial clusters cost us in forgone savings?
 
 The interactive map compares three scenarios. The table shows all five sectors together at the default settings (the page itself opens on steel only; switch the other sectors on with the chips above the map):
