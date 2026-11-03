@@ -1,6 +1,0 @@
-basin,capacity_factor,overnight_capex_eur_per_kw,source,status
-North Sea,0.48,2600,"Author estimate from recent project capacity factors and cost reports; floating-dominated basins (Atlantic, Mediterranean, Black Sea) priced higher",judgement
-Baltic,0.42,2600,"Author estimate from recent project capacity factors and cost reports; floating-dominated basins (Atlantic, Mediterranean, Black Sea) priced higher",judgement
-Atlantic,0.45,3400,"Author estimate from recent project capacity factors and cost reports; floating-dominated basins (Atlantic, Mediterranean, Black Sea) priced higher",judgement
-Mediterranean,0.34,3600,"Author estimate from recent project capacity factors and cost reports; floating-dominated basins (Atlantic, Mediterranean, Black Sea) priced higher",judgement
-Black Sea,0.36,3400,"Author estimate from recent project capacity factors and cost reports; floating-dominated basins (Atlantic, Mediterranean, Black Sea) priced higher",judgement

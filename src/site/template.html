@@ -4,307 +4,323 @@
     __CONFIG__    config/model_config.json  (model section is read by the scripts below)
     __MIX__       src/model/mix.js
     __PLAN__      src/model/plan.js
-    __REPO_LINE__ link to the GitHub repository (from $GITHUB_REPOSITORY in Actions)
+    __REPO_BUTTON__ button linking to the GitHub repository (from $GITHUB_REPOSITORY in Actions, else the git remote)
   The file is written as a page fragment (head elements first, then the body), as Claude artifacts expect;
   build_site.py wraps it in a full HTML document for GitHub Pages.
 -->
 <title>Heavy Industry Power Atlas</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap">
 <style>
-/* Layout: an analyst's workbench. Controls rail on the left; scenario scoreboard over a full-bleed map, relocation ledger below. */
+/* Layout: a policy-report page. Serif headline and figures, a quiet sans for controls, white panels on cool grey, navy accent;
+   scenario results sit directly above the map, the data table is folded away below. */
 :root{
-  --paper:#EDF0EF; --panel:#FFFFFF; --ink:#14212B; --muted:#5B6B73; --rule:#D3DADA; --sea:#E2E8EA;
-  --land:#DCE1DF; --accent:#0B6E7F; --heat:#D4572A; --warn:#B7791F;
-  --q0:#E9F0EF; --q1:#A9D3D1; --q2:#4FA3A8; --q3:#16707F; --q4:#0C3B52;
-  --d-neg:#0B6E7F; --d-mid:#EEF1F0; --d-pos:#D4572A;
-  --c-steel:#4E6E9E; --c-cement:#8A7765; --c-ammonia:#3F8F4E; --c-chemicals:#8E5BA6; --c-aluminium:#C98A1C; --c-chlor:#B08BC0;
-  --t-pv:#EDB230; --t-on:#5AA9E6; --t-off:#23577E; --t-smr:#C2417A; --t-ccs:#6B5B4E; --t-gas:#A0A6AA; --t-imp:#CDD3D6; --t-bat:#A77BCA; --t-h2:#62C3B8;
-  --grid:#5B6B73;
-  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-  --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-  --f-data:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --paper:#F3F4F6; --panel:#FFFFFF; --ink:#1B2230; --muted:#5D6572; --rule:#D9DCE1; --sea:#E6EAEE; --land:#D9DDE2;
+  --accent:#1E3A64; --warn:#9A6200;
+  --q0:#E8EFEE; --q1:#A9D3D1; --q2:#4FA3A8; --q3:#16707F; --q4:#0C3B52;
+  --d-neg:#16707F; --d-mid:#ECEEF0; --d-pos:#C9532A;
+  --t-pv:#eda100; --t-on:#2a78d6; --t-smr:#e87ba4; --t-ccs:#008300;
+  --s-steel:#2a78d6; --s-cement:#eda100; --s-ammonia:#008300; --s-chemicals:#e34948; --s-aluminium:#1baf7a;
+  --dot:#1B2230; --grid:#5D6572;
+  --f-display:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-body:"Source Serif 4", Georgia, "Times New Roman", serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#0F171C; --panel:#162128; --ink:#E5ECEC; --muted:#93A4AA; --rule:#28363E; --sea:#0C1418;
-  --land:#1E2A30; --accent:#4CC3CC; --heat:#F07A4B; --warn:#E3A944;
+  --paper:#111418; --panel:#1A1E24; --ink:#E7E9EC; --muted:#9BA2AC; --rule:#2B313A; --sea:#0D1013; --land:#232830;
+  --accent:#9DBCE6; --warn:#E3A944;
   --q0:#1D2B31; --q1:#1E5359; --q2:#2B8B91; --q3:#5CC4C2; --q4:#C9F2EA;
-  --d-neg:#4CC3CC; --d-mid:#22313A; --d-pos:#F07A4B;
-  --c-steel:#7FA2D6; --c-cement:#C2AE9A; --c-ammonia:#6CC17B; --c-chemicals:#C493DB; --c-aluminium:#E8B04E; --c-chlor:#B79AC6;
-  --t-pv:#F5C451; --t-on:#7DBDF0; --t-off:#4F86B8; --t-smr:#E06A9C; --t-ccs:#A08C7B; --t-gas:#7D868B; --t-imp:#4B575D; --t-bat:#BC97DB; --t-h2:#7FD6CB;
-  --grid:#93A4AA; color-scheme:dark}}
+  --d-neg:#4CC3CC; --d-mid:#262C33; --d-pos:#F07A4B;
+  --t-pv:#c98500; --t-on:#3987e5; --t-smr:#d55181; --t-ccs:#008300;
+  --s-steel:#3987e5; --s-cement:#c98500; --s-ammonia:#008300; --s-chemicals:#e66767; --s-aluminium:#199e70;
+  --dot:#E7E9EC; --grid:#9BA2AC; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --paper:#0F171C; --panel:#162128; --ink:#E5ECEC; --muted:#93A4AA; --rule:#28363E; --sea:#0C1418;
-  --land:#1E2A30; --accent:#4CC3CC; --heat:#F07A4B; --warn:#E3A944;
+  --paper:#111418; --panel:#1A1E24; --ink:#E7E9EC; --muted:#9BA2AC; --rule:#2B313A; --sea:#0D1013; --land:#232830;
+  --accent:#9DBCE6; --warn:#E3A944;
   --q0:#1D2B31; --q1:#1E5359; --q2:#2B8B91; --q3:#5CC4C2; --q4:#C9F2EA;
-  --d-neg:#4CC3CC; --d-mid:#22313A; --d-pos:#F07A4B;
-  --c-steel:#7FA2D6; --c-cement:#C2AE9A; --c-ammonia:#6CC17B; --c-chemicals:#C493DB; --c-aluminium:#E8B04E; --c-chlor:#B79AC6;
-  --t-pv:#F5C451; --t-on:#7DBDF0; --t-off:#4F86B8; --t-smr:#E06A9C; --t-ccs:#A08C7B; --t-gas:#7D868B; --t-imp:#4B575D; --t-bat:#BC97DB; --t-h2:#7FD6CB;
-  --grid:#93A4AA; color-scheme:dark}
+  --d-neg:#4CC3CC; --d-mid:#262C33; --d-pos:#F07A4B;
+  --t-pv:#c98500; --t-on:#3987e5; --t-smr:#d55181; --t-ccs:#008300;
+  --s-steel:#3987e5; --s-cement:#c98500; --s-ammonia:#008300; --s-chemicals:#e66767; --s-aluminium:#199e70;
+  --dot:#E7E9EC; --grid:#9BA2AC; color-scheme:dark}
 [hidden]{display:none!important}
-html,body{height:100%}
-body{background:var(--paper);color:var(--ink);font:14px/1.45 var(--f-body)}
 *{box-sizing:border-box}
-.app{display:grid;grid-template-columns:minmax(340px,410px) 1fr;height:100%}
-aside{background:var(--panel);border-right:1px solid var(--rule);overflow-y:auto;padding-block:20px 32px;
-  padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:18px;display:flex;flex-direction:column;gap:24px}
-main{display:flex;flex-direction:column;min-width:0;min-height:0;overflow-y:auto}
-h1{font:700 26px/1.08 var(--f-display);letter-spacing:-.01em;margin:0;text-wrap:balance}
-.kicker{font:500 11px/1 var(--f-data);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
-.thesis{margin:10px 0 0;max-width:62ch}
-.thesis b{font-weight:600}
-h2{font:700 15px/1.2 var(--f-display);margin:0 0 10px;display:flex;align-items:baseline;justify-content:space-between;gap:8px;text-wrap:balance}
-h2 small{font:500 11px var(--f-data);color:var(--muted);letter-spacing:.04em;white-space:nowrap}
-.sec{display:flex;flex-direction:column;gap:8px}
-.lead{margin:0 0 4px;font-size:12.5px;color:var(--muted)}
-.ind{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:center;padding:10px 0;border-top:1px solid var(--rule)}
-.ind:first-of-type{border-top:0}
-.sw{width:10px;height:10px;border-radius:2px;display:inline-block;flex:none}
-.ind label.nm{font-weight:600;display:flex;align-items:center;gap:8px;cursor:pointer}
-.ind .twh{font:500 13px var(--f-data);text-align:right;font-variant-numeric:tabular-nums}
-.ind .row2{grid-column:2/4;display:grid;grid-template-columns:76px 1fr 64px;gap:6px;align-items:center}
-.ind .note{grid-column:2/4;font-size:11.5px;color:var(--muted)}
-.ind.off .row2,.ind.off .twh{opacity:.4}
-input[type=number],select{font:13px var(--f-data);color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:4px 6px;min-width:0;width:100%}
-select{font-family:var(--f-body);font-size:12.5px}
-input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;margin:0;flex:none}
-input[type=range]{accent-color:var(--accent);width:100%}
+body{background:var(--paper);color:var(--ink);font:14px/1.5 var(--f-body)}
+.app{max-width:1480px;margin:0 auto;display:flex;flex-direction:column;gap:14px;
+  padding-block:22px 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+a:hover{text-decoration-thickness:2px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.unit{font:11px var(--f-data);color:var(--muted)}
-.total{display:flex;justify-content:space-between;align-items:baseline;padding-top:10px;border-top:2px solid var(--ink)}
-.total span:first-child{font-weight:600}
-.total .big{font:700 22px var(--f-display);font-variant-numeric:tabular-nums}
-.tech{display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:center;padding:7px 0;border-top:1px solid var(--rule)}
-.tech:first-of-type{border-top:0}
-.tech label{display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer}
-.tech .cost{font:12px var(--f-data);color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.tech .d{grid-column:2/4;font-size:11.5px;color:var(--muted)}
-.tech .subopt{grid-column:2/4;display:flex;gap:8px;align-items:center;font-size:12px}
-.tech.off .cost,.tech.off .d,.tech.off .subopt{opacity:.45}
-.prices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
-.prices .param{grid-template-columns:1fr auto}
-.cons{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border:1px solid var(--rule);border-radius:6px}
-.cons.off .param,.cons.off input[type=range],.cons.off .sub{opacity:.4}
-.cons > label{font-weight:600;display:flex;gap:8px;align-items:center;cursor:pointer}
-.cons p{margin:0;font-size:12px;color:var(--muted)}
-.param{display:grid;grid-template-columns:1fr 86px;gap:8px;align-items:center;font-size:12.5px}
-.param output{font:12px var(--f-data);text-align:right;font-variant-numeric:tabular-nums}
-.sub{display:flex;gap:8px;align-items:center;font-size:12.5px;cursor:pointer}
-details{border-top:1px solid var(--rule);padding-top:12px}
-summary{cursor:pointer;font:700 15px var(--f-display)}
-details .grid{display:grid;grid-template-columns:1fr 90px;gap:6px 10px;align-items:center;margin-top:10px;font-size:12.5px}
-.src{font-size:11.5px;color:var(--muted);line-height:1.5}
-.src a{color:var(--accent)}
-.src p{margin:0 0 8px}
-/* scoreboard */
-.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding-block:14px 8px;padding-left:16px;padding-right:max(16px,env(safe-area-inset-right,0px))}
-.card{all:unset;box-sizing:border-box;cursor:pointer;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;display:grid;gap:5px;min-width:0;align-content:start}
-.card[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;margin:0;flex:none}
+input[type=range]{accent-color:var(--accent);width:100%;margin:0}
+select,input[type=number],input[type=search]{font:13px var(--f-body);color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:3px;padding:5px 7px;min-width:0}
+input[type=number]{width:74px;text-align:right;font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit}
+
+/* header */
+.top{display:block;border-bottom:1px solid var(--rule)}
+.brand{display:flex;flex-direction:column;gap:10px;min-width:0;padding-bottom:16px}
+h1{font:700 34px/1.1 var(--f-display);letter-spacing:-.01em;margin:0;text-wrap:balance}
+.intro{display:flex;flex-direction:column;gap:10px;font-size:16px;line-height:1.6}
+.intro p{margin:0;text-wrap:pretty}
+.intro b{font-weight:600}
+.byline{margin:0;font-size:13.5px;color:var(--muted)}
+.ghlink{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;text-decoration:none;color:var(--ink);background:var(--panel);border:1px solid var(--ink);border-radius:3px;padding:6px 12px}
+.ghlink:hover{background:var(--ink);color:var(--panel)}
+.ghlink svg{width:16px;height:16px;fill:currentColor;flex:none}
+.sub{font-size:13px;color:var(--muted);margin:0;font-variant-numeric:tabular-nums}
+
+/* scenario results */
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.card{all:unset;box-sizing:border-box;cursor:pointer;background:var(--panel);border:1px solid var(--rule);border-radius:3px;padding:12px 16px;display:grid;gap:4px;min-width:0;align-content:start}
+.card:hover{border-color:var(--muted)}
+.card[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.card .lab{font:500 10.5px/1.2 var(--f-data);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap}
-.card[aria-pressed="true"] .lab{color:var(--accent)}
-.card .v{font:700 26px/1 var(--f-display);font-variant-numeric:tabular-nums}
-.card .v small{font:500 12px var(--f-data);color:var(--muted);margin-left:3px}
-.card .m{font:12px/1.4 var(--f-data);color:var(--muted);font-variant-numeric:tabular-nums}
-.card .m b{color:var(--ink);font-weight:500}
-.card .m .w{color:var(--warn)}
-.mixbar{display:flex;height:9px;border-radius:2px;overflow:hidden;background:var(--q0)}
-.mixbar i{display:block;height:100%}
-.toolbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding-block:2px 8px;padding-left:16px;padding-right:max(16px,env(safe-area-inset-right,0px))}
-.toolbar label{display:flex;gap:6px;align-items:center;font-size:12.5px;cursor:pointer}
-.toolbar select{width:auto;max-width:100%}
-.status{font:11px var(--f-data);color:var(--accent);margin-left:auto;min-height:1em}
-.mapwrap{position:relative;flex:none;height:clamp(460px,76vh,1000px);background:var(--sea);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.card .lab{font:600 13.5px var(--f-body);color:var(--muted)}
+.card[aria-pressed="true"] .lab{color:var(--ink)}
+.card .v{font:600 32px/1.05 var(--f-display);font-variant-numeric:tabular-nums lining-nums}
+.card .v small{font:500 13px var(--f-body);color:var(--muted);margin-left:3px}
+.card .m{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.card .m b{color:var(--ink);font-weight:600}
+.card .w{color:var(--warn)}
+
+/* control bar */
+.controls{display:flex;flex-direction:column;gap:12px;background:var(--panel);border:1px solid var(--rule);border-radius:3px;padding:12px 16px}
+.ctlrow{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px}
+.ctlrow.prices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 32px;padding-top:12px;border-top:1px solid var(--rule)}
+.ctlrow.prices .ctl.slider{width:auto}
+.ctl .row{flex-wrap:wrap}
+.sym.line{width:22px}
+.sym.line path{fill:none;stroke:var(--grid);stroke-width:1.4}
+.ctl{display:flex;flex-direction:column;gap:5px;min-width:0;font-size:12.5px;font-weight:600;color:var(--muted)}
+.ctl .row{display:flex;justify-content:space-between;gap:10px}
+.ctl output{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.ctl.slider{width:min(180px,100%)}
+.ctl.chk{flex-direction:row;align-items:center;gap:7px;color:var(--ink);font-size:13px;font-weight:400;cursor:pointer;padding-bottom:5px}
+.ctl select{font-weight:400}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid var(--rule);border-radius:3px;font-size:13px;font-weight:400;color:var(--muted);background:var(--paper)}
+.chip:hover{border-color:var(--muted)}
+.chip[aria-pressed="true"]{color:var(--ink);border-color:var(--ink);background:var(--panel);font-weight:500}
+.chip:not([aria-pressed="true"]) .sym{opacity:.35}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.status{margin-left:auto;font-size:12.5px;color:var(--accent);min-height:1em;padding-bottom:5px}
+
+/* folded panels */
+details.fold{background:var(--panel);border:1px solid var(--rule);border-radius:3px}
+details.fold > summary{list-style:none;cursor:pointer;padding:10px 16px;display:flex;align-items:center;gap:9px;font:600 14px var(--f-body)}
+details.fold > summary::-webkit-details-marker{display:none}
+details.fold > summary::before{content:"";width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s}
+details.fold[open] > summary::before{transform:rotate(45deg)}
+details.fold > summary small{font-size:13px;color:var(--muted);font-weight:400}
+.foldbody{padding:2px 16px 16px;border-top:1px solid var(--rule)}
+
+/* settings */
+.setgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px 32px;padding-top:12px}
+.setgrid h3{font:600 13px var(--f-body);color:var(--ink);margin:0 0 6px}
+.opt{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;cursor:pointer}
+.sect{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:8px;padding:4px 0;font-size:13px}
+.srcbtn{cursor:pointer;font-size:12px;line-height:1;padding:4px 8px;border:1px solid var(--rule);border-radius:3px;background:var(--panel);color:var(--accent);white-space:nowrap}
+.srcbtn:hover,.srcbtn[aria-expanded="true"]{border-color:var(--accent)}
+.srcpanel{grid-column:1/-1;display:flex;flex-direction:column;gap:5px;font-size:12.5px;line-height:1.45;background:var(--paper);border:1px solid var(--rule);border-radius:3px;padding:8px 10px;margin:2px 0 4px}
+.srcpanel p{margin:0}
+.card .go{font-size:12.5px;color:var(--accent);margin-top:2px}
+.card[aria-pressed="true"] .go{color:var(--muted)}
+.sect .twh{font-size:12.5px;color:var(--muted);min-width:64px;text-align:right;font-variant-numeric:tabular-nums}
+.sect.off label,.sect.off .twh,.sect.off input[type=number]{opacity:.45}
+.unitnote{font-weight:400;color:var(--muted)}
+
+/* map */
+.mapzone{position:relative}
+.mapwrap{position:relative;height:clamp(440px,72vh,920px);background:var(--sea);border:1px solid var(--rule);border-radius:3px;overflow:hidden}
 .mapwrap svg.map{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 .rg{stroke:var(--panel);stroke-width:.35;vector-effect:non-scaling-stroke;cursor:pointer}
 .rg:hover,.rg.sel{stroke:var(--ink);stroke-width:1.4}
-.bg{fill:var(--land);opacity:.4;stroke:none}
+.bg{fill:var(--land);opacity:.45;stroke:none}
 .ln{fill:none;stroke:var(--grid);vector-effect:non-scaling-stroke;pointer-events:none}
-.pl{stroke:var(--panel);stroke-width:.8;vector-effect:non-scaling-stroke;pointer-events:none;fill-opacity:.92}
-.ring{fill:none;stroke-width:1.2;vector-effect:non-scaling-stroke;pointer-events:none;opacity:.9}
-.arc{fill:none;stroke-width:1.3;vector-effect:non-scaling-stroke;pointer-events:none;opacity:.6}
-.mapzone{position:relative}
-.legend{position:absolute;left:12px;top:12px;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:8px 10px;font:11px var(--f-data);color:var(--muted);max-width:calc(100% - 24px)}
-.legend .t{font:600 12px var(--f-body);color:var(--ink);margin-bottom:6px;max-width:240px}
+.pl{stroke:var(--panel);stroke-width:1;vector-effect:non-scaling-stroke;pointer-events:none;fill-opacity:.9}
+.sym{width:11px;height:11px;flex:none;vertical-align:-1px;overflow:visible}
+.sym circle{stroke:var(--panel);stroke-width:.8}
+.sym.arrow{width:22px}
+.sym.arrow circle{fill:var(--panel);stroke:var(--ink);stroke-width:1.2}
+.sym.arrow .l{fill:none;stroke:var(--ink);stroke-width:1.4}
+.sym.arrow .h{fill:var(--ink);stroke:none}
+.mv{pointer-events:none}
+.mvl{fill:none;stroke:currentColor;stroke-width:1.3;stroke-opacity:.75;vector-effect:non-scaling-stroke}
+.mvh{fill:currentColor;stroke:var(--panel);stroke-width:.6;vector-effect:non-scaling-stroke}
+.mvo{fill:var(--panel);stroke:currentColor;stroke-width:1.3;vector-effect:non-scaling-stroke}
+.legend{position:absolute;left:12px;top:12px;background:var(--panel);border:1px solid var(--rule);border-radius:3px;padding:9px 11px;font-size:12px;color:var(--muted);max-width:calc(100% - 64px)}
+.legend .t{font-weight:600;font-size:12.5px;color:var(--ink);margin-bottom:6px;max-width:250px}
 .legend svg{width:220px;height:30px;display:block;max-width:100%}
-.legend svg text{fill:var(--muted);font:10px var(--f-data)}
-.keys{display:flex;flex-wrap:wrap;gap:3px 10px;margin-top:6px;max-width:240px}
-.keys span{display:flex;align-items:center;gap:4px}
-.keys i{width:8px;height:8px;border-radius:50%;display:inline-block}
-.keys i.sq{border-radius:2px}
-.zoom{position:absolute;right:max(12px,env(safe-area-inset-right,0px));top:12px;display:flex;flex-direction:column;gap:4px}
-.zoom button{all:unset;cursor:pointer;width:30px;height:30px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--rule);border-radius:5px;font:600 16px var(--f-body);color:var(--ink)}
+.legend svg text{fill:var(--muted);font:10.5px var(--f-body);font-variant-numeric:tabular-nums}
+.keys{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:6px;max-width:260px}
+.keys span{display:flex;align-items:center;gap:5px;color:var(--ink)}
+.keys i{width:9px;height:9px;border-radius:2px;display:inline-block}
+.keys i.dot{border-radius:50%;background:var(--dot)}
+.zoom{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:4px}
+.zoom button{all:unset;cursor:pointer;width:30px;height:30px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--rule);border-radius:3px;font:600 16px var(--f-body);color:var(--ink)}
 .zoom button:focus-visible{outline:2px solid var(--accent)}
-.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-size:12px;width:300px;max-width:calc(100% - 16px);box-shadow:0 6px 20px rgba(0,0,0,.18);z-index:5}
-.tip h3{margin:0 0 2px;font:700 14px var(--f-display)}
-.tip .cc{font:11px var(--f-data);color:var(--muted);margin-bottom:6px}
-.tip table{width:100%;border-collapse:collapse;font:11.5px var(--f-data);font-variant-numeric:tabular-nums}
-.tip td{padding:1.5px 0;vertical-align:top}
-.tip td.r{text-align:right;white-space:nowrap;padding-left:6px}
-.tip tr.h td{color:var(--muted);padding-top:7px}
-.tip .mixbar{margin:4px 0 2px}
-.lower{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:0;background:var(--panel)}
-.lower > section{padding-block:12px 18px;padding-left:16px;padding-right:16px;min-width:0}
-.lower > section + section{border-left:1px solid var(--rule);padding-right:max(16px,env(safe-area-inset-right,0px))}
-.lower h2{font-size:14px}
-.bars{display:grid;grid-template-columns:minmax(110px,170px) 1fr 52px;gap:5px 10px;align-items:center;font-size:12.5px}
-.bars .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bars .n .cc{font:11px var(--f-data);color:var(--muted);margin-right:5px}
-.bars .b{display:flex;height:12px;background:var(--q0);border-radius:2px;overflow:hidden}
-.bars .b i{display:block;height:100%}
-.bars .val{font:12px var(--f-data);text-align:right;font-variant-numeric:tabular-nums}
-.ledger{max-height:420px;overflow:auto}
-.ledger table{width:100%;border-collapse:collapse;font-size:12px}
-.ledger th{font:500 10.5px var(--f-data);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:4px 6px;position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--rule)}
-.ledger td{padding:5px 6px;border-bottom:1px solid var(--rule);vertical-align:top}
-.ledger td.num,.ledger th.num{text-align:right;font-family:var(--f-data);font-variant-numeric:tabular-nums;white-space:nowrap}
-.ledger .pn{display:flex;gap:6px;align-items:baseline}
-.ledger .pn .sw{transform:translateY(1px)}
-.ledger .rt{color:var(--muted);font-size:11.5px}
-.ledger .save{color:var(--accent)}
-.empty{color:var(--muted);font-size:12.5px;margin:0}
-@media (max-width:900px){
-  .app{display:block;height:auto}
-  html,body{height:auto}
-  aside{border-right:0;border-bottom:1px solid var(--rule);padding-right:max(16px,env(safe-area-inset-right,0px))}
-  main{overflow:visible}
-  .mapwrap{height:92vw;min-height:380px}
-  .legend{position:static;max-width:none;margin:10px 16px 12px;border-radius:6px}
-  .board{grid-template-columns:1fr}
-  .lower{grid-template-columns:1fr}
-  .lower > section + section{border-left:0;border-top:1px solid var(--rule)}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--rule);border-radius:3px;padding:10px 12px;font-size:12.5px;width:260px;max-width:calc(100% - 16px);box-shadow:0 6px 20px rgba(0,0,0,.16);z-index:5}
+.tip h3{margin:0;font:600 16px/1.2 var(--f-display)}
+.tip .cc{font-size:12px;color:var(--muted);margin:2px 0 8px}
+.tip .kv{display:flex;justify-content:space-between;gap:10px;padding:2px 0;font-variant-numeric:tabular-nums}
+.tip .kv span{color:var(--muted)}
+.tip .kv b{font-weight:600}
+.tip .kv.main b{font:600 16px var(--f-display)}
+.tip ul{margin:6px 0 0;padding:6px 0 0;border-top:1px solid var(--rule);list-style:none;font-size:12px}
+.tip li{display:flex;justify-content:space-between;gap:8px;padding:1px 0}
+.tip li span:last-child{color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* data table */
+.dtools{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 0 10px}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+.seg button{all:unset;cursor:pointer;padding:5px 12px;font-size:13px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.btn{cursor:pointer;background:var(--panel);border:1px solid var(--rule);border-radius:3px;padding:5px 10px;font-size:13px}
+.btn:hover{border-color:var(--muted)}
+.dcount{font-size:12.5px;color:var(--muted);margin-left:auto}
+.tablewrap{max-height:480px;overflow:auto;border:1px solid var(--rule);border-radius:3px;min-width:0}
+table.data{width:100%;border-collapse:collapse;font-size:13px}
+table.data th{position:sticky;top:0;background:var(--panel);text-align:left;font-weight:600;font-size:12.5px;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--ink);cursor:pointer;white-space:nowrap;user-select:none}
+table.data th.num{text-align:right}
+table.data th[aria-sort]{color:var(--ink)}
+table.data th[aria-sort="ascending"]::after{content:" ↑"}
+table.data th[aria-sort="descending"]::after{content:" ↓"}
+table.data td{padding:5px 10px;border-bottom:1px solid var(--rule);white-space:nowrap}
+table.data tr:last-child td{border-bottom:0}
+table.data td.num{text-align:right;font-variant-numeric:tabular-nums}
+table.data tbody tr:hover td{background:var(--paper)}
+.foot{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+.foot p{margin:0}
+
+@media (max-width:560px){
+  h1{font-size:28px}
+  .card{padding:9px 10px}
+  .card .v{font-size:22px}
+  .card .m{font-size:11.5px}
+  .ctl.slider{width:calc(50% - 12px)}
+  .ctlrow.prices{gap:10px 14px}
+  .mapwrap{height:118vw;min-height:380px}
+  .legend{position:static;max-width:none;margin-top:8px}
+  .status{margin-left:0}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
 <div class="app">
-<aside>
-  <header>
-    <p class="kicker">EU27 · 234 NUTS-2 regions · 230 plants</p>
-    <h1>Where clean power would put Europe's heavy industry</h1>
-    <p class="thesis" id="thesis">Optimising local power mixes for every plant and region…</p>
+  <header class="top">
+    <div class="brand">
+      <h1>Heavy Industry Power Atlas</h1>
+      <div class="intro">
+        <p>Decarbonising heavy industry needs vast amounts of cheap clean power, and Europe's sun, wind and land are unevenly spread. In this atlas every plant in the EU, Norway, Switzerland and the UK runs <b>behind the meter</b>: it supplies itself from solar, wind, batteries, hydrogen storage, small nuclear reactors or gas with carbon capture built in its own region, and takes no power from the grid.</p>
+        <p>Its <b>electricity cost</b> is an average cost per MWh. For each plant, the model picks the cheapest mix that covers its demand in every month, by day and by night. It then divides that mix's total yearly cost (building and financing the plants and storage, running them, fuel and CO₂) by the electricity the plant uses in a year.</p>
+        <p>Three cases are compared: plants stay put, move within today's grid and industrial clusters, or go wherever power is cheapest. The difference shows where existing plants could relocate, and where new industrial capacity should be built.</p>
+      </div>
+      <p class="byline">By <a href="https://www.cer.eu/personnel/elise-viadere" target="_blank" rel="noopener">Elise Viadere</a> and <a href="https://www.cer.eu/personnel/ron-stoop" target="_blank" rel="noopener">Ron Stoop</a> · <a href="https://www.cer.eu" target="_blank" rel="noopener">Centre for European Reform</a></p>
+      __REPO_BUTTON__
+      <p class="sub" id="sub"></p>
+    </div>
   </header>
 
-  <section class="sec" aria-labelledby="h-dem">
-    <h2 id="h-dem">1 · Power needed to decarbonise <small>TWh / yr</small></h2>
-    <p class="lead">Output is shared across today's plants by capacity. A plant that moves keeps its size and its demand.</p>
-    <div id="inds"></div>
-    <div class="total"><span>All selected industries</span><span class="big" id="dtot"></span></div>
-    <div class="unit" id="dshare"></div>
-  </section>
-
-  <section class="sec" aria-labelledby="h-tech">
-    <h2 id="h-tech">2 · Technologies each site may use <small>least-cost mix per site</small></h2>
-    <p class="lead">Every plant, at home or relocated, gets its own least-cost mix, built from the region's average sun and wind and the industry's flexibility.</p>
-    <div id="techs"></div>
-    <div class="prices">
-      <div><div class="param"><label for="gasPrice">Gas price</label><output id="o-gasPrice"></output></div>
-        <input type="range" id="gasPrice" min="15" max="100" step="5"></div>
-      <div><div class="param"><label for="co2">CO₂ price</label><output id="o-co2"></output></div>
-        <input type="range" id="co2" min="0" max="250" step="10"></div>
-    </div>
-    <div class="unit">TTF spot traded near €88/MWh in October 2026; the default is a long-run planning price.</div>
-  </section>
-
-  <section class="sec" aria-labelledby="h-con">
-    <h2 id="h-con">3 · Second-best constraints <small>tick to apply</small></h2>
-    <div class="cons" id="k-grid">
-      <label><input type="checkbox" id="cGrid"> Grid: stay close to strong substations</label>
-      <p>A relocated plant above 300 MW needs a region with a ≥330 kV substation, and each region can absorb only so much new load. Congestion shrinks that headroom; curtailment zones enlarge it. Today's sites keep their connections.</p>
-      <div class="param"><span>New load per 380 kV node</span><output id="o-h380"></output></div>
-      <input type="range" id="h380" min="100" max="1500" step="50" aria-label="New load per 380 kV substation">
-      <div class="param"><span>New load per 220 kV node</span><output id="o-h220"></output></div>
-      <input type="range" id="h220" min="0" max="600" step="25" aria-label="New load per 220 kV substation">
-      <label class="sub"><input type="checkbox" id="cCong"> Apply congestion map (NL, Dublin, Flanders, Madrid, south Germany…)</label>
-    </div>
-    <div class="cons" id="k-re">
-      <label><input type="checkbox" id="cRE"> Existing renewables: build where wind and solar already are</label>
-      <p>New wind and solar for industry in a region is capped at a multiple of what its existing wind, solar and hydro already produce, a proxy for permitting, supply chains and consent. Applies at every site.</p>
-      <div class="param"><span>Cap, × today's output</span><output id="o-reK"></output></div>
-      <input type="range" id="reK" min="0.25" max="5" step="0.25" aria-label="Multiple of existing renewable output">
-    </div>
-    <div class="cons" id="k-eco">
-      <label><input type="checkbox" id="cEco"> Industrial ecosystem: stick to today's clusters</label>
-      <p>Only part of each industry's capacity may move, and the planner picks which plants. Movers may only go to regions that already host that industry, or any heavy-industry cluster.</p>
-      <div class="param"><span>Share of each industry that must stay</span><output id="o-alpha"></output></div>
-      <input type="range" id="alpha" min="0" max="1" step="0.05" aria-label="Share of capacity that must stay">
-      <div class="param"><span>Movers may go to</span>
-        <select id="ecoMode" aria-label="Where movable plants may go"><option value="same">Same industry</option><option value="any">Any cluster</option></select></div>
-    </div>
-  </section>
-
-  <details id="assum">
-    <summary>4 · Cost and land assumptions</summary>
-    <div class="grid" id="agrid"></div>
-  </details>
-
-  <section class="src" aria-labelledby="h-src">
-    <h2 id="h-src">Method and sources</h2>
-    <p><b>Demand.</b> Output × electricity intensity of the net-zero route (Vogl et al. 2018 for hydrogen DRI; electrolysis at ~53 kWh/kg H₂). Each route has a flexible share, the part that runs through electrolysers and can follow the weather if hydrogen can be stored.</p>
-    <p><b>Local mix.</b> For each industry and region, a linear programme picks the cheapest capacities of solar, onshore and offshore wind, 4-hour batteries, extra electrolyser and hydrogen storage, SMRs, gas with carbon capture and capped gas backup to serve the plant's load. The year is cut into eight slices: winter or summer, windy or calm, day or night. Each slice's output is derived from the region's <i>average</i> capacity factors with fixed shape rules: solar seasonality grows with latitude, calm spells run at a quarter of average wind, and batteries shift sun into the night. Hydrogen storage is cheap in salt-cavern regions and dear elsewhere. If a region's land for wind and solar runs out, the remaining load falls back to its no-renewables mix.</p>
-    <p><b>Planner.</b> Plants are indivisible and keep their size. The planner minimises total power cost by moving whole plants between regions, sharing each region's renewable potential among the plants it hosts (greedy construction plus local search). <b>First best</b> uses land and weather only. <b>Second best</b> adds the ticked constraints. <b>Stay put</b> keeps every plant where it is, each with its own best local mix. Product transport and the cost of moving process kit are left out; set a relocation premium under Assumptions to price them in.</p>
-    <p><b>Costs.</b> Battery packs fell to $70/kWh for stationary storage in 2025 and European turnkey systems cost $275/kWh in 2024 (<a href="https://www.energy-storage.news/behind-the-numbers-bnef-finds-40-year-on-year-drop-in-bess-costs/" target="_blank" rel="noopener">BNEF</a>); electrolysers made outside China cost $1,900–2,500/kW installed (<a href="https://www.argusmedia.com/en/news-and-insights/latest-market-news/2841836-green-h2-electrolyser-sector-enters-consolidation-iea" target="_blank" rel="noopener">IEA, 2026</a>); salt-cavern storage costs €0.66–1.75/kg (<a href="https://ewi.uni-koeln.de/en/?p=17110" target="_blank" rel="noopener">EWI</a>); SMR target costs run €52–119/MWh (<a href="https://www.nucnet.org/news/analysis-shows-competitive-lcoe-target-for-small-modular-reactors-7-3-2025" target="_blank" rel="noopener">Arthur D. Little</a>). Italy legalised SMRs in September 2026 (<a href="https://balkangreenenergynews.com/italy-allows-nuclear-power-four-decades-after-first-ban/" target="_blank" rel="noopener">BGEN</a>); bans or phase-outs remain in Austria, Germany, Denmark, Spain, Ireland, Luxembourg and Portugal.</p>
-    <p><b>Data.</b> NUTS 2024 regions via <a href="https://github.com/eurostat/Nuts2json" target="_blank" rel="noopener">Nuts2json</a>; grid from the ENTSO-E extract in <a href="https://github.com/PyPSA/pypsa-eur" target="_blank" rel="noopener">PyPSA-Eur</a>; installed renewables from <a href="https://github.com/PyPSA/powerplantmatching" target="_blank" rel="noopener">powerplantmatching</a>; ammonia plants from PyPSA-Eur; cement kilns from EU ETS records in <a href="https://github.com/timtroendle/possibility-for-electricity-autarky" target="_blank" rel="noopener">Tröndle et al.</a> plus additions; steelworks, smelters and crackers compiled from company sources. Average solar and wind capacity factors are interpolated from ~160 points calibrated to <a href="https://re.jrc.ec.europa.eu/pvg_tools/en/" target="_blank" rel="noopener">PVGIS</a> and the <a href="https://globalwindatlas.info" target="_blank" rel="noopener">Global Wind Atlas</a>. Congestion scores and salt-cavern regions are stylised.</p>
-    __REPO_LINE__
-  </section>
-</aside>
-
-<main>
-  <div class="board" id="board" role="group" aria-label="Scenario"></div>
-  <div class="toolbar">
-    <label for="layer">Map shows
+  <div class="controls">
+   <div class="ctlrow">
+    <label class="ctl" for="layer">Map
       <select id="layer">
-        <optgroup label="Where plants go">
-          <option value="alloc">Plant load in the selected scenario</option>
-          <option value="diff">Second best minus first best</option>
+        <optgroup label="Plants">
+          <option value="alloc">Where the load goes</option>
+          <option value="diff">Second best vs first best</option>
         </optgroup>
         <optgroup label="Local power mix">
-          <option value="mixcost">Cost of the best local mix</option>
-          <option value="mixsrc">Main source in the best local mix</option>
+          <option value="mixcost">Cost of the best mix</option>
+          <option value="mixsrc">Main power source</option>
         </optgroup>
         <optgroup label="Inputs">
-          <option value="spare">Wind and solar potential left after local demand</option>
           <option value="pv">Solar capacity factor</option>
-          <option value="won">Onshore wind capacity factor</option>
+          <option value="won">Wind capacity factor</option>
+          <option value="land">Land for solar and wind</option>
           <option value="dens">Population density</option>
-          <option value="host">Grid headroom for new load</option>
-          <option value="cong">Grid congestion score</option>
-          <option value="re">Existing renewable output</option>
-          <option value="cav">Salt caverns for hydrogen</option>
+          <option value="sub">Substations ≥330 kV</option>
         </optgroup>
       </select></label>
-    <label for="mixInd" id="mixIndL" hidden>for
+    <label class="ctl" for="mixInd" id="mixIndL" hidden>Mix for
       <select id="mixInd"></select></label>
-    <label><input type="checkbox" id="ovPl" checked> Plants</label>
-    <label><input type="checkbox" id="ovMv" checked> Moves</label>
-    <label><input type="checkbox" id="ovLn"> Transmission ≥220 kV</label>
+    <div class="ctl" role="group" aria-labelledby="chipsL"><span id="chipsL">Sectors</span><div class="chips" id="chips"></div></div>
+    <label class="ctl chk"><input type="checkbox" id="ovPl" checked> Plants</label>
+    <label class="ctl chk"><input type="checkbox" id="ovMv" checked> Moves</label>
+    <label class="ctl chk"><input type="checkbox" id="ovLn"> Power lines ≥220 kV</label>
     <span class="status" id="status" role="status"></span>
+   </div>
+   <div class="ctlrow prices">
+    <div class="ctl slider"><div class="row"><label for="wacc">Cost of capital</label><output id="o-wacc" for="wacc"></output></div>
+      <input type="range" id="wacc" min="0.02" max="0.12" step="0.005"></div>
+    <div class="ctl slider"><div class="row"><label for="gasPrice">Gas price</label><output id="o-gasPrice" for="gasPrice"></output></div>
+      <input type="range" id="gasPrice" min="15" max="120" step="5"></div>
+    <div class="ctl slider"><div class="row"><label for="co2">CO₂ price</label><output id="o-co2" for="co2"></output></div>
+      <input type="range" id="co2" min="0" max="300" step="10"></div>
+   </div>
   </div>
+
+  <details class="fold" id="settings">
+    <summary>Model assumptions <small>· electricity per tonne and sources, technologies, second-best rules</small></summary>
+    <div class="foldbody">
+      <div class="setgrid">
+        <div>
+          <h3>Electricity per tonne produced <span class="unitnote">· MWh</span></h3>
+          <div id="inds"></div>
+        </div>
+        <div>
+          <h3>Technologies</h3>
+          <div id="techs"></div>
+          <label class="opt"><input type="checkbox" id="smrBans"> Respect national nuclear bans</label>
+        </div>
+        <div>
+          <h3>Second best</h3>
+          <label class="opt"><input type="checkbox" id="cGrid"> Needs a ≥330 kV substation</label>
+          <label class="opt"><input type="checkbox" id="cEco"> Stays in today's clusters</label>
+          <div class="ctl slider" style="width:100%;max-width:260px;margin-top:4px"><div class="row"><label for="alpha">Share of each sector that stays</label><output id="o-alpha" for="alpha"></output></div>
+            <input type="range" id="alpha" min="0" max="1" step="0.05"></div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <div class="board" id="board" role="group" aria-label="Scenario"></div>
+
   <div class="mapzone">
-  <div class="mapwrap" id="mapwrap">
-    <svg class="map" id="map" role="img" aria-label="Map of EU NUTS-2 regions"></svg>
-    <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="zre" aria-label="Reset view">⟲</button></div>
-    <div class="tip" id="tip" hidden></div>
+    <div class="mapwrap" id="mapwrap">
+      <svg class="map" id="map" role="img" aria-label="Map of NUTS-2 regions"></svg>
+      <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="zre" aria-label="Reset view">⟲</button></div>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+    <div class="legend" id="legend"></div>
   </div>
-  <div class="legend" id="legend"></div>
-  </div>
-  <div class="lower">
-    <section>
-      <h2><span id="rankT">Where the load goes</span> <small id="rankS"></small></h2>
-      <div class="bars" id="bars"></div>
-    </section>
-    <section>
-      <h2><span id="ledT">Plants that move</span> <small id="ledS"></small></h2>
-      <div class="ledger" id="ledger"></div>
-    </section>
-  </div>
-</main>
+
+  <details class="fold" id="data">
+    <summary>Data <small id="dataS"></small></summary>
+    <div class="foldbody">
+      <div class="dtools">
+        <div class="seg" role="group" aria-label="Scenario" id="dscn">
+          <button data-k="stay" aria-pressed="false">Stay put</button><button data-k="second" aria-pressed="true">Second best</button><button data-k="first" aria-pressed="false">First best</button>
+        </div>
+        <div class="seg" role="group" aria-label="Dataset">
+          <button id="dsPlants" aria-pressed="true">Plants</button><button id="dsRegions" aria-pressed="false">Regions</button>
+        </div>
+        <input type="search" id="dfilter" placeholder="Filter" aria-label="Filter rows">
+        <button class="btn" id="dcopy">Copy as CSV</button>
+        <span class="dcount" id="dcount" role="status"></span>
+      </div>
+      <div class="tablewrap"><table class="data" id="dtable"></table></div>
+    </div>
+  </details>
+
+  <footer class="foot">
+    <p>Data: Eurostat · PVGIS · JRC EMHIRES · PyPSA-Eur · EU ETS · company information</p>
+  </footer>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/javascript-lp-solver@0.4.24/prod/solver.js"></script>
-<script type="application/json" id="data">__DATA__</script>
+<script type="application/json" id="data-json">__DATA__</script>
 <script type="application/json" id="config">__CONFIG__</script>
 <script>globalThis.MODEL_CONFIG = JSON.parse(document.getElementById("config").textContent);</script>
 <script>
@@ -313,114 +329,90 @@ __PLAN__
 </script>
 <script>
 (function(){
-const DATA = JSON.parse(document.getElementById('data').textContent);
+const DATA = JSON.parse(document.getElementById('data-json').textContent);
 const R = DATA.regions, RI = Object.fromEntries(R.map((r,j)=>[r.id,j]));
-const BANS=[...new Set(R.filter(r=>r.nban).map(r=>r.cc))].sort().join(', ');
-const PLANTS = DATA.plants.filter(p=>p.i!=='chlor').map(p=>({i:p.i,n:p.n,home:RI[p.r],c:p.c,x:p.x,y:p.y}));
-const CN = {AT:"Austria",BE:"Belgium",BG:"Bulgaria",CY:"Cyprus",CZ:"Czechia",DE:"Germany",DK:"Denmark",EE:"Estonia",EL:"Greece",ES:"Spain",FI:"Finland",FR:"France",HR:"Croatia",HU:"Hungary",IE:"Ireland",IT:"Italy",LT:"Lithuania",LU:"Luxembourg",LV:"Latvia",MT:"Malta",NL:"Netherlands",PL:"Poland",PT:"Portugal",RO:"Romania",SE:"Sweden",SI:"Slovenia",SK:"Slovakia"};
+const PLANTS = DATA.plants.map(p=>({i:p.i,n:p.n,home:RI[p.r],o:p.o,x:p.x,y:p.y}));
+const CN = {AT:"Austria",BE:"Belgium",BG:"Bulgaria",CY:"Cyprus",CZ:"Czechia",DE:"Germany",DK:"Denmark",EE:"Estonia",EL:"Greece",ES:"Spain",FI:"Finland",FR:"France",HR:"Croatia",HU:"Hungary",IE:"Ireland",IT:"Italy",LT:"Lithuania",LU:"Luxembourg",LV:"Latvia",MT:"Malta",NL:"Netherlands",PL:"Poland",PT:"Portugal",RO:"Romania",SE:"Sweden",SI:"Slovenia",SK:"Slovakia",NO:"Norway",CH:"Switzerland",UK:"United Kingdom"};
 const css = (v)=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-const IC = {steel:'--c-steel',cement:'--c-cement',ammonia:'--c-ammonia',chemicals:'--c-chemicals',aluminium:'--c-aluminium',chlor:'--c-chlor'};
-const GEN = TECHS.map(t=>t.k), TC = Object.fromEntries(TECHS.map(t=>[t.k,t.c])), TN = Object.fromEntries(TECHS.map(t=>[t.k,t.name]));
+const GEN = TECHS.map(t=>t.k), TN = Object.fromEntries(TECHS.map(t=>[t.k,t.name]));
+const SHORT = {steel:'Steel',cement:'Cement',ammonia:'Ammonia',chemicals:'Chemicals',aluminium:'Aluminium'};
+const esc=(t)=>String(t).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+// each sector has its own colour
+const icon=(i)=>`<svg class="sym" viewBox="-6 -6 12 12" aria-hidden="true"><circle r="4.5" fill="var(--s-${i})"/></svg>`;
 const P = {...MIX_DEFAULTS, ...PLAN_DEFAULTS};
-const cfg = {}; IND.forEach(i=>cfg[i.k]={on:true,out:i.out,route:0,int:i.routes[0][1],h:i.routes[0][2]});
+const cfg = {}; SECTORS.forEach(s=>cfg[s.k]={on:s.k==='steel',int:s.mwh_per_t,h:s.flex_share});   // opens on steel only
+const SCN={stay:{name:'Stay put'},second:{name:'Second best'},first:{name:'First best'}};
 let scenario='second', layer='alloc', mixInd='steel', sel=null, res={}, mixes={A:{},B:{}};
-const dirty={mix:true,plans:true};
-const f0=d3.format(',.0f'), f1=d3.format(',.1f'), pct=d3.format('.0%');
+const dirty={mix:true};
+const f0=d3.format(',.0f'), f1=d3.format(',.1f'), pct=d3.format('.0%'), pct1=d3.format('.1%');
 const short=(s)=>s.replace(/ \(.*?\)/g,'').replace(/^Prov\. /,'');
 const rname=(j)=>short(R[j].na);
+const mean12=(a)=>a.reduce((s,v,m)=>s+v*DAYS[m],0)/DAYS.reduce((a,b)=>a+b,0);
+const PVA=R.map(r=>mean12(r.pv)), WA=R.map(r=>mean12(r.wd.map((v,m)=>(v+r.wn[m])/2)));
+const outKt={}; PLANTS.forEach(p=>{if(p.o>0) outKt[p.i]=(outKt[p.i]||0)+p.o;});
+const demand=(k)=>cfg[k].on?outKt[k]*cfg[k].int/1000:0;
+const nPlants=PLANTS.filter(p=>p.o>0).length;
 
-// ---------- 1 · industry rows
+// ---------- settings: sectors, technologies, constraints
 const indsEl=document.getElementById('inds');
-function indNote(ind){const c=cfg[ind.k];return `${ind.unit} · MWh/t · ${c.h?pct(c.h)+' runs through electrolysers and can flex':'needs steady power'} · ${ind.note}`;}
-IND.forEach(ind=>{
-  const c=cfg[ind.k], d=document.createElement('div'); d.className='ind';
-  d.innerHTML=`<input type="checkbox" id="on-${ind.k}" checked aria-label="Include ${ind.name}">
-   <label class="nm" for="on-${ind.k}"><span class="sw" style="background:var(${IC[ind.k]})"></span>${ind.name}</label>
-   <span class="twh" id="twh-${ind.k}"></span>
-   <div class="row2">
-     <input type="number" id="out-${ind.k}" value="${c.out}" min="0" step="any" aria-label="${ind.name} output, ${ind.unit}">
-     <select id="rt-${ind.k}" aria-label="${ind.name} route">${ind.routes.map((r,i)=>`<option value="${i}">${r[0]}</option>`).join('')}</select>
-     <input type="number" id="int-${ind.k}" value="${c.int}" min="0" step="any" aria-label="${ind.name} MWh per tonne">
-   </div>
-   <div class="note" id="note-${ind.k}">${indNote(ind)}</div>`;
+SECTORS.forEach(s=>{
+  const c=cfg[s.k], d=document.createElement('div'); d.className='sect'+(c.on?'':' off'); d.id='sect-'+s.k;
+  d.innerHTML=`<label for="int-${s.k}">${icon(s.k)} ${SHORT[s.k]}</label>
+    <input type="number" id="int-${s.k}" value="${c.int}" min="0" step="any" aria-label="${SHORT[s.k]}, MWh per tonne">
+    <button class="srcbtn" type="button" aria-expanded="false" aria-controls="srcp-${s.k}">Source</button>
+    <span class="twh" id="twh-${s.k}"></span>
+    <div class="srcpanel" id="srcp-${s.k}" hidden>
+      <p>${esc(s.source.label)}.</p>
+      <p><b>Find the number:</b> Ctrl+F ${s.source.find.map(f=>`“${esc(f)}”`).join(' and ')}${s.source.calc?` · ${esc(s.source.calc)}`:''}</p>
+      <a href="${s.source.url}" target="_blank" rel="noopener">Open the source ↗</a>
+    </div>`;
+  const sbtn=d.querySelector('.srcbtn'), span=d.querySelector('.srcpanel');
+  sbtn.addEventListener('click',()=>{const open=span.hidden; span.hidden=!open; sbtn.setAttribute('aria-expanded',open);});
   indsEl.appendChild(d);
-  d.querySelector('#on-'+ind.k).addEventListener('change',e=>{c.on=e.target.checked;d.classList.toggle('off',!c.on);dirty.plans=true;schedule();});
-  d.querySelector('#out-'+ind.k).addEventListener('input',e=>{c.out=Math.max(0,+e.target.value||0);dirty.plans=true;schedule(250);});
-  d.querySelector('#rt-'+ind.k).addEventListener('change',e=>{c.route=+e.target.value;c.int=ind.routes[c.route][1];c.h=ind.routes[c.route][2];d.querySelector('#int-'+ind.k).value=c.int;document.getElementById('note-'+ind.k).textContent=indNote(ind);dirty.plans=true;schedule();});
-  d.querySelector('#int-'+ind.k).addEventListener('input',e=>{c.int=Math.max(0,+e.target.value||0);dirty.plans=true;schedule(250);});
+  d.querySelector('#int-'+s.k).addEventListener('input',e=>{const v=+e.target.value;if(isFinite(v)&&e.target.value!==''){c.int=Math.max(0,v);schedule(250);}});
 });
-
-// ---------- 2 · technologies
-const TECHROWS=[
-  {k:'vre',name:'Solar and onshore wind',sw:['--t-pv','--t-on'],fixed:true,d:'Always available. Capacity limited by free land in each region.',cost:()=>`€${f0(P.pvCapex)} / €${f0(P.wCapex)}/kW`},
-  {k:'offshore',name:'Offshore wind',sw:['--t-off'],d:'Coastal regions only; capacity factor and cost set by sea basin.',cost:()=>'€2,600–3,600/kW'},
-  {k:'batOn',name:'Batteries',sw:['--t-bat'],d:'Four-hour lithium-ion, shifting midday sun into the night.',cost:()=>`€${f0(P.batKwh)}/kWh`},
-  {k:'h2On',name:'Hydrogen storage',sw:['--t-h2'],d:'Lets electrolysers follow the weather. Salt caverns make seasonal storage cheap; tanks elsewhere do not.',cost:()=>`€${f0(P.cavSeas)} vs €${f0(P.tankSeas)}/MWh shifted`},
-  {k:'smrOn',name:'Small modular reactors',sw:['--t-smr'],d:'Steady output at 92% availability.',cost:()=>{const U=unitCosts({kxoff:0},P);return `≈ €${f0(U.smr/P.smrAvail+U.smrV)}/MWh`;},
-    sub:`<label class="sub"><input type="checkbox" id="smrBans"> Respect national bans (${BANS})</label>`},
-  {k:'ccsOn',name:'Gas with carbon capture',sw:['--t-ccs'],d:'Combined cycle with 90% capture; fuel, CO₂ storage and residual CO₂ priced in.',cost:()=>{const U=unitCosts({kxoff:0},P);return `≈ €${f0(U.ccs/0.9+U.ccsV)}/MWh`;}},
-  {k:'gasOn',name:'Unabated gas backup',sw:['--t-gas'],d:'For calm, dark spells, capped at a share of each plant\'s energy.',cost:()=>{const U=unitCosts({kxoff:0},P);return `€${f0(U.gasV)}/MWh run`;}},
-  {k:'impOn',name:'Firm power bought from the grid',sw:['--t-imp'],d:'Off by default, so each site must firm its own supply. Switch on to let plants lean on the wider system at a flat price.',cost:()=>`€${f0(P.impPrice)}/MWh`},
-];
+const chipsEl=document.getElementById('chips');
+SECTORS.forEach(s=>{
+  const b=document.createElement('button'); b.className='chip'; b.id='chip-'+s.k; b.setAttribute('aria-pressed',cfg[s.k].on);
+  b.innerHTML=`${icon(s.k)}${SHORT[s.k]}`;
+  b.addEventListener('click',()=>{const c=cfg[s.k];
+    if(c.on&&SECTORS.filter(x=>cfg[x.k].on).length===1) return;    // keep at least one sector
+    c.on=!c.on; b.setAttribute('aria-pressed',c.on); document.getElementById('sect-'+s.k).classList.toggle('off',!c.on); schedule();});
+  chipsEl.appendChild(b);
+});
 const techEl=document.getElementById('techs');
-TECHROWS.forEach(t=>{
-  const d=document.createElement('div'); d.className='tech'; d.id='tr-'+t.k;
-  d.innerHTML=`${t.fixed?'<span></span>':`<input type="checkbox" id="t-${t.k}" aria-label="Allow ${t.name}">`}
-    <label ${t.fixed?'':`for="t-${t.k}"`}>${t.sw.map(s=>`<span class="sw" style="background:var(${s})"></span>`).join('')}${t.name}</label>
-    <span class="cost" id="tc-${t.k}"></span><span class="d">${t.d}</span>${t.sub?`<span class="subopt">${t.sub}</span>`:''}`;
-  techEl.appendChild(d);
-  if(!t.fixed){const el=d.querySelector('#t-'+t.k);el.checked=!!P[t.k];d.classList.toggle('off',!P[t.k]);
-    el.addEventListener('change',()=>{P[t.k]=el.checked;d.classList.toggle('off',!el.checked);dirty.mix=true;schedule();});}
+[['batOn','Batteries'],['h2On','Hydrogen storage'],['smrOn','Small modular reactors'],['ccsOn','Gas with carbon capture']].forEach(([k,name])=>{
+  const l=document.createElement('label'); l.className='opt';
+  l.innerHTML=`<input type="checkbox" id="t-${k}"> ${name}`;
+  techEl.appendChild(l);
+  const el=l.querySelector('input'); el.checked=!!P[k];
+  el.addEventListener('change',()=>{P[k]=el.checked;dirty.mix=true;schedule();});
 });
 const sb=document.getElementById('smrBans');sb.checked=P.smrBans;sb.addEventListener('change',()=>{P.smrBans=sb.checked;dirty.mix=true;schedule();});
-function techCosts(){TECHROWS.forEach(t=>{document.getElementById('tc-'+t.k).textContent=t.cost();});}
-[['gasPrice',v=>`€${v}/MWh`],['co2',v=>`€${v}/t`]].forEach(([k,fm])=>{const el=document.getElementById(k);el.value=P[k];const o=document.getElementById('o-'+k);o.textContent=fm(P[k]);
-  el.addEventListener('input',()=>{P[k]=+el.value;o.textContent=fm(P[k]);techCosts();dirty.mix=true;schedule(300);});});
+[['wacc',v=>pct1(v),true],['gasPrice',v=>`€${v}/MWh`,true],['co2',v=>`€${v}/t`,true],['alpha',v=>pct(v),false]].forEach(([k,fm,mix])=>{
+  const el=document.getElementById(k),o=document.getElementById('o-'+k);el.value=P[k];o.textContent=fm(P[k]);
+  el.addEventListener('input',()=>{P[k]=+el.value;o.textContent=fm(P[k]);if(mix)dirty.mix=true;schedule(mix?400:150);});});
+['cGrid','cEco'].forEach(k=>{const el=document.getElementById(k);el.checked=P[k];el.addEventListener('change',()=>{P[k]=el.checked;schedule();});});
 
-// ---------- 3 · constraints
-const fmt={h380:v=>v+' MW',h220:v=>v+' MW',reK:v=>'×'+v,alpha:v=>pct(v)};
-['h380','h220','reK','alpha'].forEach(k=>{const el=document.getElementById(k);el.value=P[k];
-  const o=document.getElementById('o-'+k);o.textContent=fmt[k](P[k]);
-  el.addEventListener('input',()=>{P[k]=+el.value;o.textContent=fmt[k](P[k]);schedule(150);});});
-['cGrid','cCong','cRE','cEco'].forEach(k=>{const el=document.getElementById(k);el.checked=P[k];
-  el.addEventListener('change',()=>{P[k]=el.checked;syncCons();schedule();});});
-const em=document.getElementById('ecoMode');em.value=P.ecoMode;em.addEventListener('change',()=>{P.ecoMode=em.value;schedule();});
-function syncCons(){document.getElementById('k-grid').classList.toggle('off',!P.cGrid);document.getElementById('k-re').classList.toggle('off',!P.cRE);document.getElementById('k-eco').classList.toggle('off',!P.cEco);}
-syncCons();
-
-// ---------- 4 · assumptions
-const AS=[['wacc','Cost of capital','%',100,'mix'],['pvCapex','Solar capex, €/kW','',1,'mix'],['wCapex','Onshore wind capex, €/kW','',1,'mix'],
- ['batKwh','Battery capex, €/kWh','',1,'mix'],['elCapex','Electrolyser capex, €/kW','',1,'mix'],['smrCapex','SMR capex, €/kW','',1,'mix'],
- ['smrWacc','SMR cost of capital','%',100,'mix'],['ccsCapex','Gas + CCS capex, €/kW','',1,'mix'],['fossilCap','Unabated gas cap, share of energy','%',100,'mix'],
- ['impPrice','Grid power price, €/MWh','',1,'mix'],
- ['pvLand','Free land open to solar','%',100,'plan'],['wLand','Free land open to wind','%',100,'plan'],['wDens','Wind density on zoned land, MW/km²','',1,'plan'],
- ['offDens','Offshore wind per km of coast, MW','',1,'plan'],['reserve','Reserved for local demand, MWh/head','',1,'plan'],
- ['relocPrem','Relocation premium, €/MWh','',1,'plan']];
-const ag=document.getElementById('agrid');
-AS.forEach(([k,l,u,m,kind])=>{const id='a-'+k;ag.insertAdjacentHTML('beforeend',`<label for="${id}">${l}${u?' ('+u+')':''}</label><input type="number" id="${id}" step="any" value="${+(P[k]*m).toFixed(3)}">`);
-  document.getElementById(id).addEventListener('input',e=>{const v=+e.target.value;if(isFinite(v)&&e.target.value!==''){P[k]=v/m;techCosts();if(kind==='mix')dirty.mix=true;else dirty.plans=true;schedule(400);}});});
-document.getElementById('t-offshore').addEventListener('change',()=>{dirty.plans=true;});
-
-// ---------- compute
-function ensureMixes(){
-  const hs=new Set(IND.map(i=>cfg[i.k].h)); hs.add(cfg[mixInd].h);
-  if(dirty.mix){mixes={A:{},B:{}};}
-  let did=false;
-  hs.forEach(h=>{if(!mixes.A[h]){mixes.A[h]=R.map(r=>solveMix(r,h,P));
-    const cache={};mixes.B[h]=R.map(r=>{const key=(P.smrOn&&!(P.smrBans&&r.nban))?'n':'x';return cache[key]||(cache[key]=solveMix(r,h,P,{noVRE:true}));});did=true;}});
-  return did;
-}
-let timer=0;
+// ---------- compute: step 1 local mixes (yields between sector classes), step 2 plans
+let timer=0, job=0;
 const statusEl=document.getElementById('status');
-function schedule(delay=0){clearTimeout(timer);statusEl.textContent='Optimising…';timer=setTimeout(compute,Math.max(30,delay));}
-function compute(){
-  const t0=performance.now();
-  const newMix=ensureMixes();
-  if(dirty.mix||dirty.plans||newMix||!res.first){res.stay=plan(R,PLANTS,cfg,mixes,P,'stay');res.first=plan(R,PLANTS,cfg,mixes,P,'first');}
-  res.second=plan(R,PLANTS,cfg,mixes,P,'second');
-  dirty.mix=false;dirty.plans=false;
+const tick=()=>new Promise(r=>setTimeout(r,0));
+function schedule(delay=0){clearTimeout(timer);statusEl.textContent='Updating…';timer=setTimeout(compute,Math.max(30,delay));}
+async function compute(){
+  const my=++job;
+  if(dirty.mix){mixes={A:{},B:{}};dirty.mix=false;}
+  const hs=[...new Set(SECTORS.filter(s=>cfg[s.k].on).map(s=>cfg[s.k].h).concat([cfg[mixInd].h]))];   // only the classes in use
+  for(const h of hs){ if(mixes.A[h]) continue;
+    await tick(); if(my!==job) return;
+    const A=R.map(r=>solveMix(r,h,P)), cache={};
+    const B=R.map(r=>{const key=(P.smrOn&&!(P.smrBans&&r.nban))?'n':'x';return cache[key]||(cache[key]=solveMix(r,h,P,{noVRE:true}));});
+    if(dirty.mix) return;                                           // settings changed meanwhile: a newer run is queued
+    mixes.A[h]=A; mixes.B[h]=B;}
+  await tick(); if(my!==job) return;
+  ['stay','second','first'].forEach(sc=>res[sc]=plan(R,PLANTS,cfg,mixes,P,sc));
   render();
-  statusEl.textContent=`Solved ${f0(Object.keys(mixes.A).length*R.length)} local mixes and 3 plans in ${f1((performance.now()-t0)/1000)} s`;
+  statusEl.textContent='';
 }
 
 // ---------- map
@@ -438,66 +430,84 @@ const rp=gR.selectAll('path').data(DATA.geo).join('path').attr('class','rg')
   .on('mousemove',(ev,f)=>showTip(ev,f.id)).on('mouseleave',hideTip)
   .on('click',(ev,f)=>{sel=sel===f.id?null:f.id;rp.classed('sel',d=>d.id===sel);if(sel)showTip(ev,f.id,true);else tip.hidden=true;});
 function drawLines(){
-  gL.selectAll('*').remove(); if(!document.getElementById('ovLn').checked) return;
+  gL.selectAll('*').remove(); if(!(document.getElementById('ovLn').checked||layer==='sub')) return;
   [0,1].forEach(v=>{const d=DATA.lines.filter(l=>l[0]===v).map(l=>'M'+l[1].map(p=>proj(p).join(',')).join('L')).join('');
-    gL.append('path').attr('class','ln').attr('d',d).attr('stroke-width',v?1.1:.6).attr('stroke-opacity',v?.7:.45);});
+    gL.append('path').attr('class','ln').attr('d',d).attr('stroke-width',v?1.1:.6).attr('stroke-opacity',v?.7:.4);});
 }
 function plantPos(){
   const a=res[scenario]; if(!a) return [];
   const k={}; return a.plants.map(p=>{
     let xy;
     if(p.loc===p.home) xy=proj([p.x,p.y]);
-    else{const r=R[p.loc];const c=proj([r.cx,r.cy]);const n=(k[p.loc]=(k[p.loc]||0)+1);const th=n*2.39996,rad=3.4*Math.sqrt(n);xy=[c[0]+Math.cos(th)*rad,c[1]+Math.sin(th)*rad];}
-    return {...p,xy,o:proj([p.x,p.y]),r0:1.8+Math.sqrt(p.E)*2.3};
+    else{const r=R[p.loc];const c=proj([r.cx,r.cy]);const n=(k[p.loc]=(k[p.loc]||0)+1);const th=n*2.39996,rad=3.2*Math.sqrt(n);xy=[c[0]+Math.cos(th)*rad,c[1]+Math.sin(th)*rad];}
+    const r0=1.8+Math.sqrt(p.E)*2;
+    return {xy,o:proj([p.x,p.y]),moved:p.loc!==p.home,i:p.i,E:p.E,r0,d:d3.symbol(d3.symbolCircle,Math.PI*r0*r0)()};
   });
 }
+const plantTf=(p)=>`translate(${p.xy[0]},${p.xy[1]}) scale(${1/K})`;
+const sectorColour=(i)=>layer==='mixsrc'?css('--dot'):css('--s-'+i);   // on the power-source map the regions already use colour
 function drawPlants(){
-  gP.selectAll('*').remove(); gA.selectAll('*').remove();
-  const pts=plantPos(); if(!pts.length) return;
-  const mv=pts.filter(p=>p.loc!==p.home);
-  if(document.getElementById('ovMv').checked){
-    gA.selectAll('path').data(mv).join('path').attr('class','arc').attr('stroke',p=>css(IC[p.i]))
-      .attr('d',p=>{const [x0,y0]=p.o,[x1,y1]=p.xy,mx=(x0+x1)/2,my=(y0+y1)/2,dx=x1-x0,dy=y1-y0;return `M${x0},${y0}Q${mx-dy*.18},${my+dx*.18} ${x1},${y1}`;});
-    gA.selectAll('circle').data(mv).join('circle').attr('class','ring').attr('stroke',p=>css(IC[p.i])).attr('cx',p=>p.o[0]).attr('cy',p=>p.o[1]).attr('r',2.2/K);
-  }
-  if(document.getElementById('ovPl').checked){
-    gP.selectAll('circle').data(pts.sort((a,b)=>b.E-a.E)).join('circle').attr('class','pl')
-      .attr('cx',p=>p.xy[0]).attr('cy',p=>p.xy[1]).attr('r',p=>p.r0/K).attr('fill',p=>css(IC[p.i]));
-  }
+  drawMoves();
+  gP.selectAll('*').remove();
+  if(!document.getElementById('ovPl').checked) return;
+  gP.selectAll('path').data(plantPos().sort((a,b)=>b.E-a.E)).join('path').attr('class','pl')
+    .attr('d',p=>p.d).attr('transform',plantTf).attr('fill',p=>sectorColour(p.i));
 }
-const zoom=d3.zoom().scaleExtent([1,14]).on('zoom',ev=>{K=ev.transform.k;gRoot.attr('transform',ev.transform);
-  gP.selectAll('circle').attr('r',p=>p.r0/K);gA.selectAll('circle').attr('r',2.2/K);});
+// Moves: hollow ring at today's site -> gently curved line -> arrowhead just short of the new site.
+// Ring, line width and arrowhead keep their on-screen size when zooming.
+function moveGeo(p){
+  const [x0,y0]=p.o,[x1,y1]=p.xy, dx=x1-x0, dy=y1-y0;
+  const cx=(x0+x1)/2-dy*0.12, cy=(y0+y1)/2+dx*0.12;              // bend slightly left of the direction of travel
+  let tx=x1-cx, ty=y1-cy; const tl=Math.hypot(tx,ty)||1; tx/=tl; ty/=tl;
+  const tipX=x1-tx*(p.r0+1.5)/K, tipY=y1-ty*(p.r0+1.5)/K;         // arrow tip stops at the edge of the plant dot
+  const endX=tipX-tx*6/K, endY=tipY-ty*6/K;                       // line ends at the base of the arrowhead
+  return {line:`M${x0},${y0}Q${cx},${cy} ${endX},${endY}`, head:`translate(${tipX},${tipY}) rotate(${Math.atan2(ty,tx)*180/Math.PI}) scale(${1/K})`};
+}
+function drawMoves(){
+  gA.selectAll('*').remove();
+  if(!document.getElementById('ovMv').checked) return;
+  const mv=gA.selectAll('g').data(plantPos().filter(p=>p.moved)).join('g').attr('class','mv').style('color',p=>sectorColour(p.i));
+  mv.append('path').attr('class','mvl');
+  mv.append('path').attr('class','mvh').attr('d','M0,0L-7,-3.6L-7,3.6Z');
+  mv.append('circle').attr('class','mvo');
+  updateMoves();
+}
+function updateMoves(){
+  gA.selectAll('g.mv').each(function(p){const g=moveGeo(p), s=d3.select(this);
+    s.select('.mvl').attr('d',g.line); s.select('.mvh').attr('transform',g.head);
+    s.select('.mvo').attr('cx',p.o[0]).attr('cy',p.o[1]).attr('r',2.6/K);});
+}
+const zoom=d3.zoom().scaleExtent([1,14]).on('zoom',ev=>{K=ev.transform.k;gRoot.attr('transform',ev.transform);gP.selectAll('path').attr('transform',plantTf);updateMoves();});
 svg.call(zoom);
 document.getElementById('zin').onclick=()=>svg.transition().call(zoom.scaleBy,1.6);
 document.getElementById('zout').onclick=()=>svg.transition().call(zoom.scaleBy,1/1.6);
 document.getElementById('zre').onclick=()=>svg.transition().call(zoom.transform,d3.zoomIdentity);
 ['ovPl','ovMv'].forEach(id=>document.getElementById(id).addEventListener('change',()=>{drawPlants();paint();}));
-document.getElementById('ovLn').addEventListener('change',drawLines);
+document.getElementById('ovLn').addEventListener('change',()=>{drawLines();paint();});
 const mixIndSel=document.getElementById('mixInd');
-mixIndSel.innerHTML=IND.map(i=>`<option value="${i.k}">${i.name}</option>`).join('');
-mixIndSel.addEventListener('change',()=>{mixInd=mixIndSel.value;if(ensureMixes())statusEl.textContent='';paint();});
-document.getElementById('layer').addEventListener('change',e=>{layer=e.target.value;document.getElementById('mixIndL').hidden=!(layer==='mixcost'||layer==='mixsrc');paint();});
+mixIndSel.innerHTML=SECTORS.map(s=>`<option value="${s.k}">${SHORT[s.k]}</option>`).join('');
+mixIndSel.addEventListener('change',()=>{mixInd=mixIndSel.value;if(!mixes.A[cfg[mixInd].h]){schedule();return;}paint();renderTable();});
+document.getElementById('layer').addEventListener('change',e=>{layer=e.target.value;document.getElementById('mixIndL').hidden=!(layer==='mixcost'||layer==='mixsrc');drawLines();drawPlants();paint();});
 
 // ---------- layers
 const mainSrc=(m)=>m&&m.feasible?GEN.reduce((a,k)=>(m.E[k]||0)>(m.E[a]||0)?k:a,'pv'):null;
+const mixOf=(j)=>mixes.A[cfg[mixInd].h]&&mixes.A[cfg[mixInd].h][j];
 const LAY={
-  alloc:{t:()=>`Plant load, ${SCN[scenario].name.toLowerCase()} (TWh/yr)`,v:j=>res[scenario].tot[j],seq:'sqrt'},
-  diff:{t:()=>'Second best minus first best (TWh/yr)',v:j=>res.second.tot[j]-res.first.tot[j],div:true},
-  mixcost:{t:()=>`Cost of the best local mix for ${IND.find(i=>i.k===mixInd).name.toLowerCase()} (€/MWh)`,v:j=>{const m=mixes.A[cfg[mixInd].h][j];return m&&m.feasible?m.cost:NaN;},seq:'lin',rev:true,clipQ:true},
-  mixsrc:{t:()=>`Main source in the best local mix for ${IND.find(i=>i.k===mixInd).name.toLowerCase()}`,cat:j=>mainSrc(mixes.A[cfg[mixInd].h][j])},
-  spare:{t:()=>'Wind and solar potential after local demand (TWh/yr)',v:j=>res.first.res0[j].potTWh,seq:'sqrt'},
-  pv:{t:()=>'Solar capacity factor (%)',v:j=>R[j].pv*100,seq:'lin'},
-  won:{t:()=>'Onshore wind capacity factor (%)',v:j=>R[j].won*100,seq:'lin'},
-  dens:{t:()=>'Population density (people/km²)',v:j=>R[j].pop/R[j].area,seq:'log'},
-  host:{t:()=>'Grid headroom for new load (TWh/yr)',v:j=>(R[j].n380*P.h380+R[j].n220*P.h220)*8.76e-3*(P.cCong?Math.max(0,1-R[j].cong):1),seq:'sqrt'},
-  cong:{t:()=>'Congestion score (−0.5 surplus … +0.8 saturated)',v:j=>R[j].cong,div:true,fixed:.8},
-  re:{t:()=>'Existing wind, solar and hydro output (TWh/yr)',v:j=>existingRE(R[j]),seq:'sqrt'},
-  cav:{t:()=>'Hydrogen storage geology',cat:j=>R[j].cav?'cav':'tank',cats:{cav:['Salt caverns','--q3'],tank:['Tanks or lined rock only','--q1']}},
+  alloc:{t:()=>`Power demand placed here, ${SCN[scenario].name.toLowerCase()} (TWh/yr)`,v:j=>res[scenario].tot[j],seq:'sqrt',fmt:j=>`${f1(res[scenario].tot[j])} TWh`},
+  diff:{t:()=>'Second best minus first best (TWh/yr)',v:j=>res.second.tot[j]-res.first.tot[j],div:true,fmt:j=>`${d3.format('+,.1f')(res.second.tot[j]-res.first.tot[j])} TWh`},
+  mixcost:{t:()=>`Cost of the best local mix, ${SHORT[mixInd].toLowerCase()} (€/MWh)`,v:j=>{const m=mixOf(j);return m&&m.feasible?m.cost:NaN;},seq:'lin',rev:true,clipQ:true,fmt:j=>{const m=mixOf(j);return m&&m.feasible?`€${f0(m.cost)}/MWh`:'–';}},
+  mixsrc:{t:()=>`Main power source, ${SHORT[mixInd].toLowerCase()}`,cat:j=>mainSrc(mixOf(j)),fmt:j=>{const s=mainSrc(mixOf(j));return s?TN[s]:'–';}},
+  pv:{t:()=>'Solar capacity factor, annual mean (%)',v:j=>PVA[j]*100,seq:'lin',fmt:j=>pct(PVA[j])},
+  won:{t:()=>'Onshore wind capacity factor, annual mean (%)',v:j=>WA[j]*100,seq:'lin',fmt:j=>pct(WA[j])},
+  land:{t:()=>'Land open to solar and wind (km²)',v:j=>res.first.land[j],seq:'sqrt',fmt:j=>`${f0(res.first.land[j])} km²`},
+  dens:{t:()=>'Population density (people/km²)',v:j=>R[j].pop/R[j].area,seq:'log',fmt:j=>`${f0(R[j].pop/R[j].area)} /km²`},
+  sub:{t:()=>'Substations of 330 kV or more',cat:j=>R[j].n330>0?'yes':'no',cats:{yes:['At least one','--q3'],no:['None','--q1']},fmt:j=>`${R[j].n330}`},
 };
+const LAYNAME={alloc:'Demand placed here',diff:'Second vs first best',mixcost:'Best local mix',mixsrc:'Main source',pv:'Solar capacity factor',won:'Wind capacity factor',land:'Land for solar and wind',dens:'Population density',sub:'Substations ≥330 kV'};
 function ramp(){return [css('--q0'),css('--q1'),css('--q2'),css('--q3'),css('--q4')];}
 function scaleFor(L,vals){
   const fin=vals.filter(v=>isFinite(v));
-  if(L.div){const m=L.fixed||Math.max(1e-6,d3.max(fin,v=>Math.abs(v)));
+  if(L.div){const m=Math.max(1e-6,d3.max(fin,v=>Math.abs(v)));
     const i=d3.interpolateRgbBasis([css('--d-neg'),css('--d-mid'),css('--d-pos')]);
     return {f:v=>i((Math.max(-m,Math.min(m,v))+m)/(2*m)),dom:[-m,m],ticks:[-m,0,m]};}
   const s0=fin.slice().sort(d3.ascending);
@@ -511,13 +521,17 @@ function scaleFor(L,vals){
 function paint(){
   if(!res.first) return;
   const L=LAY[layer], lg=document.getElementById('legend');
-  const plantKeys=document.getElementById('ovPl').checked?`<div class="keys">${IND.filter(i=>cfg[i.k].on).map(i=>`<span><i style="background:var(${IC[i.k]})"></i>${i.name.split(' ')[0]}</span>`).join('')}${document.getElementById('ovMv').checked&&scenario!=='stay'?'<span>◯→ moved from</span>':''}</div>`:'';
+  const showPl=document.getElementById('ovPl').checked, showMv=document.getElementById('ovMv').checked&&res[scenario].moved>0;
+  const moveKey=showMv?`<span><svg class="sym arrow" viewBox="0 0 22 10" aria-hidden="true"><circle cx="3" cy="5" r="2.2"/><path class="l" d="M5.5 5H14"/><path class="h" d="M21 5L14 1.4V8.6Z"/></svg>Moves from today's site</span>`:'';
+  const lineKey=(document.getElementById('ovLn').checked||layer==='sub')?`<div class="keys"><span><svg class="sym line" viewBox="0 0 22 10" aria-hidden="true"><path d="M1 5H21"/></svg>Power lines ≥220 kV</span></div>`:'';
+  const plantKey=(!(showPl||showMv)?'':layer==='mixsrc'?`<div class="keys">${showPl?'<span><i class="dot"></i>Plant</span>':''}${moveKey}</div>`
+    :`<div class="keys">${SECTORS.filter(s=>cfg[s.k].on).map(s=>`<span>${icon(s.k)}${SHORT[s.k]}</span>`).join('')}${moveKey}</div>`)+lineKey;
   if(L.cat){
     const cats=L.cats||Object.fromEntries(TECHS.map(t=>[t.k,[t.name,t.c]]));
     const vals=R.map((r,j)=>L.cat(j));
     rp.attr('fill',f=>{const c=vals[RI[f.id]];return c&&cats[c]?css(cats[c][1]):css('--land');});
-    const present=[...new Set(vals)].filter(Boolean);
-    lg.innerHTML=`<div class="t">${L.t()}</div><div class="keys">${present.map(c=>`<span><i class="sq" style="background:var(${cats[c][1]})"></i>${cats[c][0]}</span>`).join('')}</div>`+plantKeys;
+    const present=Object.keys(cats).filter(c=>vals.includes(c));
+    lg.innerHTML=`<div class="t">${L.t()}</div><div class="keys">${present.map(c=>`<span><i style="background:var(${cats[c][1]})"></i>${cats[c][0]}</span>`).join('')}</div>`+plantKey;
     return;
   }
   const vals=R.map((r,j)=>L.v(j)), sc=scaleFor(L,vals);
@@ -530,33 +544,21 @@ function paint(){
   const tf=v=>Math.abs(v)>=10?f0(v):f1(v);
   const pos=v=>L.div?(v-sc.dom[0])/(sc.dom[1]-sc.dom[0])*w:sc.s(v)*w;
   const ticks=sc.ticks.map(v=>{const x=pos(v);return `<text x="${Math.min(w-2,Math.max(2,x))}" y="27" text-anchor="${x<10?'start':x>w-10?'end':'middle'}">${tf(v)}</text>`;}).join('');
-  lg.innerHTML=`<div class="t">${L.t()}</div><svg viewBox="0 0 ${w} 30" aria-hidden="true"><defs><linearGradient id="lgG">${stops}</linearGradient></defs><rect width="${w}" height="12" fill="url(#lgG)" rx="2"/>${ticks}</svg>`+plantKeys;
+  lg.innerHTML=`<div class="t">${L.t()}</div><svg viewBox="0 0 ${w} 30" aria-hidden="true"><defs><linearGradient id="lgG">${stops}</linearGradient></defs><rect width="${w}" height="12" fill="url(#lgG)" rx="2"/>${ticks}</svg>`+plantKey;
 }
 
 // ---------- tooltip
 const tip=document.getElementById('tip');
-const mixBar=(m)=>{const t=GEN.reduce((a,k)=>a+(m[k]||0),0)||1;return `<div class="mixbar">${GEN.filter(k=>(m[k]||0)>0.004).map(k=>`<i style="width:${(m[k]/t)*100}%;background:var(${TC[k]})" title="${TN[k]} ${pct(m[k]/t)}"></i>`).join('')}</div>`;};
-const mixTxt=(m)=>{const t=GEN.reduce((a,k)=>a+(m[k]||0),0)||1;return GEN.filter(k=>(m[k]||0)/t>0.05).sort((a,b)=>m[b]-m[a]).map(k=>`${TN[k].replace(' wind','').replace('Gas with carbon capture','Gas+CCS')} ${pct(m[k]/t)}`).join(' · ');};
 function showTip(ev,id,pin){
   if(!res.first) return;
   if(sel&&!pin&&sel!==id) return;
   const j=RI[id], r=R[j], a=res[scenario];
   const here=a.plants.filter(p=>p.loc===j).sort((x,y)=>y.E-x.E);
-  const left=a.plants.filter(p=>p.home===j&&p.loc!==j);
-  const agg={};here.forEach(p=>{for(const k in p.mix) agg[k]=(agg[k]||0)+p.mix[k]*p.E;});
-  const rows=here.slice(0,6).map(p=>`<tr><td><span class="sw" style="background:var(${IC[p.i]});width:8px;height:8px;margin-right:5px"></span>${p.n.length>26?p.n.slice(0,25)+'…':p.n}${p.loc!==p.home?` <span style="color:var(--muted)">← ${R[p.home].id}</span>`:''}</td><td class="r">${f1(p.E)} TWh</td><td class="r">€${f0(p.unit)}</td></tr>`).join('');
-  const mixRows=IND.filter(i=>cfg[i.k].on).map(i=>{const m=mixes.A[cfg[i.k].h][j];return m&&m.feasible?`<tr><td>${i.name.split(' ')[0]}</td><td class="r">€${f0(m.cost)}</td><td class="r" style="font-size:10.5px">${mixTxt(m.E)}</td></tr>`:'';}).join('');
-  tip.innerHTML=`<h3>${r.na}</h3><div class="cc">${id} · ${CN[r.cc]} · ${f0(r.pop/r.area)} people/km²${r.cav?' · salt caverns':''}</div>
-   ${here.length?`<table><tr class="h"><td>Plants here · ${SCN[scenario].name.toLowerCase()}</td><td class="r">load</td><td class="r">€/MWh</td></tr>${rows}${here.length>6?`<tr><td colspan="3" style="color:var(--muted)">+${here.length-6} more</td></tr>`:''}</table>${mixBar(agg)}<div class="cc">${mixTxt(agg)}</div>`:`<div class="cc">No plants here in the ${SCN[scenario].name.toLowerCase()} scenario.</div>`}
-   ${left.length?`<div class="cc">${left.length} plant${left.length>1?'s':''} move away (${f1(d3.sum(left,p=>p.E))} TWh)</div>`:''}
-   <table><tr class="h"><td>Best local mix</td><td class="r">€/MWh</td><td class="r">main sources</td></tr>${mixRows}</table>
-   <table><tr class="h"><td colspan="2">Inputs</td></tr>
-   <tr><td>Solar / wind capacity factor</td><td class="r">${pct(r.pv)} / ${pct(r.won)}</td></tr>
-   ${r.coff&&P.offshore?`<tr><td>Offshore (${r.basin})</td><td class="r">${pct(r.coff)}</td></tr>`:''}
-   <tr><td>Renewable potential left</td><td class="r">${f0(res.first.res0[j].potTWh)} TWh</td></tr>
-   <tr><td>Existing renewable output</td><td class="r">${f0(existingRE(r))} TWh</td></tr>
-   <tr><td>Substations ≥330 / 220 kV</td><td class="r">${r.n380} / ${r.n220}</td></tr>
-   <tr><td>Congestion score</td><td class="r">${r.cong>0?'+':''}${r.cong}</td></tr></table>`;
+  const main=layer==='alloc'?'':`<div class="kv main"><span>${LAYNAME[layer]}</span><b>${LAY[layer].fmt(j)}</b></div>`;
+  tip.innerHTML=`<h3>${short(r.na)}</h3><div class="cc">${CN[r.cc]}</div>${main}
+    <div class="kv${layer==='alloc'?' main':''}"><span>Demand placed here</span><b>${f1(a.tot[j])} TWh</b></div>
+    <div class="kv"><span>Solar · wind</span><b>${pct(PVA[j])} · ${pct(WA[j])}</b></div>
+    ${here.length?`<ul>${here.slice(0,5).map(p=>`<li><span>${icon(p.i)} ${p.n.length>26?p.n.slice(0,25)+'…':p.n}</span><span>${f1(p.E)} TWh</span></li>`).join('')}${here.length>5?`<li><span>+ ${here.length-5} more</span><span></span></li>`:''}</ul>`:''}`;
   tip.hidden=false;
   const box=document.getElementById('mapwrap').getBoundingClientRect();
   let x=ev.clientX-box.left+14, y=ev.clientY-box.top+14;
@@ -567,72 +569,97 @@ function showTip(ev,id,pin){
 }
 function hideTip(){if(!sel) tip.hidden=true;}
 
-// ---------- scoreboard, bars, ledger, thesis
-const SCN={stay:{name:'Stay put',d:'every plant where it is'},second:{name:'Second best',d:'with ticked constraints'},first:{name:'First best',d:'social planner, free hand'}};
+// ---------- scenario cards
 const board=document.getElementById('board');
 ['stay','second','first'].forEach(k=>{const b=document.createElement('button');b.className='card';b.id='card-'+k;b.setAttribute('aria-pressed',k===scenario);
-  b.addEventListener('click',()=>{scenario=k;document.querySelectorAll('.card').forEach(c=>c.setAttribute('aria-pressed',c.id==='card-'+k));if(!['alloc','diff'].includes(layer)){}else if(layer==='diff'){layer='alloc';document.getElementById('layer').value='alloc';}render();});
+  b.innerHTML=`<span class="lab">${SCN[k].name}</span><span class="v">…</span><span class="m">&nbsp;</span>`;
+  b.addEventListener('click',()=>setScenario(k));
   board.appendChild(b);});
+// one scenario drives the map, the result boxes and the data table
+function setScenario(k){
+  scenario=k;
+  document.querySelectorAll('.card').forEach(c=>c.setAttribute('aria-pressed',c.id==='card-'+k));
+  document.querySelectorAll('#dscn button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));
+  if(layer==='diff'){layer='alloc';document.getElementById('layer').value='alloc';}
+  repaint();
+}
+document.querySelectorAll('#dscn button').forEach(b=>b.addEventListener('click',()=>setScenario(b.dataset.k)));
 function scoreboard(){
   ['stay','second','first'].forEach(k=>{const a=res[k];
-    const st=a.st||{}, sh=(x)=>pct((x||0)/(a.E||1));
-    document.getElementById('card-'+k).innerHTML=`<span class="lab"><span>${SCN[k].name}</span><span>${SCN[k].d}</span></span>
+    document.getElementById('card-'+k).innerHTML=`<span class="lab">${SCN[k].name}</span>
      <span class="v">€${f0(a.avg)}<small>/MWh</small></span>
-     <span class="m"><b>€${f1(a.bn)}bn</b> a year · <b>${a.used}</b> regions</span>
-     <span class="m"><b>${a.moved}</b> of ${a.nPlants} plants move (${pct(a.E?a.movedE/a.E:0)} of load)${a.unserved>0.5?` · <span class="w">${f0(a.unserved)} TWh unserved</span>`:''}</span>
-     ${mixBar(a.mix)}
-     <span class="m">${mixTxt(a.mix)}${(st.bat||st.h2)?` · stored: ${sh(st.bat)} battery, ${sh(st.h2)} H₂`:''}</span>`;});
+     <span class="m"><b>€${f1(a.bn)}bn</b>/yr · <b>${a.moved}</b> plants move${a.uncovered>0.5?` · <span class="w">${f0(a.uncovered)} TWh unsupplied</span>`:''}</span>
+     <span class="go">${k===scenario?'Shown on the map and in the data':'Show on the map →'}</span>`;});
 }
-function ranking(){
-  const a=res[scenario], idx=d3.range(R.length).filter(j=>a.tot[j]>0.05).sort((x,y)=>a.tot[y]-a.tot[x]).slice(0,12);
-  const mx=d3.max(idx,j=>a.tot[j])||1;
-  document.getElementById('rankT').textContent=`Where the load goes: ${SCN[scenario].name.toLowerCase()}`;
-  document.getElementById('rankS').textContent=`top ${idx.length} of ${a.used} · TWh/yr`;
-  document.getElementById('bars').innerHTML=idx.map(j=>{const r=R[j];const isNew=IND.some(i=>cfg[i.k].on&&(a.byInd[j][i.k]||0)>0.05&&r.cap[i.k]<=0);
-    return `<span class="n" title="${r.na}"><span class="cc">${r.id}</span>${short(r.na)}</span>
-    <span class="b">${IND.filter(i=>cfg[i.k].on).map(i=>`<i style="width:${(a.byInd[j][i.k]||0)/mx*100}%;background:var(${IC[i.k]})" title="${i.name}: ${f1(a.byInd[j][i.k]||0)} TWh"></i>`).join('')}</span>
-    <span class="val">${f1(a.tot[j])}</span>`;}).join('');
+
+// ---------- data table
+let dset='plants', sortK='E', sortDir=-1;
+const dataEl=document.getElementById('data'), dfilter=document.getElementById('dfilter');
+const COLS={
+  plants:[{k:'n',t:'Plant'},{k:'s',t:'Sector',h:r=>`${icon(r.si)} ${r.s}`},{k:'c',t:'Country'},{k:'from',t:'Today'},{k:'to',t:'In scenario'},{k:'mv',t:'Moves'},
+    {k:'o',t:'Output (kt)',num:1,f:f0},{k:'E',t:'Demand (TWh)',num:1,f:f1},{k:'u',t:'Cost (€/MWh)',num:1,f:f0}],
+  regions:[{k:'n',t:'Region'},{k:'id',t:'Code'},{k:'c',t:'Country'},{k:'L',t:'Demand (TWh)',num:1,f:f1},{k:'np',t:'Plants',num:1,f:f0},
+    {k:'mix',t:'Best mix (€/MWh)',num:1,f:f0},{k:'src',t:'Main source'},{k:'pv',t:'Solar CF',num:1,f:pct},{k:'w',t:'Wind CF',num:1,f:pct},
+    {k:'land',t:'Land (km²)',num:1,f:f0},{k:'s330',t:'≥330 kV',num:1,f:f0}],
+};
+function rows(){
+  const a=res[scenario];
+  if(dset==='plants') return a.plants.map(p=>({n:p.n,s:SHORT[p.i],si:p.i,c:CN[R[p.home].cc],from:rname(p.home),to:rname(p.loc),mv:p.loc!==p.home?'Yes':'',o:p.o,E:p.E,u:p.unit}));
+  const np=new Array(R.length).fill(0); a.plants.forEach(p=>np[p.loc]++);
+  return R.map((r,j)=>{const m=mixOf(j),s=mainSrc(m);return {n:short(r.na),id:r.id,c:CN[r.cc],L:a.tot[j],np:np[j],mix:m&&m.feasible?m.cost:NaN,src:s?TN[s]:'',
+    pv:PVA[j],w:WA[j],land:a.land[j],s330:r.n330};});
 }
-function ledger(){
-  const a=res[scenario], el=document.getElementById('ledger');
-  const home=Object.fromEntries(res.stay.plants.map(p=>[p.q,p.unit]));
-  const mv=a.plants.filter(p=>p.loc!==p.home).sort((x,y)=>y.E-x.E);
-  document.getElementById('ledT').textContent=`Plants that move: ${SCN[scenario].name.toLowerCase()}`;
-  document.getElementById('ledS').textContent=mv.length?`${mv.length} plants · ${f0(d3.sum(mv,p=>p.E))} TWh/yr`:'';
-  if(!mv.length){el.innerHTML=`<p class="empty">${scenario==='stay'?'No plant moves in this scenario. Each runs on the best mix its home region allows.':'No plant gains enough to move under these settings.'}</p>`;return;}
-  el.innerHTML=`<table><thead><tr><th>Plant</th><th>From → to</th><th class="num">TWh</th><th class="num">€/MWh</th></tr></thead><tbody>${
-    mv.map(p=>`<tr><td><span class="pn"><span class="sw" style="background:var(${IC[p.i]})"></span><span>${p.n}</span></span></td>
-      <td class="rt">${rname(p.home)} → <b style="color:var(--ink);font-weight:500">${rname(p.loc)}</b><br>${mixTxt(p.mix)}</td>
-      <td class="num">${f1(p.E)}</td><td class="num">${f0(home[p.q])} → <span class="save">${f0(p.unit)}</span></td></tr>`).join('')}</tbody></table>`;
+function visibleRows(){
+  const q=dfilter.value.trim().toLowerCase(), cols=COLS[dset];
+  let rs=rows();
+  if(q) rs=rs.filter(r=>cols.some(c=>!c.num&&String(r[c.k]).toLowerCase().includes(q)));
+  return rs.sort((x,y)=>{const a=x[sortK],b=y[sortK];if(typeof a==='number'||typeof b==='number')return sortDir*((isFinite(a)?a:-Infinity)-(isFinite(b)?b:-Infinity));return sortDir*String(a).localeCompare(String(b));});
 }
-function thesis(){
-  const on=IND.filter(i=>cfg[i.k].on), Dt=d3.sum(on,i=>cfg[i.k].out*cfg[i.k].int);
-  const el=document.getElementById('thesis');
-  if(!Dt){el.textContent='Select at least one industry to size its clean-power needs.';return;}
-  const a=res.first,b=res.second,c=res.stay;
-  const byC={};R.forEach((r,j)=>{if(a.tot[j]>0)byC[r.cc]=(byC[r.cc]||0)+a.tot[j];});
-  const topC=Object.entries(byC).sort((x,y)=>y[1]-x[1]).slice(0,2).map(([k])=>CN[k]);
-  const names=on.length===IND.length?'these five industries':on.map(i=>i.name.split(' ')[0].toLowerCase()).join(', ');
-  const gap=c.avg-a.avg, closed=gap>0.1?(c.avg-b.avg)/gap:0;
-  el.innerHTML=`Decarbonising ${names} needs <b>${f0(Dt)} TWh</b> of clean power a year. Left where they are, the plants pay <b>€${f0(c.avg)}/MWh</b> for their best local mix. A free-handed planner would move <b>${a.moved} of ${a.nPlants}</b> plants, mostly to ${topC.join(' and ')}, and cut that to <b>€${f0(a.avg)}</b>, saving €${f1(c.bn-a.bn)}bn a year. With the ticked constraints, ${b.moved} plants move and the cost is <b>€${f0(b.avg)}</b>: ${pct(closed)} of the prize.`;
+function renderTable(){
+  if(!res.first) return;
+  document.getElementById('dataS').textContent=`· ${SCN[scenario].name}${dset==='regions'?` · best mix for ${SHORT[mixInd].toLowerCase()}`:''}`;
+  if(!dataEl.open) return;
+  const cols=COLS[dset], rs=visibleRows();
+  const th=cols.map(c=>`<th data-k="${c.k}" class="${c.num?'num':''}"${c.k===sortK?` aria-sort="${sortDir>0?'ascending':'descending'}"`:''} tabindex="0" scope="col">${c.t}</th>`).join('');
+  const body=rs.map(r=>`<tr>${cols.map(c=>`<td class="${c.num?'num':''}">${c.h?c.h(r):c.f?(isFinite(r[c.k])?c.f(r[c.k]):'–'):r[c.k]}</td>`).join('')}</tr>`).join('');
+  document.getElementById('dtable').innerHTML=`<thead><tr>${th}</tr></thead><tbody>${body}</tbody>`;
+  document.getElementById('dcount').textContent=`${rs.length} rows`;
 }
+function sortBy(k){const c=COLS[dset].find(c=>c.k===k);if(sortK===k)sortDir=-sortDir;else{sortK=k;sortDir=c&&c.num?-1:1;}renderTable();}
+document.getElementById('dtable').addEventListener('click',e=>{const th=e.target.closest('th');if(th)sortBy(th.dataset.k);});
+document.getElementById('dtable').addEventListener('keydown',e=>{const th=e.target.closest('th');if(th&&(e.key==='Enter'||e.key===' ')){e.preventDefault();sortBy(th.dataset.k);}});
+dataEl.addEventListener('toggle',renderTable);
+dfilter.addEventListener('input',renderTable);
+['dsPlants','dsRegions'].forEach(id=>document.getElementById(id).addEventListener('click',()=>{
+  dset=id==='dsPlants'?'plants':'regions'; sortK=dset==='plants'?'E':'L'; sortDir=-1;
+  document.getElementById('dsPlants').setAttribute('aria-pressed',dset==='plants');document.getElementById('dsRegions').setAttribute('aria-pressed',dset==='regions');
+  renderTable();}));
+document.getElementById('dcopy').addEventListener('click',()=>{
+  const cols=COLS[dset], q=(v)=>/[",\n]/.test(String(v))?`"${String(v).replace(/"/g,'""')}"`:String(v);
+  const csv=[cols.map(c=>q(c.t)).join(','),...visibleRows().map(r=>cols.map(c=>{const v=r[c.k];return typeof v==='number'?(isFinite(v)?+v.toFixed(4):''):q(v);}).join(','))].join('\n');
+  const msg=document.getElementById('dcount');
+  const fallback=()=>{const t=document.createElement('textarea');t.value=csv;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();
+    let ok=false;try{ok=document.execCommand('copy');}catch(e){}t.remove();msg.textContent=ok?'Copied':'Copy blocked here: select the table and copy it';};
+  try{navigator.clipboard.writeText(csv).then(()=>{msg.textContent='Copied';},fallback);}catch(e){fallback();}
+});
+
+// ---------- render
 function render(){
-  techCosts();
-  IND.forEach(i=>{document.getElementById('twh-'+i.k).textContent=cfg[i.k].on?f0(cfg[i.k].out*cfg[i.k].int):'–';});
-  const Dt=d3.sum(IND,i=>cfg[i.k].on?cfg[i.k].out*cfg[i.k].int:0);
-  document.getElementById('dtot').textContent=f0(Dt)+' TWh';
-  document.getElementById('dshare').textContent=`≈ ${pct(Dt/2700)} of EU27 gross electricity use (~2,700 TWh) · ${f0(Dt*1e6/8760/1000)} GW of round-the-clock load`;
-  scoreboard();thesis();paint();drawPlants();ranking();ledger();
+  SECTORS.forEach(s=>{document.getElementById('twh-'+s.k).textContent=cfg[s.k].on?`${f0(demand(s.k))} TWh`:'–';});
+  const Dt=d3.sum(SECTORS,s=>demand(s.k));
+  document.getElementById('sub').textContent=`${f0(Dt)} TWh/yr of clean power · ${res.first.nPlants} plants · ${R.length} regions`;
+  scoreboard();paint();drawPlants();renderTable();
   if(sel){tip.hidden=true;sel=null;rp.classed('sel',false);}
 }
+const repaint=()=>{if(res.first){paint();drawPlants();scoreboard();renderTable();}};
 new ResizeObserver(()=>{fit();}).observe(document.getElementById('mapwrap'));
-const repaint=()=>{if(res.first){paint();drawPlants();ranking();ledger();scoreboard();}};
 const mq=window.matchMedia('(prefers-color-scheme: dark)');
 mq.addEventListener&&mq.addEventListener('change',repaint);
 new MutationObserver(repaint).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){sel=null;rp.classed('sel',false);tip.hidden=true;}});
+document.getElementById('sub').textContent=`${nPlants} plants · ${R.length} regions`;
 fit();
-if(typeof solver==='undefined'){statusEl.textContent='The optimiser library did not load; reload the page.';}
+if(typeof solver==='undefined'){statusEl.textContent='The optimiser did not load. Reload the page.';}
 else schedule(30);
 })();
 </script>

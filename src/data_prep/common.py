@@ -11,9 +11,11 @@ ROOT = Path(__file__).resolve().parents[2]
 RAW = ROOT / "data" / "raw"
 MANUAL = ROOT / "data" / "manual"
 PROCESSED = ROOT / "data" / "processed"
+DERIVED = ROOT / "data" / "derived"
+CACHE = ROOT / "data" / "cache"
 CONFIG = json.loads((ROOT / "config" / "model_config.json").read_text(encoding="utf-8"))
 CFG = CONFIG["data_prep"]
-EU27 = CFG["eu27"]
+COUNTRIES = CFG["countries"]
 
 # WGS84 lon/lat <-> ETRS89-LAEA (EPSG:3035, metres). All areas, lengths and the map use EPSG:3035.
 T = Transformer.from_crs(4326, CFG["projected_crs"], always_xy=True)
@@ -24,13 +26,13 @@ def proj(lon, lat):
     return T.transform(lon, lat)
 
 
-# Country names used by powerplantmatching and the PyPSA-Eur ammonia list -> Eurostat codes
+# Country names used by the PyPSA-Eur ammonia list -> Eurostat codes
 COUNTRY_CODES = {
     "Austria": "AT", "Belgium": "BE", "Bulgaria": "BG", "Croatia": "HR", "Czechia": "CZ", "Denmark": "DK",
     "Estonia": "EE", "Finland": "FI", "France": "FR", "Germany": "DE", "Greece": "EL", "Hungary": "HU",
     "Ireland": "IE", "Italy": "IT", "Latvia": "LV", "Lithuania": "LT", "Luxembourg": "LU", "Netherlands": "NL",
     "Poland": "PL", "Portugal": "PT", "Romania": "RO", "Slovakia": "SK", "Slovenia": "SI", "Spain": "ES",
-    "Sweden": "SE", "Cyprus": "CY", "Malta": "MT",
+    "Sweden": "SE", "Cyprus": "CY", "Malta": "MT", "Norway": "NO", "Switzerland": "CH", "United Kingdom": "UK",
 }
 
 

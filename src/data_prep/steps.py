@@ -1,8 +1,8 @@
-"""The nine data-preparation steps. Each step takes and returns the shared context dict `ctx`.
+"""The seven data-preparation steps. Each step takes and returns the shared context dict `ctx`.
 
 ctx["R"]       ordered dict of regions keyed by NUTS-2 id (the model's spatial unit)
 ctx["locate"]  Locator for NUTS-2 polygons
-ctx["plants"]  list of industrial sites (and chlor-alkali sites used only to mark chemical clusters)
+ctx["plants"]  list of industrial sites with today's output
 ctx["qa"]      lines written to outputs/qa_report.md
 """
 import json
@@ -14,215 +14,128 @@ from shapely import wkt
 from shapely.geometry import LineString, mapping, shape
 from shapely.ops import unary_union
 
-from common import CFG, EU27, RAW, COUNTRY_CODES, Locator, TI, proj, read_manual
+from common import CFG, CONFIG, COUNTRIES, COUNTRY_CODES, DERIVED, RAW, Locator, proj, read_manual
 
 NUTS = RAW / "nuts2json"
+SECTORS = {s["k"]: s for s in CONFIG["model"]["sectors"]}
 
 
 # --------------------------------------------------------------------------------------------
-# Step 1 · Regions: NUTS-2 (2024) polygons for the EU27, minus outermost regions, Ceuta and Melilla
+# Step 1 · Regions: NUTS-2 polygons. NUTS 2024 for the EU27, Norway and Switzerland; NUTS 2016 for
+# the UK, which left the NUTS system after Brexit. Outermost regions, Ceuta, Melilla and Svalbard dropped.
 # --------------------------------------------------------------------------------------------
-def s1_regions(ctx):
-    rg = json.loads((NUTS / "nutsrg_2_2024_3035_20M.json").read_text(encoding="utf-8"))
+def load_regions():
     excl = tuple(CFG["excluded_nuts_prefixes"])
-    feats = [f for f in rg["features"] if f["properties"]["id"][:2] in EU27 and not f["properties"]["id"].startswith(excl)]
-    pts = {f["properties"]["id"]: f for f in json.loads((NUTS / "nutspt_2_2024_4326.json").read_text(encoding="utf-8"))["features"]}
+    old = set(CFG["nuts2016_countries"])
+    feats, pts = [], {}
+    for year, keep in [("2024", lambda cc: cc not in old), ("2016", lambda cc: cc in old)]:
+        rg = json.loads((NUTS / f"nutsrg_2_{year}_3035_20M.json").read_text(encoding="utf-8"))
+        feats += [f for f in rg["features"] if f["properties"]["id"][:2] in COUNTRIES and keep(f["properties"]["id"][:2])
+                  and not f["properties"]["id"].startswith(excl)]
+        pts.update({f["properties"]["id"]: f for f in json.loads((NUTS / f"nutspt_2_{year}_4326.json").read_text(encoding="utf-8"))["features"]})
+    return feats, pts
+
+
+def s1_regions(ctx):
+    feats, pts = load_regions()
     ids = [f["properties"]["id"] for f in feats]
     geoms = [shape(f["geometry"]).buffer(0) for f in feats]
     R = {}
     for i, f in zip(ids, feats):
-        pt = pts[i]
-        lon, lat = pt["geometry"]["coordinates"]
+        lon, lat = pts[i]["geometry"]["coordinates"]
         x, y = proj(lon, lat)
-        R[i] = dict(id=i, na=f["properties"]["na"], cc=i[:2], area=pt["properties"]["ar"] / 1e6,   # km²
-                    lon=lon, lat=lat, cx=x / 1000, cy=y / 1000, cities=0.0)
+        R[i] = dict(id=i, na=f["properties"]["na"], cc=i[:2], area=pts[i]["properties"]["ar"] / 1e6,   # km²
+                    lon=lon, lat=lat, cx=x / 1000, cy=y / 1000)
     ctx.update(R=R, feats=feats, geoms=geoms, ids=ids, locate=Locator(ids, geoms))
-    ctx["qa"].append(f"- Regions: {len(R)} NUTS-2 regions (EU27, NUTS 2024, excluding {', '.join(excl)})")
+    n = {c: sum(1 for r in R.values() if r["cc"] == c) for c in COUNTRIES}
+    ctx["qa"].append(f"- Regions: {len(R)} NUTS-2 regions in {len(COUNTRIES)} countries (UK on NUTS 2016: {n['UK']}; NO {n['NO']}; CH {n['CH']})")
     return ctx
 
 
 # --------------------------------------------------------------------------------------------
-# Step 2 · Population: towns > 15,000 (GeoNames) + national residual spread by area
+# Step 2 · Population (Eurostat demo_r_d2jan, 1 January) and density
 # --------------------------------------------------------------------------------------------
+def _eurostat(path):
+    d = json.loads(path.read_text(encoding="utf-8"))
+    dims, size = d["id"], d["size"]
+    stride = {k: int(np.prod(size[i + 1:])) for i, k in enumerate(dims)}
+    geo = d["dimension"]["geo"]["category"]["index"]
+    inv = {v: k for k, v in geo.items()}
+    return {inv[(int(k) // stride["geo"]) % size[dims.index("geo")]]: v for k, v in d["value"].items()}
+
+
 def s2_population(ctx):
-    R, locate = ctx["R"], ctx["locate"]
-    cities = pd.read_csv(RAW / "geonames" / "cities15000_eu27.csv", encoding="utf-8")
-    placed = 0
-    for c in cities.itertuples(index=False):
-        cc = "EL" if c.countrycode == "GR" else c.countrycode
-        if cc not in EU27:
-            continue
-        r = locate(c.longitude, c.latitude)
-        if r:
-            R[r]["cities"] += c.population
-            placed += 1
-    pop = dict(read_manual("population_national_2024.csv")[["country_code", "population_million"]].itertuples(index=False))
-    share = CFG["population"]["residual_min_share"]
-    for cc in EU27:
-        rs = [r for r in R.values() if r["cc"] == cc]
-        if not rs:
-            continue
-        ctot = sum(r["cities"] for r in rs)
-        atot = sum(r["area"] for r in rs)
-        P = pop[cc] * 1e6
-        resid = max(P - ctot, share * P)                         # at least 15% lives outside towns > 15k
-        scale = (P - resid) / ctot if ctot > 0 else 0
-        for r in rs:
-            r["pop"] = r["cities"] * scale + resid * r["area"] / atot
-            r["urb"] = r["cities"] * scale / r["pop"] if r["pop"] else 0   # urban share of population
-    ctx["qa"].append(f"- Population: {placed} of {len(cities)} GeoNames towns placed in a region; national totals from data/manual/population_national_2024.csv")
+    R, Y = ctx["R"], CFG["population_year"]
+    pop = {y: _eurostat(RAW / "eurostat" / f"demo_r_d2jan_nuts2_{y}.json") for y in set(Y.values())}
+    over = dict(read_manual("population_overrides.csv")[["nuts2", "population"]].itertuples(index=False))
+    missing = []
+    for r in R.values():
+        y = Y.get(r["cc"], Y["default"])
+        r["pop"] = pop[y].get(r["id"], over.get(r["id"]))
+        if r["pop"] is None:
+            missing.append(r["id"])
+            r["pop"] = 0
+        r["dens"] = r["pop"] / r["area"]
+    total = sum(r["pop"] for r in R.values()) / 1e6
+    ctx["qa"].append(f"- Population: {total:,.1f} million (Eurostat demo_r_d2jan, {Y['default']}; UK {Y['UK']})"
+                     + (f"; missing: {', '.join(missing)}" if missing else ""))
     return ctx
 
 
 # --------------------------------------------------------------------------------------------
-# Step 3 · Weather: annual-average solar yield and onshore wind capacity factor (IDW of anchors)
+# Step 3 · Weather: monthly solar (PVGIS) and day/night onshore wind (EMHIRES) capacity factors.
+# The tables in data/derived/ are built by src/data_prep/fetch_weather.py.
 # --------------------------------------------------------------------------------------------
-def _haversine_km(lat1, lon1, lat2, lon2):
-    p = np.pi / 180
-    a = np.sin((lat2 - lat1) * p / 2) ** 2 + np.cos(lat1 * p) * np.cos(lat2 * p) * np.sin((lon2 - lon1) * p / 2) ** 2
-    return 12742 * np.arcsin(np.sqrt(a))
-
-
 def s3_weather(ctx):
-    A = read_manual("weather_anchors.csv")[["lat", "lon", "pv_yield_kwh_per_kwp", "onshore_wind_cf"]].to_numpy(float)
-    k_n, pw, dmin = CFG["weather_idw"]["neighbours"], CFG["weather_idw"]["power"], CFG["weather_idw"]["min_distance_km"]
-    for r in ctx["R"].values():
-        d = _haversine_km(r["lat"], r["lon"], A[:, 0], A[:, 1])
-        k = np.argsort(d)[:k_n]
-        w = 1 / np.maximum(d[k], dmin) ** pw
-        r["pv"] = float((A[k, 2] * w).sum() / w.sum()) / 8760      # solar capacity factor
-        r["won"] = float((A[k, 3] * w).sum() / w.sum())            # onshore wind capacity factor
-    ctx["qa"].append(f"- Weather: {len(A)} anchor points (PLACEHOLDER author estimates), IDW k={k_n}, power={pw}")
-    return ctx
-
-
-# --------------------------------------------------------------------------------------------
-# Step 4 · Coastline and sea basin per region (from coastal NUTS-3 boundaries)
-# --------------------------------------------------------------------------------------------
-def _basin(lon, lat):
-    if lon < -3:
-        return "Atlantic"
-    if lat < 38.2 and lon < -5.4:
-        return "Atlantic"
-    if lon > 27 and 41 < lat < 46.5:
-        return "Black Sea"
-    if lat > 53.5:
-        if lon < 9.3 or (lon < 12.6 and 55.4 < lat < 59.3):
-            return "North Sea"
-        return "Baltic"
-    if lat > 50.4 and lon > 1.4:
-        return "North Sea"
-    if lon < -1.5 or (lat > 43.6 and lon < 0.5) or lat > 46:
-        return "Atlantic"
-    return "Mediterranean"
-
-
-def s4_coast(ctx):
     R = ctx["R"]
-    off = {b.basin: (b.capacity_factor, b.overnight_capex_eur_per_kw) for b in read_manual("offshore_basins.csv").itertuples(index=False)}
-    bn = json.loads((NUTS / "nutsbn_3_2024_3035_20M.json").read_text(encoding="utf-8"))
+    pv = pd.read_csv(DERIVED / "pv_monthly_cf.csv").set_index("nuts2")
+    wd = pd.read_csv(DERIVED / "wind_monthly_cf.csv").set_index("nuts2")
+    months = [f"{m:02d}" for m in range(1, 13)]
     for r in R.values():
-        r["coast"], r["_b"] = 0.0, {}
-    for f in bn["features"]:
-        p = f["properties"]
-        if p.get("co") != "T":
-            continue
-        n3 = p.get("left") or p.get("right")
-        if not n3 or n3[:4] not in R:
-            continue
-        g = shape(f["geometry"])
-        L = g.length / 1000                                         # km of coastline
-        c = g.interpolate(0.5, normalized=True)
-        lon, lat = TI.transform(c.x, c.y)
-        r = R[n3[:4]]
-        r["coast"] += L
-        b = _basin(lon, lat)
-        r["_b"][b] = r["_b"].get(b, 0) + L
-    for r in R.values():
-        r["basin"] = max(r["_b"], key=r["_b"].get) if r["_b"] else None
-        del r["_b"]
-        r["coff"], r["kxoff"] = off[r["basin"]] if r["basin"] else (0, 0)
-    n = sum(1 for r in R.values() if r["basin"])
-    ctx["qa"].append(f"- Coast: {n} coastal regions, {sum(r['coast'] for r in R.values()):,.0f} km of coastline at 1:20M")
+        r["pv"] = [float(pv.loc[r["id"], f"cf_{m}"]) for m in months]
+        r["wd"] = [float(wd.loc[r["id"], f"day_{m}"]) for m in months]
+        r["wn"] = [float(wd.loc[r["id"], f"night_{m}"]) for m in months]
+    days = np.array([31, 28.25, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
+    pa = [np.dot(r["pv"], days) / days.sum() for r in R.values()]
+    wa = [np.dot((np.array(r["wd"]) + np.array(r["wn"])) / 2, days) / days.sum() for r in R.values()]
+    ctx["qa"].append(f"- Weather: solar capacity factor {min(pa):.1%}–{max(pa):.1%}, onshore wind {min(wa):.1%}–{max(wa):.1%} (annual means by region)")
     return ctx
 
 
 # --------------------------------------------------------------------------------------------
-# Step 5 · Transmission grid: count >=220 kV substations per region; keep lines for display
+# Step 4 · Transmission grid: count >=330 kV substations per region; keep >=220 kV lines for display
 # --------------------------------------------------------------------------------------------
-def s5_grid(ctx):
+def s4_grid(ctx):
     R, locate, G = ctx["R"], ctx["locate"], CFG["grid"]
     bus = pd.read_csv(RAW / "pypsa_eur" / "entsoegridkit_buses.csv", quotechar="'")
-    bus = bus[(bus.voltage >= G["min_voltage_kv"]) & (bus.dc == "f") & (bus.under_construction == "f")]
+    bus = bus[(bus.voltage >= G["high_voltage_kv"]) & (bus.dc == "f") & (bus.under_construction == "f")]
     for r in R.values():
-        r["n380"], r["n220"] = 0, 0
-    subs = []
+        r["n330"] = 0
     for b in bus.itertuples(index=False):
         rid = locate(b.x, b.y, CFG["snap_km"]["substation"])
-        if not rid:
-            continue
-        hv = b.voltage >= G["high_voltage_kv"]
-        R[rid]["n380" if hv else "n220"] += 1
-        x, y = proj(b.x, b.y)
-        subs.append([round(x / 1000, 1), round(y / 1000, 1), 1 if hv else 0])
+        if rid:
+            R[rid]["n330"] += 1
     lines = pd.read_csv(RAW / "pypsa_eur" / "entsoegridkit_lines.csv", quotechar="'")
     lines = lines[(lines.voltage >= G["min_voltage_kv"]) & (lines.under_construction == False)]  # noqa: E712
-    eu = unary_union(ctx["geoms"]).buffer(20000)
+    area = unary_union(ctx["geoms"]).buffer(20000)
     L = []
     for l in lines.itertuples(index=False):
         g = wkt.loads(l.geometry)
         xs, ys = zip(*g.coords)
         X, Y = proj(xs, ys)
-        g2 = LineString(list(zip(X, Y)))
-        if not g2.intersects(eu):
+        g2 = LineString(zip(X, Y))
+        if not g2.intersects(area):
             continue
         g2 = g2.simplify(G["line_simplify_m"])
         L.append([1 if l.voltage >= G["high_voltage_kv"] else 0, [[round(x / 1000, 1), round(y / 1000, 1)] for x, y in g2.coords]])
-    ctx.update(subs=subs, lines=L)
-    ctx["qa"].append(f"- Grid: {sum(r['n380'] for r in R.values())} substations >=330 kV and {sum(r['n220'] for r in R.values())} at 220-300 kV in EU27 regions; {len(L)} line segments kept for display")
+    ctx["lines"] = L
+    n = sum(1 for r in R.values() if r["n330"] > 0)
+    ctx["qa"].append(f"- Grid: {sum(r['n330'] for r in R.values())} substations >=330 kV; {n} of {len(R)} regions have at least one")
     return ctx
 
 
 # --------------------------------------------------------------------------------------------
-# Step 6 · Existing renewables (utility scale) from powerplantmatching
-# --------------------------------------------------------------------------------------------
-def s6_renewables(ctx):
-    R, locate, E = ctx["R"], ctx["locate"], CFG["existing_renewables"]
-    ppm = pd.read_csv(RAW / "powerplantmatching" / "powerplants.csv",
-                      usecols=["Fueltype", "Technology", "Country", "Capacity", "DateIn", "DateOut", "lat", "lon"])
-    ppm = ppm[ppm.DateIn.isna() | (ppm.DateIn <= E["commissioned_by"])]
-    ppm["Capacity"] = ppm.Capacity.fillna(0)
-    ppm = ppm[ppm.Country.isin(list(COUNTRY_CODES)) & (ppm.DateOut.isna() | (ppm.DateOut >= E["still_operating_in"])) & ppm.lat.notna()]
-    for r in R.values():
-        r.update(e_pv=0.0, e_won=0.0, e_woff=0.0, e_hres=0.0, e_hror=0.0)
-
-    def key(f, t):
-        if f == "Solar":
-            return "e_pv"
-        if f == "Wind":
-            return "e_woff" if t == "Offshore" else "e_won"
-        if f == "Hydro":
-            return {"Reservoir": "e_hres", "Run-Of-River": "e_hror"}.get(t)
-        return None
-
-    miss = 0.0
-    for f, t, cty, cap, lat, lon in ppm[["Fueltype", "Technology", "Country", "Capacity", "lat", "lon"]].itertuples(index=False):
-        k = key(f, t)
-        if not k:
-            continue
-        snap = CFG["snap_km"]["offshore_plant"] if k == "e_woff" else CFG["snap_km"]["onshore_plant"]
-        rid = locate(lon, lat, snap)
-        if not rid or rid[:2] != COUNTRY_CODES[cty]:
-            miss += cap
-            continue
-        R[rid][k] += cap
-    tot = {k: sum(r[k] for r in R.values()) for k in ["e_pv", "e_won", "e_woff", "e_hres", "e_hror"]}
-    ctx["qa"].append("- Existing renewables (MW): " + ", ".join(f"{k[2:]} {v:,.0f}" for k, v in tot.items()) + f"; {miss:,.0f} MW not placed (outside EU27 regions or country mismatch)")
-    return ctx
-
-
-# --------------------------------------------------------------------------------------------
-# Step 7 · Industrial sites: steel, cement, ammonia, chemicals, aluminium (+ chlor-alkali clusters)
+# Step 5 · Industrial sites and today's output per site
 # --------------------------------------------------------------------------------------------
 def _dms(s):
     """Parse the free-text coordinates in the Tröndle et al. workbook (DMS, decimal, mixed) -> (lat, lon)."""
@@ -248,35 +161,41 @@ def _dms(s):
     return a, b
 
 
-def _named(df, cap_col):
-    disp = lambda row: row["name"] + (" (idle)" if row.get("status") == "idle" else "")
-    return [(disp(r), r["country_code"], r["lat"], r["lon"], r[cap_col]) for _, r in df.iterrows()]
+MANUAL_NOTE = "hand-compiled list (data/manual)"
 
 
-def s7_plants(ctx):
+def _site(ind, name, cc, lat, lon, cap, status="operating", basis="capacity", source=MANUAL_NOTE, verification=""):
+    return dict(ind=ind, name=name, cc=cc, lat=lat, lon=lon, cap=float(cap), status=status, basis=basis, source=source, verification=verification)
+
+
+def _manual(ind, file, cap_col, scale=1):
+    df = read_manual(file)
+    return [_site(ind, r["name"], r["country_code"], r["lat"], r["lon"], r[cap_col] * scale, r.get("status", "operating"),
+                  verification=r.get("verification", "")) for _, r in df.iterrows()]
+
+
+def s5_plants(ctx):
     R, locate = ctx["R"], ctx["locate"]
-    x = pd.read_excel(RAW / "troendle_2019" / "energy-intensive-industries.xlsx", sheet_name=None)
-    plants = {k: [] for k in ["steel", "cement", "ammonia", "chemicals", "aluminium"]}
-    # steel (capacity kt crude steel), aluminium (kt), crackers (kt ethylene): hand-compiled
-    for n, cc, lat, lon, c in _named(read_manual("steel_plants.csv"), "crude_steel_capacity_mt"):
-        plants["steel"].append((n, cc, lat, lon, c * 1000))
-    plants["aluminium"] += _named(read_manual("aluminium_smelters.csv"), "primary_al_capacity_kt")
-    plants["chemicals"] += _named(read_manual("steam_crackers.csv"), "ethylene_capacity_kt")
-    # cement: EU ETS 2013/14 verified emissions / t CO2 per t clinker -> kt clinker; then additions
+    sites = []
+    sites += _manual("steel", "steel_plants.csv", "crude_steel_capacity_mt", 1000)
+    sites += _manual("aluminium", "aluminium_smelters.csv", "primary_al_capacity_kt")
+    sites += _manual("chemicals", "steam_crackers.csv", "ethylene_capacity_kt")
+    # cement: EU ETS 2014 (else 2013) verified emissions / t CO2 per t clinker = that year's clinker OUTPUT
+    x = pd.read_excel(RAW / "troendle_2019" / "energy-intensive-industries.xlsx", sheet_name="Act 29 (cement clinker)")
     drop = list(read_manual("cement_exclusions.csv").name_contains)
     ef = CFG["cement"]["t_co2_per_t_clinker"]
-    for _, row in x["Act 29 (cement clinker)"].iterrows():
-        cc = {"GR": "EL"}.get(row.REGISTRY_CODE, row.REGISTRY_CODE)
-        if cc not in EU27 or not isinstance(row.Coordinates, str):
-            continue
-        if any(d in str(row.INSTALLATION_NAME) for d in drop):
+    for _, row in x.iterrows():
+        cc = {"GR": "EL", "GB": "UK"}.get(row.REGISTRY_CODE, row.REGISTRY_CODE)
+        if cc not in COUNTRIES or not isinstance(row.Coordinates, str) or any(d in str(row.INSTALLATION_NAME) for d in drop):
             continue
         ll = _dms(row.Coordinates)
         em = row.VERIFIED_EMISSIONS_2014 if row.VERIFIED_EMISSIONS_2014 > 0 else row.VERIFIED_EMISSIONS_2013
         if not ll or not em or em <= 0:
             continue
-        plants["cement"].append((str(row.INSTALLATION_NAME).strip().title()[:40], cc, ll[0], ll[1], em / (ef * 1000)))
-    plants["cement"] += _named(read_manual("cement_additions.csv"), "clinker_capacity_kt")
+        sites.append(_site("cement", str(row.INSTALLATION_NAME).strip().title()[:40], cc, ll[0], ll[1], em / (ef * 1000),
+                           basis="output", source="EU ETS verified emissions 2014 (Tröndle et al. 2019)",
+                           verification="clinker output = emissions / 0.83 t CO2 per t; coordinates from source"))
+    sites += _manual("cement", "cement_additions.csv", "clinker_capacity_kt")
     # ammonia: PyPSA-Eur list, capacity gaps filled, sites added
     fills = dict(read_manual("ammonia_capacity_fills.csv")[["plant", "ammonia_capacity_kt"]].itertuples(index=False))
     am = pd.read_csv(RAW / "pypsa_eur" / "ammonia_plants.csv")
@@ -284,78 +203,61 @@ def s7_plants(ctx):
         cc = COUNTRY_CODES.get(a.Country)
         if not cc:
             continue
-        cap = a["Ammonia [kt/a]"] if not np.isnan(a["Ammonia [kt/a]"]) else fills.get(a.Plant, 0)
+        given = not np.isnan(a["Ammonia [kt/a]"])
+        cap = a["Ammonia [kt/a]"] if given else fills.get(a.Plant, 0)
         if cap <= 0:
             continue
-        plants["ammonia"].append((a.Plant, cc, a.Latitude, a.Longitude, cap))
-    plants["ammonia"] += _named(read_manual("ammonia_additions.csv"), "ammonia_capacity_kt")
-    # chlor-alkali sites: mark chemical clusters (eligibility of destinations only, no load)
-    fixes = {r.city: (r.lat, r.lon) for r in read_manual("chloralkali_coordinate_fixes.csv").itertuples(index=False)}
-    chlor = []
-    for _, row in x["Total chloralkali"].iterrows():
-        cc = {"GR": "EL", "UK": "GB"}.get(row.Country, row.Country)
-        if cc not in EU27:
-            continue
-        ll = fixes.get(str(row.City).strip()) or _dms(row.Coordinates)
-        if not ll:
-            continue
-        chlor.append((f"{row.Company} {row.City}".strip(), cc, ll[0], ll[1], float(row["Capacity (kt Cl/a)"])))
+        sites.append(_site("ammonia", a.Plant, cc, a.Latitude, a.Longitude, cap,
+                           source="PyPSA-Eur ammonia_plants.csv" if given else "capacity from data/manual/ammonia_capacity_fills.csv",
+                           verification="" if given else "capacity not individually verified"))
+    sites += _manual("ammonia", "ammonia_additions.csv", "ammonia_capacity_kt")
 
     P, unplaced = [], []
-    for ind, lst in plants.items():
-        for r in R.values():
-            r.setdefault("cap", {})[ind] = 0.0
-        for n, cc, lat, lon, c in lst:
-            rid = locate(lon, lat, CFG["snap_km"]["industrial_site"])
-            if not rid or rid[:2] != cc:
-                unplaced.append(f"{ind}: {n} ({cc})")
-                continue
-            R[rid]["cap"][ind] += c
-            xx, yy = proj(lon, lat)
-            P.append(dict(i=ind, n=n, r=rid, c=round(c), x=round(xx / 1000, 1), y=round(yy / 1000, 1)))
+    for s in sites:
+        rid = locate(s["lon"], s["lat"], CFG["snap_km"]["industrial_site"])
+        if not rid or rid[:2] != s["cc"]:
+            unplaced.append(f"{s['ind']}: {s['name']} ({s['cc']})")
+            continue
+        sec = SECTORS[s["ind"]]
+        if s["status"] != "operating":
+            out = 0.0
+        elif s["basis"] == "output":
+            out = s["cap"]
+        else:
+            out = s["cap"] * sec["utilisation"]
+        x, y = proj(s["lon"], s["lat"])
+        P.append(dict(s, r=rid, out=out, x=x / 1000, y=y / 1000))
     for r in R.values():
-        r["chlor"] = 0
-    for n, cc, lat, lon, c in chlor:
-        rid = locate(lon, lat, CFG["snap_km"]["industrial_site"])
-        if rid and rid[:2] == cc:
-            R[rid]["chlor"] += c
-            xx, yy = proj(lon, lat)
-            P.append(dict(i="chlor", n=n, r=rid, c=round(c), x=round(xx / 1000, 1), y=round(yy / 1000, 1)))
+        r["cap"] = {k: 0.0 for k in SECTORS}
+    for p in P:
+        if p["out"] > 0:
+            R[p["r"]]["cap"][p["ind"]] += p["cap"]
     ctx["plants"] = P
-    units = {"steel": "kt crude steel", "cement": "kt clinker", "ammonia": "kt NH3", "chemicals": "kt ethylene", "aluminium": "kt primary Al"}
-    for ind in plants:
-        n = sum(1 for p in P if p["i"] == ind)
-        cap = sum(r["cap"][ind] for r in R.values())
-        ctx["qa"].append(f"- {ind.capitalize()}: {n} sites, {cap:,.0f} {units[ind]}")
-    ctx["qa"].append(f"- Chlor-alkali cluster markers: {sum(1 for p in P if p['i'] == 'chlor')}")
+    for k, sec in SECTORS.items():
+        ps = [p for p in P if p["ind"] == k]
+        live = [p for p in ps if p["out"] > 0]
+        out = sum(p["out"] for p in ps)
+        ctx["qa"].append(f"- {sec['name']}: {len(ps)} sites ({len(live)} producing), output {out:,.0f} {sec['unit']}, "
+                         f"demand {out * sec['mwh_per_t'] / 1000:,.0f} TWh at {sec['mwh_per_t']} MWh/t")
     ctx["qa"].append(f"- Unplaced sites: {len(unplaced)}" + ("" if not unplaced else " (" + "; ".join(unplaced) + ")"))
     return ctx
 
 
 # --------------------------------------------------------------------------------------------
-# Step 8 · Policy and geology layers: congestion scores, salt caverns, national nuclear policy
+# Step 6 · National policy on new nuclear reactors
 # --------------------------------------------------------------------------------------------
-def s8_policy(ctx):
-    R = ctx["R"]
-    cong = dict(read_manual("grid_congestion_scores.csv")[["nuts_prefix", "score"]].itertuples(index=False))
-    cav = list(read_manual("salt_caverns.csv").nuts_prefix)
+def s6_policy(ctx):
     nuc = read_manual("nuclear_policy.csv")
     banned = set(nuc.loc[nuc.new_reactors_allowed == 0, "country_code"])
-    for r in R.values():
-        s, best = 0.0, 0
-        for pre, v in cong.items():                                   # longest matching prefix wins
-            if r["id"].startswith(pre) and len(pre) > best:
-                s, best = v, len(pre)
-        r["cong"] = s
-        r["cav"] = 1 if any(r["id"].startswith(p) for p in cav) else 0
+    for r in ctx["R"].values():
         r["nban"] = 1 if r["cc"] in banned else 0
-    ctx["qa"].append(f"- Congestion: {sum(1 for r in R.values() if r['cong'] != 0)} regions with a non-zero score")
-    ctx["qa"].append(f"- Salt caverns: {sum(r['cav'] for r in R.values())} regions; nuclear new build barred in: {', '.join(sorted(banned))}")
+    ctx["qa"].append(f"- Nuclear new build barred in: {', '.join(sorted(banned))}")
     return ctx
 
 
 # --------------------------------------------------------------------------------------------
-# Step 9 · Export: data/processed/data.json (read by the model and the map) + flat CSVs
+# Step 7 · Export: data/processed/data.json (read by the model and the map), flat CSVs, and the
+# plant lists for human review (outputs/review/plant_lists_for_review.xlsx)
 # --------------------------------------------------------------------------------------------
 def _rnd(c, nd):
     if isinstance(c[0], (float, int)):
@@ -363,7 +265,35 @@ def _rnd(c, nd):
     return [_rnd(cc, nd) for cc in c]
 
 
-def s9_export(ctx, out_dir):
+def _review_sheet(P, R, path):
+    cols = {"name": "Plant", "cc": "Country", "r": "NUTS-2", "region": "Region", "lat": "Lat", "lon": "Lon", "status": "Status",
+            "cap": "Capacity (kt/yr)", "basis": "Capacity basis", "out": "Output used (kt/yr)", "twh": "Power demand (TWh/yr)",
+            "source": "Source", "verification": "Verification note"}
+    with pd.ExcelWriter(path, engine="openpyxl") as xw:
+        notes = pd.DataFrame({"How to use": [
+            "One sheet per sector. Check each row: does the plant exist, is it the right technology, are location, capacity and status right?",
+            "Status: operating plants carry output; idle or closed plants carry none.",
+            "Capacity basis 'capacity' = nameplate, output = capacity × the sector's utilisation; 'output' = the value already is annual output (EU ETS cement rows).",
+            "Fill in the last three columns. Corrections go back into data/manual/*.csv (or a new manual file for ETS cement rows).",
+            "Missing plants: add a row at the bottom with name, country, coordinates, capacity and status."]})
+        notes.to_excel(xw, sheet_name="Read me", index=False)
+        for k, sec in SECTORS.items():
+            rows = []
+            for p in sorted((p for p in P if p["ind"] == k), key=lambda p: (p["cc"], p["name"])):
+                rows.append({**{c: p.get(c) for c in cols}, "region": R[p["r"]]["na"], "twh": round(p["out"] * sec["mwh_per_t"] / 1000, 2),
+                             "cap": round(p["cap"]), "out": round(p["out"])})
+            df = pd.DataFrame(rows)[list(cols)].rename(columns=cols)
+            df["Reviewer: correct? (Y/N)"] = ""
+            df["Reviewer: corrected value"] = ""
+            df["Reviewer: comment and source"] = ""
+            df.to_excel(xw, sheet_name=sec["name"][:31], index=False)
+            ws = xw.sheets[sec["name"][:31]]
+            for col, w in zip("ABCDEFGHIJKLMNOP", [38, 8, 8, 28, 7, 7, 10, 10, 10, 10, 10, 34, 40, 12, 16, 40]):
+                ws.column_dimensions[col].width = w
+            ws.freeze_panes = "B2"
+
+
+def s7_export(ctx, out_dir, review_dir):
     R, S = ctx["R"], CFG["geometry_simplify_m"]
     geo = []
     for i, f in zip(ctx["ids"], ctx["feats"]):
@@ -372,7 +302,7 @@ def s9_export(ctx, out_dir):
     cnt = json.loads((NUTS / "cntrg_2024_3035_20M.json").read_text(encoding="utf-8"))
     bg = []
     for f in cnt["features"]:
-        if f["properties"]["id"] in EU27:
+        if f["properties"]["id"] in COUNTRIES:
             continue
         g = shape(f["geometry"]).buffer(0).simplify(S["countries"])
         if g.is_empty:
@@ -382,19 +312,27 @@ def s9_export(ctx, out_dir):
     regions = []
     for r in R.values():
         regions.append(dict(
-            id=r["id"], na=r["na"], cc=r["cc"], lat=round(r["lat"], 2), lon=round(r["lon"], 2),
-            cx=round(r["cx"], 1), cy=round(r["cy"], 1), area=round(r["area"]), pop=round(r["pop"]),
-            urb=round(r["urb"], 3), pv=round(r["pv"], 4), won=round(r["won"], 3), coast=round(r["coast"]),
-            basin=r["basin"], coff=r["coff"], kxoff=r["kxoff"], n380=r["n380"], n220=r["n220"], cong=r["cong"],
-            e=dict(pv=round(r["e_pv"]), won=round(r["e_won"]), woff=round(r["e_woff"]), hres=round(r["e_hres"]), hror=round(r["e_hror"])),
-            cap={k: round(v, 1) for k, v in r["cap"].items()}, chlor=round(r["chlor"]), cav=r["cav"], nban=r["nban"]))
-    data = dict(regions=regions, geo=geo, bg=bg, plants=ctx["plants"], subs=ctx["subs"], lines=ctx["lines"])
+            id=r["id"], na=r["na"], cc=r["cc"], lat=round(r["lat"], 2), lon=round(r["lon"], 2), cx=round(r["cx"], 1), cy=round(r["cy"], 1),
+            area=round(r["area"]), pop=round(r["pop"]), pv=[round(v, 4) for v in r["pv"]], wd=[round(v, 4) for v in r["wd"]],
+            wn=[round(v, 4) for v in r["wn"]], n330=r["n330"], cap={k: round(v, 1) for k, v in r["cap"].items()}, nban=r["nban"]))
+    plants = [dict(i=p["ind"], n=p["name"] + ("" if p["status"] == "operating" else f" ({p['status']})"), r=p["r"], c=round(p["cap"]),
+                   o=round(p["out"], 1), x=round(p["x"], 1), y=round(p["y"], 1)) for p in ctx["plants"]]
+    data = dict(regions=regions, geo=geo, bg=bg, plants=plants, lines=ctx["lines"])
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "data.json").write_text(json.dumps(data, separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
-    flat = pd.json_normalize(regions, sep="_")
-    flat.columns = [c.replace("e_", "existing_mw_", 1) if c.startswith("e_") else c.replace("cap_", "capacity_kt_", 1) if c.startswith("cap_") else c for c in flat.columns]
-    flat.to_csv(out_dir / "regions.csv", index=False, encoding="utf-8")
-    pd.DataFrame(ctx["plants"]).rename(columns={"i": "industry", "n": "name", "r": "nuts2", "c": "capacity_kt", "x": "x_km_epsg3035", "y": "y_km_epsg3035"}) \
+    flat = []
+    for r in regions:
+        row = {k: v for k, v in r.items() if k not in ("pv", "wd", "wn", "cap")}
+        row.update({f"pv_cf_{m + 1:02d}": v for m, v in enumerate(r["pv"])})
+        row.update({f"wind_cf_day_{m + 1:02d}": v for m, v in enumerate(r["wd"])})
+        row.update({f"wind_cf_night_{m + 1:02d}": v for m, v in enumerate(r["wn"])})
+        row.update({f"capacity_kt_{k}": v for k, v in r["cap"].items()})
+        flat.append(row)
+    pd.DataFrame(flat).to_csv(out_dir / "regions.csv", index=False, encoding="utf-8")
+    pd.DataFrame([{k: p[k] for k in ("ind", "name", "cc", "r", "lat", "lon", "status", "cap", "basis", "out", "source")} for p in ctx["plants"]]) \
+        .rename(columns={"ind": "industry", "cc": "country", "r": "nuts2", "cap": "capacity_kt", "out": "output_kt"}) \
         .to_csv(out_dir / "plants.csv", index=False, encoding="utf-8")
-    ctx["qa"].append(f"- Export: data.json {len(json.dumps(data, separators=(',', ':'))):,} bytes; regions.csv; plants.csv")
+    review_dir.mkdir(parents=True, exist_ok=True)
+    _review_sheet(ctx["plants"], R, review_dir / "plant_lists_for_review.xlsx")
+    ctx["qa"].append(f"- Export: data.json {len(json.dumps(data, separators=(',', ':'))):,} bytes; regions.csv; plants.csv; review/plant_lists_for_review.xlsx")
     return ctx

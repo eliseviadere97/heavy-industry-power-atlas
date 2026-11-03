@@ -1,4 +1,4 @@
-case,scenario,avg_eur_per_mwh,cost_bn_eur_per_yr,demand_twh,plants,plants_moved,share_load_moved,regions_used,unserved_twh,share_pv,share_on,share_off,share_smr,share_ccs,share_gas,share_imp,battery_throughput_share,h2_storage_throughput_share
-default,stay,95.7245,59.1003,617.4000,230,0,0,129,0,0.2341,0.2334,0,0.2624,0.2137,0.0565,0,0.0398,0.0783
-default,second,86.8200,53.6026,617.4000,230,77,0.4971,102,0,0.3293,0.3341,0,0.1711,0.1123,0.0532,0,0.0723,0.1093
-default,first,72.5670,44.8029,617.4000,230,216,0.9650,28,0,0.5866,0.3779,0,0.0100,0.0008,0.0248,0,0.1794,0.1343
+case,scenario,avg_eur_per_mwh,cost_bn_eur_per_yr,demand_twh,plants,plants_moved,share_load_moved,regions_used,uncovered_twh,share_pv,share_on,share_smr,share_ccs,battery_throughput_share,h2_storage_throughput_share
+default,stay,87.8554,57.4265,653.6482,259,0,0,147,0,0.2555,0.3196,0.2611,0.1638,0.1084,0
+default,second,72.6455,47.4846,653.6482,259,130,0.4957,72,0,0.1880,0.6432,0.1053,0.0635,0.0736,0
+default,first,61.5783,40.2505,653.6482,259,258,0.9992,17,0,0.0192,0.9212,0.0004,0.0592,0.0009,0

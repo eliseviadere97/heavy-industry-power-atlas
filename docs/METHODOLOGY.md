@@ -1,206 +1,110 @@
 # Methodology
 
-The model asks one question. If a social planner could place each of today's heavy-industry plants anywhere in the EU27, powering each from the least-cost clean mix its region allows, where would the plants go? And how much do real-world constraints cost? It runs in four steps:
+The model asks one question. If a social planner could place each of today's heavy-industry plants anywhere in the EU27, Norway, Switzerland or the UK, powering each from the least-cost clean mix its region allows, where would the plants go? And how much do real-world constraints cost? It runs in two optimisation steps, inside a four-stage pipeline:
 
-| Step | Code | Output |
+| Stage | Code | Output |
 |---|---|---|
-| A · Data preparation | `src/data_prep/run_data_prep.py` (steps 1–9 in `steps.py`) | `data/processed/data.json`, `regions.csv`, `plants.csv`, `outputs/qa_report.md` |
-| B · Model runs | `src/run/run_scenarios.js` using `src/model/mix.js` and `plan.js` | `outputs/results/*.csv` |
-| C · Solver check | `src/validation/validate_lp.py` | `outputs/validation/lp_check.csv` |
-| D · Web page | `src/site/build_site.py` | `site/index.html` |
+| A · Data preparation | `src/data_prep/run_data_prep.py` (steps 1–7 in `steps.py`); weather tables built once by `fetch_weather.py` | `data/processed/`, `outputs/qa_report.md`, `outputs/review/plant_lists_for_review.xlsx` |
+| B · Model runs | `src/run/run_scenarios.js` using `src/model/mix.js` (step 1) and `plan.js` (step 2) | `outputs/results/*.csv` |
+| C · Checks | `src/validation/validate_lp.py` (step 1), `validate_plan.py` (step 2) | `outputs/validation/` |
+| D · Web page | `src/site/build_site.py` | `site/index.html`, `outputs/artifact.html` |
 
-All parameters live in `config/model_config.json`; parameter names below match its keys. Monetary values are in euros; energy demand is in TWh a year.
+All parameters live in `config/model_config.json`; names below match its keys. The basis for each value is in `docs/ASSUMPTIONS.md`.
 
 ---
 
-## 1. Spatial unit and data preparation
+## 1. Data preparation
 
-The spatial unit is the NUTS-2 region (2024 version): 234 regions across the EU27, excluding the outermost regions, Ceuta and Melilla. Data preparation builds one record per region:
+1. **Regions.** NUTS-2 polygons and label points from Eurostat GISCO (Nuts2json): NUTS 2024 for the EU27, Norway and Switzerland; NUTS 2016 for the UK. 288 regions; outermost regions, Ceuta, Melilla and Svalbard dropped.
+2. **Population.** Eurostat demo_r_d2jan (1 January 2024; UK 2019; Northern Ireland 2018). Density $= \text{pop}_r / A_r$.
+3. **Weather.** Monthly solar capacity factors $\text{pv}_{r,m}$ from PVGIS and monthly day/night onshore wind capacity factors $\text{wd}_{r,m}, \text{wn}_{r,m}$ from EMHIRES (`data/derived/`, see §1.1).
+4. **Grid.** AC substations ≥330 kV in service, counted per region ($n^{330}_r$), snapping up to 5 km. Lines ≥220 kV kept for display.
+5. **Plants.** Steelworks, smelters and crackers from hand-compiled lists; cement kilns from EU ETS records (output = verified emissions ÷ 0.83 t CO₂/t clinker) plus additions; ammonia plants from PyPSA-Eur with gaps filled. Sites snap up to 25 km and must fall in their own country. Output: $o_p = K_p \cdot u_i$ for nameplate capacity $K_p$ and sector utilisation $u_i$; ETS cement values are output already; idle and closed plants produce nothing.
+6. **Policy.** National bar on new reactors.
+7. **Export.** Processed files, simplified map geometry, and the plant review spreadsheet.
 
-1. **Regions.** Polygons and label points from Eurostat GISCO; area from the label-point file; coordinates projected to ETRS89-LAEA (EPSG:3035).
-2. **Population.** Each GeoNames town above 15,000 people is assigned to the region it falls in, giving town population $T_r$. With national population $P_c$ and national town total $T_c$, the residual $\text{Res}_c = \max(P_c - T_c,\; 0.15\,P_c)$ is spread by area:
+### 1.1 Weather tables
 
-   $$\text{pop}_r = s_c T_r + \text{Res}_c \frac{A_r}{A_c},\qquad s_c=\frac{P_c-\text{Res}_c}{T_c},\qquad \text{urb}_r=\frac{s_c T_r}{\text{pop}_r}.$$
-
-3. **Weather (annual averages).** Solar yield and onshore wind capacity factor at each region's label point come from inverse-distance weighting over the 5 nearest of 157 anchor points, with weights $w_k=\max(d_k,15\text{ km})^{-2}$. The solar capacity factor is yield ÷ 8,760. *The anchors are author estimates and should be replaced with EMHIRES or Renewables.ninja NUTS-2 averages* (see ASSUMPTIONS 4.1).
-4. **Coast and sea basin.** Coastline length is the sum of coastal NUTS-3 boundary segments (1:20M) belonging to the region. Each segment's midpoint is assigned to a basin (North Sea, Baltic, Atlantic, Mediterranean, Black Sea) by fixed latitude/longitude rules. The region takes the basin with the longest coastline, and with it the offshore capacity factor $\text{coff}_r$ and capex $\text{kxoff}_r$ for that basin.
-5. **Grid.** AC substations in service are counted per region, split into ≥330 kV ($n^{380}_r$) and 220–300 kV ($n^{220}_r$), snapping up to 5 km to the nearest region.
-6. **Existing renewables.** Installed solar, onshore wind, offshore wind (snapped up to 150 km), reservoir and run-of-river hydro, commissioned by 2025 and still running. Annual output:
-
-   $$G_r = 8760\,\big(\text{MW}^{pv}\text{CF}^{pv}_r + \text{MW}^{on}\text{CF}^{on}_r + \text{MW}^{off}\text{coff}_r + 0.30\,\text{MW}^{res} + 0.45\,\text{MW}^{ror}\big)/10^6 \text{ TWh}.$$
-
-7. **Plants.**
-   - Steelworks, smelters and crackers come from the hand-compiled lists.
-   - Cement kilns are taken from EU ETS records, with capacity = 2014 (else 2013) verified emissions ÷ 0.83 t CO₂ per t clinker, plus hand-compiled additions.
-   - Ammonia plants come from the PyPSA-Eur list, with gaps filled.
-   - Chlor-alkali sites mark chemical clusters only.
-   - Sites are snapped up to 25 km and must fall in their own country.
-8. **Policy layers.**
-   - Grid congestion score (longest matching NUTS prefix wins; 0 if unlisted).
-   - Salt-cavern flag.
-   - National bar on new reactors.
-9. **Export.** Writes the processed files and simplifies the map geometry.
+- **Solar.** For each region, up to six points on a regular grid inside the polygon. PVGIS 5.3 (`PVcalc`, PVGIS-ERA5, 2005–2023) returns the monthly yield $E_m$ (kWh/kWp) of a fixed, optimally tilted system with 14% losses. $\text{pv}_{r,m} = \overline{E_m} / (24\, d_m)$.
+- **Wind.** EMHIRES (JRC, June 2019 release, NUTS 2016 codes) gives hourly capacity factors per region for 1986–2015, for the wind fleet installed at the end of 2015. Hours 06–18 UTC count as day. Each model region takes the area-weighted mean of the EMHIRES regions it overlaps.
 
 ## 2. Demand
 
-For industry $i$ with output $Q_i$ (Mt) and route intensity $e_i$ (MWh/t), demand is $D_i = Q_i e_i$ TWh. Each of today's plants $p$ in industry $i$ with capacity $K_p$ carries
+For plant $p$ in sector $i$ with output $o_p$ (kt) and intensity $e_i$ (MWh/t):
 
-$$E_p = \frac{K_p}{\sum_{q\in i} K_q}\,D_i \;\text{TWh/yr},\qquad L_p = \frac{E_p \cdot 10^6}{8760}\;\text{MW of average load}.$$
+$$E_p = o_p\, e_i / 1000 \;\text{TWh/yr},\qquad L_p = E_p\cdot 10^6 / 8760 \;\text{MW of average load}.$$
 
-$E_p$ is the same wherever the plant goes: plants move whole. Each route has a **flexible share** $h_i$, the part of the load that runs through electrolysers and can follow the weather if hydrogen can be stored. The rest, $1-h_i$, is steady.
+$E_p$ is the same wherever the plant goes. A share $h_i$ of the load runs through electrolysers ($h$ = 0.75 steel, 0.9 ammonia, 0 otherwise) and can follow the weather if hydrogen can be stored.
 
-| Industry | $Q_i$ default | Route | $e_i$ (MWh/t) | $h_i$ | $D_i$ (TWh) |
-|---|---|---|---|---|---|
-| Steel | 70 Mt | Hydrogen DRI + electric arc furnace | 3.5 | 0.75 | 245 |
-| Cement | 118 Mt clinker | Electrified kiln + carbon capture | 1.3 | 0 | 153 |
-| Ammonia | 13 Mt | Electrolytic hydrogen + Haber-Bosch | 10.5 | 0.9 | 137 |
-| Chemicals | 30 Mt HVC | Electric crackers (heat only) | 2.2 | 0 | 66 |
-| Aluminium | 1.0 Mt | Inert anodes + electrified alumina | 16.5 | 0 | 17 |
+## 3. Step 1: the local power mix (`src/model/mix.js`)
 
-## 3. The local power mix (`src/model/mix.js`)
+For each flexible share $h$ and region $r$, a linear programme finds the least-cost way to serve **1 MW of average load** from the plant's own assets. The objective is therefore in €/MWh of plant demand.
 
-For each flexible share $h$ and region $r$, a linear programme finds the least-cost way to serve **1 MW of average load** (8,760 MWh/yr). The objective is therefore in €/MWh of plant demand.
+### 3.1 Slices
 
-### 3.1 Eight slices from annual averages
+Twenty-four slices $s = (m, \text{day/night})$, each lasting $H_s = 12\, d_m$ hours ($d_m$ = days in month $m$; February 28.25), with weight $w_s = H_s / \sum H$:
 
-The year is split into eight equal slices, $s \in \{\text{winter},\text{summer}\}\times\{\text{windy},\text{calm}\}\times\{\text{day},\text{night}\}$, each with weight 1/8 (1,095 hours). With latitude $\phi_r$:
-
-$$a_r=\text{clip}\big(0.26+0.0175(\phi_r-37),\,0.2,\,0.8\big),\qquad b_r=\text{clip}\big(0.15+0.004(\phi_r-37),\,0.1,\,0.3\big)$$
-
-$$\text{pv}_s = \min\!\big(0.95,\; 2\,\text{CF}^{pv}_r(1\pm a_r)\big)\ \text{by day } (+\text{summer}, -\text{winter}),\quad 0 \text{ at night}$$
-
-$$\text{on}_s = \min\!\big(0.95,\; \text{CF}^{on}_r(1\pm b_r)(1\pm 0.75)\big),\qquad \text{off}_s = \min\!\big(0.95,\; \text{coff}_r(1\pm b_r)(1\pm 0.6)\big)$$
-
-where $+b_r$ applies in winter and $+0.75$ (or $+0.6$) in windy slices. Apart from the 0.95 cap, the slice values average back to the annual capacity factors. Parameters: `model.slices`.
+$$\text{pv}_s = \min(1,\ 2\,\text{pv}_{r,m}) \text{ by day},\ 0 \text{ at night};\qquad \text{on}_s = \text{wd}_{r,m} \text{ or } \text{wn}_{r,m}.$$
 
 ### 3.2 Costs
 
-Annualised fixed cost per MW of capacity, expressed per MWh of the 1 MW load:
+With one cost of capital $w$ for all technologies, the annualised fixed cost per MW, per MWh of the 1 MW load, is
 
 $$\alpha = \frac{\text{capex}\cdot 1000\,\big(\text{CRF}(w,n)+\text{om}\big)}{8760},\qquad \text{CRF}(w,n)=\frac{w}{1-(1+w)^{-n}}.$$
 
-- **SMRs:** $\alpha_{smr} = (\text{capex}\cdot1000\cdot\text{CRF}(7\%,60) + \text{FOM}\cdot1000)/8760$, plus variable cost $v_{smr}$.
-- **Gas with capture:**
+SMRs and gas with capture carry fixed O&M in €/kW-yr and a variable cost:
 
-  $$v_{ccs} = \frac{p_{gas}}{\eta_{ccs}} + \frac{0.202}{\eta_{ccs}}\big(\kappa\,\text{TS} + (1-\kappa)\,p_{CO_2}\big) + 4,$$
+$$v_{ccs} = \frac{p_{gas}}{\eta_{ccs}} + \frac{0.202}{\eta_{ccs}}\big(\kappa\,\text{TS} + (1-\kappa)\,p_{CO_2}\big) + \text{VOM}.$$
 
-  with capture rate $\kappa$ and transport-and-storage cost TS.
-- **Unabated gas:**
+Hydrogen storage is costed per unit of volume (€/kWh H₂, converted with 0.63 MWh H₂ per MWh electricity).
 
-  $$v_{gas} = \frac{p_{gas}}{\eta_{gas}} + \frac{0.202}{\eta_{gas}}\,p_{CO_2} + 3.$$
+### 3.3 Programme
 
-- **Batteries:** priced per MW of a 4-hour system (capex per kWh × 4).
+Variables (all ≥ 0, per MW of load): capacities $x^{pv}, x^{on}, x^{bat}, x^{el}$ (electrolyser above flat running), $V$ (hydrogen storage, days of 1 MW), $x^{smr}, x^{ccs}$; dispatch $n_s, g_s$; battery charge $bc_m$ by day and discharge $bd_m$ by night; electrolyser draw $e_s$; hydrogen into and out of storage $c_s, d_s$; storage level $\ell_s$.
 
-### 3.3 Variables (all ≥ 0, per MW of average load)
+$$\min\ \sum_t \alpha_t x^t + \alpha_V V + \sum_s w_s\,(v_{smr} n_s + v_{ccs} g_s)$$
 
-- **Capacities:**
-  - $x^{pv}, x^{on}, x^{off}$: solar, onshore and offshore wind.
-  - $x^{bat}$: 4-hour battery.
-  - $x^{el}$: electrolyser capacity *above* flat running. Electrolysers needed anyway cost the same everywhere and are left out.
-  - $x^{smr}, x^{ccs}, x^{gas}$: dispatchable plant.
-- **Dispatch in each slice $s$:**
-  - $n_s, g_s, u_s$: SMR, gas with capture, unabated gas.
-  - $m_s$: grid import (off by default).
-  - $e_s$: electrolyser consumption.
-  - $c_s, d_s$: hydrogen into and out of storage.
-- **Batteries:** charge $bc_k$ by day and discharge $bd_k$ the following night, for each season–wind pair $k$.
-- **Seasonal hydrogen transfers:** $q_{SW}, q_{WS}$.
+subject to, for each slice $s$:
 
-### 3.4 Programme
+1. **Energy balance** (curtailment free): $x^{pv}\text{pv}_s + x^{on}\text{on}_s + n_s + g_s + bd_s - bc_s - e_s \ge 1-h$.
+2. **Batteries:** $bd_m = 0.88\, bc_m$, $bd_m \le \tfrac{4}{12} x^{bat}$.
+3. **Firm plant:** $n_s \le 0.92\, x^{smr}$ (only where new reactors are allowed); $g_s \le 0.9\, x^{ccs}$.
+4. **Hydrogen** (if $h>0$ and storage is allowed): $e_s - c_s + d_s = h$ (flat downstream use); $e_s \le h + x^{el}$; $\ell_s = \ell_{s-1} + \tfrac{H_s}{24}(0.97\, c_s - d_s)$ around the year; $\ell_s \le V$. Without storage, electrolysers run flat and the whole load is steady.
 
-$$\min\; \sum_t \alpha_t x^t + \tfrac18\sum_s\big(v_{smr}n_s+v_{ccs}g_s+v_{gas}u_s+p_{imp}m_s+0.7\,c^{short}d_s\big) + \tfrac18\,0.7\,c^{seas}(q_{SW}+q_{WS})$$
+The **no-new-renewables fallback** is the same programme without solar, wind, batteries or flexible electrolysers.
 
-subject to, for every slice $s$:
+## 4. Land
 
-1. **Energy balance** (curtailment is free):
+$$\text{Land}_r = A_r\,\Big(1-\min\big(0.95,\ \tfrac{\text{pop}_r}{3000\,A_r}\big)\Big)\times 0.035 \;\text{km}^2,$$
 
-   $$x^{pv}\text{pv}_s + x^{on}\text{on}_s + x^{off}\text{off}_s + n_s+g_s+u_s+m_s+bd_s-bc_s-e_s \;\ge\; 1-h.$$
+shared by solar (50 MW/km²) and wind (20 MW/km²). Plant $p$'s renewables mix in region $j$ needs $k_{pj} L_p$ km², with $k_{pj} = x^{pv}/50 + x^{on}/20$.
 
-2. **Batteries:** $bd_k = 0.88\,bc_k$ and $bd_k \le \tfrac{4}{12}x^{bat}$. A battery moves day-time energy into the following night. It cannot bridge a calm spell.
-3. **Dispatchable plant:**
-   - $n_s \le 0.92\,x^{smr}$; $g_s \le 0.9\,x^{ccs}$; $u_s\le x^{gas}$.
-   - Unabated gas is capped at a share of annual energy: $\tfrac18\sum_s u_s \le 0.10$.
-4. **Electrolysers and hydrogen** (only if $h>0$):
-   - $e_s \le h + x^{el}$ and $e_s - c_s + d_s = h$, so downstream hydrogen use is flat.
-   - For each season $\sigma$: $\sum_{s\in\sigma}(0.97\,c_s - d_s) + 0.97\,q_{\text{in},\sigma} - q_{\text{out},\sigma} = 0$.
-   - Without hydrogen storage, $e_s = h$.
-   - Storage costs $c^{short}, c^{seas}$ are per MWh of hydrogen shifted; the factor 0.7 converts MWh of electricity into MWh of hydrogen. Regions with salt caverns use the cavern costs, the rest the tank costs.
-5. **Availability:** SMRs only where allowed (the technology switch and, if ticked, national policy); offshore wind only in coastal regions; each technology only if its switch is on.
+## 5. Step 2: plant placement (`src/model/plan.js`)
 
-The **no-new-renewables fallback** is the same programme with $x^{pv}=x^{on}=x^{off}=x^{bat}=x^{el}=0$. It prices any part of a plant's load that its region cannot cover with new wind and solar.
+Choose a region $j(p)$ for every plant and the share $f_p$ of its load served by the renewables mix to minimise
 
-### 3.5 Reported quantities
+$$\sum_p E_p\Big[f_p\, c^{A}_{h_p,j(p)} + (1-f_p)\, c^{B}_{h_p,j(p)}\Big]$$
 
-- **Cost** $c_{hr}$ (€/MWh).
-- **Capacities** per MW of load.
-- **Energy shares by source.** Renewable output net of curtailment: in each slice, the energy not met by dispatchable plant or batteries is drawn from solar and wind in proportion to their availability. Shares are normalised to sum to one.
-- **Storage throughput:** battery discharge and hydrogen withdrawn, per MWh of demand.
-- **Renewable energy available per MW of load,** used for the existing-renewables cap.
+where $c^A$ is the local-mix cost and $c^B$ the fallback cost, subject to $\sum_{p \in j} f_p\, k_{pj} L_p \le \text{Land}_j$.
 
-## 4. Regional resources (`regionResources` in `plan.js`)
-
-**Free land.** $A^{free}_r = A_r\big(1-\min(0.95,\ \text{pop}_r\,\text{urb}_r/3000/A_r)\big)$.
-
-**Potentials.**
-
-$$\overline{PV}_r = 0.015\cdot 50\cdot A^{free}_r,\qquad \overline{ON}_r = 0.02\cdot 20\cdot A^{free}_r,\qquad \overline{OFF}_r = 10\cdot\text{coast}_r \text{ (MW)}.$$
-
-**Reserve for local demand.** Each region first powers its own households and services at 7 MWh per head. All three potentials are scaled by
-
-$$\max\!\Big(0,\ 1 - \frac{\text{pop}_r \cdot 7}{8.76\cdot10^{-3}\,(\overline{PV}_r\text{CF}^{pv}_r+\overline{ON}_r\text{CF}^{on}_r+\overline{OFF}_r\text{coff}_r)\cdot 10^6}\Big).$$
-
-**Second-best caps.**
-- New wind and solar for industry may not exceed $k\,G_r$ TWh, with $k=1.5$.
-- Relocated load may not exceed
-
-  $$H_r = 8.76\cdot10^{-3}\,(500\,n^{380}_r + 150\,n^{220}_r)\,\max(0,1-\text{cong}_r) \text{ TWh}.$$
-
-## 5. The relocation planner (`plan` in `plan.js`)
-
-**Problem.** Choose a region $j(p)$ for every plant $p$ to minimise
-
-$$\sum_p E_p\Big[f_p\,c^{A}_{h_p,j(p)} + (1-f_p)\,c^{B}_{h_p,j(p)}\Big] + \rho\,E_p\,\mathbf 1[j(p)\neq \text{home}_p]$$
-
-where:
-- $c^A$ is the local-mix cost and $c^B$ the no-new-renewables cost;
-- $\rho$ is the relocation premium (default 0);
-- $f_p$ is the share of plant $p$'s local-mix needs that its region can still supply.
-
-**Packing within a region.** Plants are served in order of their gain from local renewables, $c^B - c^A$ (largest first, ties broken by size). Each takes
-$$f_p=\min_k\big(1,\ \text{remaining}_k/\text{need}_{p,k}\big)$$
-over $k \in$ {solar MW, onshore MW, offshore MW, existing-renewables allowance TWh}, with needs equal to the local-mix capacities × $L_p$.
-
-**Scenarios.**
+**Within a region** the land goes to plants in order of saving per km², $(c^B - c^A)/k$: a fractional knapsack, which is optimal for one shared resource.
 
 | | Stay put | First best | Second best |
 |---|---|---|---|
-| Allowed sites | home only | any region | home, or any region passing the ticked constraints |
-| Grid | — | — | relocated load ≤ $H_j$; plants above 300 MW average need $n^{380}_j \ge 1$ |
-| Existing renewables | — | — | new wind/solar ≤ $k\,G_j$ at every site, home included |
-| Ecosystem | — | — | destination already hosts the same industry (chemicals: also chlor-alkali), or any cluster; per industry, moved capacity ≤ $(1-\alpha)\sum K$, and the planner picks which plants move |
+| Allowed sites | home only | any region | home, or a region passing the ticked constraints |
+| Grid | — | — | destination has ≥1 substation ≥330 kV |
+| Clusters | — | — | destination hosts the same sector; moved output ≤ $(1-\alpha)$ of each sector's output |
 
-**Algorithm.** A heuristic, run twice from different starts; the cheaper result is kept.
+**Heuristic.** Two starts (all plants at home; greedy placement in order of potential saving), each followed by local search: single-plant moves, then pairwise swaps between land-limited regions, repeated until nothing improves. Where part of each sector must stay, plants are ranked by saving per tonne of the moving allowance.
 
-1. *Start 1:* all plants at home.
-2. *Start 2:* greedy construction. Plants in decreasing size, each placed where it raises total cost least.
-3. *Local search* from each start. For each plant, largest first, evaluate a move to every allowed region, re-packing both regions exactly, and take the best improving move. Repeat up to 12 passes, or until nothing improves.
+**Exact check.** `validate_plan.py` writes the same problem as a mixed-integer programme ($x_{pj}$ binary, $y_{pj} = f_p x_{pj}$ continuous, one land row per region, one allowance row per sector) and solves it with HiGHS for up to 120 s per scenario. It reports the heuristic's gap to the proven lower bound and fails the pipeline above 1%.
 
-At default settings the three scenarios solve in under a second. The result is a good feasible solution but **not a proven optimum**: there are no swaps or multi-plant moves. The local-mix LPs, by contrast, are solved exactly.
-
-## 6. Validation
-
-- **Solver check.** `validate_lp.py` re-solves 72 local-mix programmes (12 regions × 3 flexible shares × with/without new renewables) with HiGHS. The pipeline fails if any optimum differs by more than €0.01/MWh. Current worst difference: 0.00000.
-- **Data checks.** `outputs/qa_report.md` lists counts and totals from every data-preparation step (regions, towns placed, substations, installed renewables, plant capacity by industry, unplaced sites).
-- **Reproducibility.**
-  - Raw files carry SHA-256 checksums; the workflow verifies them before each build.
-  - The refactored data pipeline reproduces, field for field, the dataset behind the map first published on 22 October 2026.
-
-## 7. Outputs (`outputs/results/`)
+## 6. Outputs (`outputs/results/`)
 
 | File | One row per | Main columns |
 |---|---|---|
 | `scenario_summary.csv` | scenario | €/MWh, €bn/yr, plants moved, share of load moved, regions used, generation shares, storage throughput |
-| `plant_allocation.csv` | plant × scenario | home and site region, moved, demand (TWh), €/MWh there and if it stays, share served by the local renewables mix, generation shares |
-| `local_mix_by_region.csv` | region × industry | best local-mix cost, no-renewables cost, generation shares, capacities per MW of load, storage throughput |
-| `region_load.csv` | region | load placed in each scenario, renewable potential left after local demand |
-| `sensitivities.csv` | case × scenario | constraints one at a time; technology and price variations |
+| `plant_allocation.csv` | plant × scenario | home and site region, moved, output, demand, €/MWh there and if it stays, share on the renewables mix |
+| `local_mix_by_region.csv` | region × sector | best mix cost, fallback cost, generation shares, capacities and land per MW of load |
+| `region_load.csv` | region | load and land used in each scenario, land available |
+| `sensitivities.csv` | case × scenario | constraints one at a time; technologies, prices and cost of capital |

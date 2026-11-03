@@ -1,298 +1,265 @@
-industry,name,nuts2,capacity_kt,x_km_epsg3035,y_km_epsg3035
-steel,voestalpine Linz,AT31,5500,4642.2,2806.8
-steel,voestalpine Donawitz,AT22,1600,4703.9,2708.3
-steel,ArcelorMittal Gent,BE23,5000,3888.8,3137.1
-steel,Třinec,CZ08,2500,4945.1,2988.8
-steel,Liberty Ostrava (idle),CZ08,3000,4914.9,2999.9
-steel,thyssenkrupp Duisburg,DEA1,11500,4094.7,3158.3
-steel,HKM Duisburg-Huckingen,DEA1,4000,4093.4,3145.0
-steel,Salzgitter,DE91,4700,4343.6,3226.7
-steel,SHS Dillingen/Völklingen,DEC0,4500,4083.4,2920.5
-steel,ArcelorMittal Bremen,DE50,3500,4234.0,3335.4
-steel,ArcelorMittal Eisenhüttenstadt,DE40,2000,4640.4,3236.9
-steel,ArcelorMittal Asturias,ES12,4500,3051.7,2405.7
-steel,SSAB Raahe,FI1D,2600,5010.3,4691.1
-steel,ArcelorMittal Dunkerque,FRE1,6800,3779.9,3130.7
-steel,ArcelorMittal Fos-sur-Mer,FRL0,4000,3911.4,2272.8
-steel,Dunaferr Dunaújváros (idle),HU21,1600,4997.6,2692.6
-steel,Acciaierie d'Italia Taranto,ITF4,8000,4936.0,1960.8
-steel,Tata Steel IJmuiden,NL32,7200,3955.1,3275.9
-steel,ArcelorMittal Dąbrowa Górnicza,PL22,4500,4979.1,3065.9
-steel,Liberty Galați,RO22,3000,5717.4,2651.0
-steel,SSAB Luleå,SE33,2300,4882.4,4768.1
-steel,SSAB Oxelösund,SE12,1500,4734.1,3972.8
-steel,U.S. Steel Košice,SK04,4500,5142.5,2897.7
-cement,Εργοστασιο Καμαριου Βοιωτιας,EL30,2079,5511.6,1768.2
-cement,Aalborg Portland A/S,DK05,2070,4315.9,3771.9
-cement,Górażdże Cement Spółka Akcyjna,PL52,1884,4880.6,3092.0
-cement,Cimpor - Centro De Produção De Alhandra,PT1A,1773,2681.1,1966.9
-cement,Cementownia Warta S.A.,PL71,1748,4943.9,3151.4
-cement,Εργοστασιο Βολου,EL61,1557,5436.6,1903.9
-cement,Zementwerk Rüdersdorf,DE40,1526,4578.0,3269.2
-cement,Werk Lägerdorf,DEF0,1410,4293.6,3419.7
-cement,Cemex Hrvatska D.D.,HR03,1373,4840.9,2293.5
-cement,Centro De Produção De Souselas,PT19,1358,2761.6,2092.5
-cement,Εργοστασιο Μυλακιου,EL64,1296,5550.1,1813.6
-cement,Εργοστασιο Θεσσαλονικης,EL52,1135,5411.2,2043.4
-cement,Drehofenanlage  Deuna,DEG0,1197,4353.5,3137.8
-cement,Cementos Molins Industrial S.A.,ES51,1151,3651.5,2068.1
-cement,Fábrica Secil - Outão,PT1B,1151,2682.5,1920.8
-cement,Cementownia Chełm Cemex,PL81,1133,5258.3,3202.3
-cement,Uniland Cementera S.A.Santa Margarida I ,ES51,1105,3621.9,2063.3
-cement,Zementwerk Burglengenfeld,DE23,1088,4469.2,2900.6
-cement,Lafarge Ciments - Usine De Saint Pierre ,FRG0,1020,3503.2,2839.2
-cement,Zementwerk Karsdorf,DEA2,1063,4076.8,3053.4
-cement,Εργοστασιο Δρεπανου Αχαϊας,EL63,1062,5360.2,1774.0
-cement,Zementwerk Schelklingen,DE14,968,4301.2,2806.9
-cement,Dyckerhoff Polska Sp. Z O.O.,PL72,1029,5061.9,3131.8
-cement,Irish Cement Limited (Platin Works),IE06,1014,3246.2,3516.7
-cement,Sc Holcim (Romania) Sa - Ciment Campulun,RO31,1008,5497.1,2583.0
-cement,Ciments Calcia - Usine De Couvrot,FRF2,860,3922.2,2864.4
-cement,"Holcim España, S.A.- Instalación De Carb",ES61,935,3259.2,1630.0
-cement,Prev. Na Výrobu Cement. Slinku V Rotačný,SK01,989,4852.6,2840.0
-cement,Sc Holcim (Romania) Sa - Ciment Alesd,RO11,981,5258.0,2736.3
-cement,Drehofenanlage 8 Lengerich,DEA3,912,4175.1,3231.6
-cement,"Cemex España Operaciones, S.L.U. - Alcan",ES51,897,3521.4,1994.0
-cement,Cemex España S.A.- San Vicente,ES52,893,3398.6,1765.2
-cement,Werk Spz Rohrdorf,DE21,880,4483.4,2745.2
-cement,Soc. Financiera Y Minera - Cementos Goli,ES61,858,3030.1,1638.4
-cement,"Cementos Tudela Veguin, S.A. - La Robla",ES41,829,3050.0,2320.8
-cement,Schwenk Werk Bernburg,DEE0,811,4440.6,3189.2
-cement,Chaux Et Dolomies Du Boulonnais,FRE1,803,3742.5,3108.8
-cement,Fábrica De Cementos De Aboño,ES12,797,3052.5,2405.3
-cement,Lafarge Ciment (Ro) Sa-Punct De Lucru Me,RO22,784,5766.1,2526.6
-cement,Drehofen I Göllheim,DEB3,771,4179.9,2944.0
-cement,"Lafarge Cementos, S.A - Villaluenga De L",ES42,774,3135.0,1990.8
-cement,Zementwerk Geseke,DEA5,771,4218.3,3172.1
-cement,Lafarge Ciment (Ro) Sa-Punct De Lucru Ho,RO12,764,5498.5,2662.9
-cement,Werk Höver,DE92,753,4318.6,3245.2
-cement,Zementwerk Beckum-Kollenbach,DEA3,740,4185.7,3184.6
-cement,Ciments Calcia - Usine D'Airvault,FRI3,706,3549.6,2687.7
-cement,Drehrohrofen 7,DE27,730,4370.0,2850.6
-cement,Scotchtown Cement Works,IE04,730,3185.4,3563.3
-cement,"Cemex España Operaciones, S.L.U.-Buñol",ES52,723,3389.9,1880.5
-cement,"Lafarge Cementos, S.A - Instalación De S",ES52,722,3437.7,1902.5
-cement,Lafarge Perlmooser Mannersdorf,AT12,716,4813.4,2783.5
-cement,Sc Carpatcement Holding Sa-Sucursala Bic,RO21,721,5536.9,2776.9
-cement,Zementwerk Lengfurt,DE26,711,4292.2,2965.3
-cement,Schwenk Werk Karlstadt,DE26,707,4304.7,2983.1
-cement,Spenner Zement Drehrohrofenanlage,DEA5,706,4206.7,3168.6
-cement,"Považská Cementáreň, A.S. - Ladce",SK02,690,4925.4,2914.1
-cement,Lafarge Ciments - Usine Du Havre,FRD2,616,3606.0,2978.3
-cement,Sc Carpatcement Holding Sa-Sucursala Fie,RO31,682,5526.3,2570.8
-cement,Cementos Cosmos S.A. - Instalación De Le,ES41,670,2952.2,2314.3
-cement,Schwenk Wgs Standort Mergelstetten,DE11,650,4332.4,2840.3
-cement,"Holcim España, S.A. - Instalación De Gád",ES61,644,3205.3,1633.1
-cement,Zementwerk Ennigerloh,DEA3,538,4184.9,3193.7
-cement,Zementwerk Hannover,DE92,539,4301.7,3250.8
-cement,Ciments Calcia - Usine De Bussac-Forêt,FRI3,553,3508.2,2512.3
-cement,Lafarge Ciments - Usine De La Couronne,FRI3,541,3550.3,2550.8
-cement,Schwenk Wgs Standort Allmendingen,DE14,597,4300.3,2801.7
-cement,Klinkerproduktionsanlage,DEA5,551,4206.7,3168.6
-cement,Našicecement D.D.,HR02,589,4952.9,2520.7
-cement,Zementwerk Wössingen,DE12,582,4219.1,2878.6
-cement,Sc Carpatcement Holding Sa-Sucursala Dev,RO42,579,5316.6,2620.3
-cement,Instalación De Jerez De La Frontera,ES61,579,2880.2,1666.5
-cement,Lafarge Ciments - Usine Du Teil,FRK2,516,3898.0,2396.7
-cement,Ciments Calcia - Usine De Beaucaire,FRJ1,567,3889.4,2315.3
-cement,Zementwerk Leimen,DE12,503,4225.9,2915.9
-cement,Lagan Cement,IE06,522,3172.7,3516.6
-cement,Colacem Gubbio,ITI2,1200,4530.8,2250.5
-cement,Buzzi Robilante,ITC1,1100,4121.9,2356.6
-cement,Buzzi Trino,ITC1,900,4187.2,2454.6
-cement,Heidelberg Calusco d'Adda,ITC4,1100,4280.4,2508.7
-cement,Heidelberg Rezzato,ITC4,900,4346.0,2488.7
-cement,Heidelberg Matera,ITF5,800,4880.9,1976.9
-cement,Heidelberg Isola delle Femmine,ITG1,700,4607.6,1685.9
-cement,Heidelberg Samatzai,ITG2,700,4237.1,1821.6
-cement,Colleferro,ITI4,600,4571.5,2074.7
-cement,Buzzi Barletta,ITF4,700,4847.6,2045.1
-cement,Buzzi Augusta,ITG1,700,4785.7,1589.8
-cement,Cementir Taranto,ITF4,800,4933.4,1960.6
-cement,Monselice,ITH3,800,4458.6,2460.3
-cement,Buzzi Vernasca,ITH5,700,4307.5,2409.9
-cement,Buzzi Guidonia,ITI4,800,4547.9,2103.7
-cement,Holcim Obourg,BE32,1400,3896.3,3057.2
-cement,CBR Lixhe,BE33,1400,4016.3,3079.9
-cement,CBR Antoing,BE32,1200,3857.7,3071.6
-cement,CCB Gaurain,BE32,1300,3860.7,3073.6
-cement,Mokrá,CZ06,900,4812.1,2923.3
-cement,Radotín,CZ01,700,4633.5,2995.7
-cement,Čížkovice,CZ04,700,4606.9,3048.8
-cement,Prachovice,CZ05,700,4724.4,2991.8
-cement,Hranice,CZ07,600,4879.3,2966.9
-cement,Beremend,HU23,800,4975.8,2556.8
-cement,Királyegyháza,HU23,900,4937.8,2576.1
-cement,Vác,HU12,600,5003.6,2782.9
-cement,Lábatlan,HU21,500,4957.2,2774.0
-cement,Devnya,BG33,1000,5737.7,2401.6
-cement,Beli Izvor,BG31,600,5381.1,2334.1
-cement,Zlatna Panega,BG31,700,5470.7,2326.9
-cement,Cementa Slite,SE21,1600,4844.7,3877.6
-cement,Cementa Skövde,SE23,500,4547.0,3927.1
-cement,Cementa Degerhamn,SE21,400,4717.0,3711.7
-cement,Finnsementti Parainen,FI1C,600,4999.0,4192.3
-cement,Finnsementti Lappeenranta,FI1C,400,5293.8,4343.9
-cement,Kunda Nordic,EE00,500,5249.5,4153.1
-cement,Schwenk Brocēni,LV00,800,5087.6,3798.2
-cement,Akmenės cementas,LT02,1000,5107.1,3753.0
-cement,Salonit Anhovo,SI04,700,4602.1,2557.6
-cement,Lafarge Trbovlje,SI03,400,4711.3,2572.9
-cement,Lafarge Retznei,AT22,500,4746.7,2640.0
-cement,Kirchdorf,AT31,500,4629.0,2762.6
-cement,Gmunden,AT31,400,4605.0,2763.6
-cement,Wietersdorf,AT21,400,4666.7,2645.7
-cement,Lafarge Kujawy,PL61,1500,4879.7,3328.7
-cement,Ożarów,PL72,1600,5137.5,3151.8
-cement,Małogoszcz,PL72,1200,5041.5,3128.2
-cement,Rejowiec,PL81,400,5246.0,3194.3
-cement,Odra Opole,PL52,500,4880.5,3091.3
-cement,Vassiliko,CY00,1600,6444.4,1620.9
-cement,Cimalux Rumelange,LU00,600,4035.6,2938.4
-cement,Holcim Koromačno,HR03,500,4646.4,2437.7
-cement,Halyps Aspropyrgos,EL30,500,5514.6,1768.5
-cement,Vicat Montalieu,FRK2,900,3963.3,2534.1
-cement,Lafarge Martres-Tolosane,FRJ2,700,3590.3,2276.3
-cement,Lafarge Port-la-Nouvelle,FRJ1,500,3752.9,2238.8
-cement,Calcia Gargenville,FR10,800,3722.8,2908.5
-cement,Calcia Ranville,FRD1,700,3576.3,2953.9
-cement,Calcia Héming,FRF3,500,4098.0,2847.5
-cement,Secil Maceira-Liz,PT19,800,2711.3,2045.7
-cement,Cimpor Loulé,PT15,600,2722.9,1753.3
-cement,Irish Cement Limerick,IE05,600,3070.9,3442.2
-ammonia,Yara Sluiskil,NL34,1700,3892.3,3147.0
-ammonia,OCI Geleen,NL42,550,4025.3,3107.0
-ammonia,Yara Tertre,BE32,420,3881.7,3059.3
-ammonia,BASF Antwerp,BE21,650,3922.9,3153.9
-ammonia,Yara Gonfreville,FRD2,400,3612.8,2977.0
-ammonia,Borealis Rouen,FRD2,300,3671.6,2962.6
-ammonia,BASF Ludwigshafen,DEB3,880,4206.6,2934.4
-ammonia,SKW,DEE0,1300,4499.0,3199.5
-ammonia,Yara Brunsbuettel,DEF0,750,4269.1,3423.0
-ammonia,Fertiberia Puertollano,ES42,400,3097.2,1845.2
-ammonia,Fertiberia Huelva,ES61,200,2818.6,1739.5
-ammonia,Yara Ferrara,ITH5,600,4446.0,2418.1
-ammonia,Petrokemija,HR02,450,4851.9,2508.4
-ammonia,Neochim,BG34,450,5604.6,2256.0
-ammonia,Agopolychim,BG33,400,5745.1,2401.8
-ammonia,Azomures,RO12,1600,5416.0,2734.6
-ammonia,Nitrogenmuvek,HU21,497,4936.4,2706.4
-ammonia,DUSLO,SK02,530,4909.6,2817.6
-ammonia,Grupa Azoty,PL81,524,5149.6,3217.2
-ammonia,Anwil,PL61,500,4925.3,3325.7
-ammonia,Achema,LT02,1100,5229.2,3643.5
-ammonia,LAT Nitrogen Linz GmbH,AT31,1500,4641.9,2806.6
-ammonia,Kothla-Järve,EE00,180,5290.7,4152.5
-ammonia,Kavala Fertilizers,EL51,165,5536.3,2100.1
-ammonia,Grupa Azoty Police,PL42,400,4623.6,3394.2
-ammonia,Grupa Azoty Kędzierzyn,PL52,500,4903.3,3059.1
-ammonia,Grupa Azoty Tarnów,PL21,300,5102.6,3047.1
-chemicals,"Antwerp (BASF, TotalEnergies, INEOS)",BE21,2200,3923.8,3146.5
-chemicals,Shell Moerdijk,NL41,900,3946.6,3189.4
-chemicals,SABIC Geleen,NL42,1300,4025.5,3103.9
-chemicals,Dow Terneuzen,NL34,1800,3890.9,3153.7
-chemicals,BASF Ludwigshafen,DEB3,660,4207.3,2933.1
-chemicals,INEOS Köln,DEA2,1300,4099.6,3111.3
-chemicals,LyondellBasell/Shell Wesseling,DEA2,1000,4108.2,3083.1
-chemicals,BP/Ineos Gelsenkirchen,DEA3,1100,4115.2,3167.5
-chemicals,LyondellBasell Münchsmünster,DE21,350,4443.1,2851.0
-chemicals,OMV Burghausen,DE21,450,4531.5,2789.2
-chemicals,Dow Böhlen,DED5,560,4487.3,3123.7
-chemicals,TotalEnergies Gonfreville,FRD2,520,3616.0,2976.6
-chemicals,INEOS Lavéra,FRL0,740,3916.8,2266.9
-chemicals,TotalEnergies Feyzin,FRK2,250,3920.4,2521.3
-chemicals,LyondellBasell Berre,FRL0,470,3929.5,2276.1
-chemicals,Versalis Brindisi,ITF4,450,4998.7,1984.9
-chemicals,Versalis Priolo,ITG1,490,4786.3,1580.0
-chemicals,Repsol/Dow Tarragona,ES51,1350,3578.9,2044.4
-chemicals,Repsol Puertollano,ES42,250,3093.6,1844.4
-chemicals,Repsol Sines,PT1C,410,2672.8,1856.7
-chemicals,Borealis Stenungsund,SE23,625,4428.5,3887.9
-chemicals,Borealis Porvoo,FI1B,380,5174.8,4228.6
-chemicals,OMV Schwechat,AT12,500,4802.8,2801.9
-chemicals,Orlen Płock,PL92,700,4975.2,3315.9
-chemicals,Orlen Unipetrol Litvínov,CZ04,500,4576.0,3056.1
-chemicals,MOL Tiszaújváros,HU31,880,5145.9,2819.4
-chemicals,Slovnaft Bratislava,SK01,220,4854.8,2805.6
-chemicals,Lukoil Neftochim Burgas,BG34,400,5739.1,2323.1
-aluminium,Alcoa San Ciprián,ES11,228,2923.8,2451.8
-aluminium,Aluminium Dunkerque,FRE1,290,3787.7,3131.0
-aluminium,Trimet Saint-Jean-de-Maurienne,FRK2,145,4034.2,2469.0
-aluminium,Trimet Essen,DEA1,165,4113.2,3153.1
-aluminium,Trimet Hamburg,DE60,135,4319.0,3376.9
-aluminium,Trimet Voerde,DEA1,95,4091.1,3170.7
-aluminium,Speira Rheinwerk Neuss,DEA1,230,4090.4,3126.2
-aluminium,Alro Slatina,RO41,265,5458.7,2478.5
-aluminium,Slovalco Žiar nad Hronom,SK03,175,4973.2,2868.9
-aluminium,Kubal Sundsvall,SE32,135,4700.3,4386.2
-aluminium,Aluminium of Greece,EL64,190,5426.2,1786.8
-aluminium,Talum Kidričevo,SI03,85,4767.0,2604.8
-aluminium,Portovesme (idle),ITG2,150,4182.0,1791.6
-aluminium,Aluminium Delfzijl (idle),NL11,110,4115.8,3362.4
-chlor,Dow Stade,DE93,1585,4286.3,3388.3
-chlor,AkzoNobel Botlek,NL36,637,3927.5,3211.4
-chlor,INEOS ChlorVinyls Tessenderlo *,BE22,475,3976.7,3117.7
-chlor,Solvin Antwerp,BE21,460,3930.2,3137.8
-chlor,Bayer  MaterialScience Dormagen,DEA1,480,4098.1,3114.7
-chlor,BASF Ludwigshafen,DEB3,385,4207.6,2931.0
-chlor,Kem One Lavera,FRL0,363,3915.1,2267.0
-chlor,Solvay Tavaux,FRC2,360,3972.4,2669.7
-chlor,Bayer  MaterialScience Leverkusen,DEA2,360,4109.5,3106.8
-chlor,Kem One Fos sur Mer,FRL0,340,3911.3,2272.9
-chlor,Borsodchem Kazincbarcika,HU31,323,5108.8,2850.2
-chlor,Oltchim Rimnicu Valcea,RO41,291,5446.3,2552.6
-chlor,Bayer  MaterialScience Uerdingen,DEA1,260,4087.7,3143.0
-chlor,Vestolit Marl,DEA3,260,4121.6,3176.9
-chlor,Dow Schkopau,DEE0,250,4457.9,3143.2
-chlor,Vinnolit (Westlake) Knapsack,DEA2,250,4099.3,3088.7
-chlor,Hispavic Martorell,ES51,218,3645.9,2076.7
-chlor,Solvay Rheinberg,DEA1,220,4085.3,3165.1
-chlor,Anwil Wloclawek,PL61,214,4932.8,3321.6
-chlor,Ercros Vilaseca,ES51,190,3575.5,2044.8
-chlor,Vinnolit (Westlake) Burgkirchen,DE21,180,4523.1,2787.4
-chlor,Solvic Jemeppe,BE35,174,3942.7,3053.2
-chlor,AkzoNobel Frankfurt,DE71,167,4216.6,2999.3
-chlor,Vencorex Pont de Claix,FRK2,170,3982.3,2456.1
-chlor,Solvay Rosignano,ITI1,150,4357.1,2254.5
-chlor,Evonik Industries Lülsdorf,DEA2,137,4112.0,3082.6
-chlor,Spolana Neratovice,CZ02,135,4641.7,3025.2
-chlor,AkzoNobel Ibbenbüren,DEA3,125,4165.2,3243.4
-chlor,PCC Rokita Brzeg Dolny,PL51,125,4789.3,3150.4
-chlor,INEOS ChlorVinyls Stenungsund,SE23,120,4428.3,3888.2
-chlor,AkzoNobel Delfzijl,NL11,121,4115.6,3362.7
-chlor,AkzoNobel Bitterfeld,DEE0,99,4481.4,3169.9
-chlor,Chimcomplex Borzesti,RO21,93,5602.9,2717.3
-chlor,Ercros Flix,ES51,88,3527.0,2064.0
-chlor,Sabic Bergen op Zoom,NL41,89,3925.7,3169.8
-chlor,Fortischem Novaky,SK02,76,4948.0,2880.8
-chlor,Arkema Jarrie,FRK2,73,3987.1,2453.9
-chlor,Kemira Joutseno,FI1C,75,5308.7,4354.6
-chlor,PPChemicals Thann,FRF1,72,4104.1,2748.0
-chlor,CUF Estarreja,PT19,116,2763.6,2153.7
-chlor,Donau Chemie Brückl,AT21,70,4667.5,2636.9
-chlor,Solvay Torrelavega,ES13,63,3186.8,2356.0
-chlor,Spolchemie Usti,CZ04,61,4606.6,3068.6
-chlor,Wacker Chemie Burghausen,DE21,50,4531.8,2787.7
-chlor,Ercros Huelva/Palos,ES61,48,2822.9,1739.4
-chlor,CABB GmbH Gersthofen,DE27,45,4385.2,2811.8
-chlor,HydroChem Italia Pieve Vergonte,ITC1,42,4186.6,2544.6
-chlor,AkzoNobel Oulu,FI1D,40,5048.0,4737.6
-chlor,Altair Chimica Volterra,ITI1,39,4391.4,2255.0
-chlor,Elnosa Pontevedra/Lourizan,ES11,34,2800.4,2337.2
-chlor,Quimica del Cinca Monzon,ES24,31,3506.7,2142.7
-chlor,Ercros Sabinanigo,ES24,30,3469.3,2215.8
-chlor,Solvay Povoa,PT1A,26,2675.6,1959.9
-chlor,Solvay Bussi,ITF1,25,4637.2,2129.7
-chlor,Syndial Assemini,ITG2,25,4234.2,1799.9
-chlor,PC Harbonnières Harbonnières,FRE2,23,3794.8,2997.1
-chlor,Arkema St-Auban,FRL0,20,4000.9,2340.1
-chlor,Unilever Knorr Marousi,EL30,20,5533.5,1773.1
-chlor,Fater S.p.A. Campochiaro,ITF2,20,4699.7,2050.1
-chlor,PC Loos Loos,FRE1,18,3827.4,3079.2
-chlor,TKI Hrastnik Hrastnik,SI03,16,4719.2,2573.2
-chlor,Leuna-Harze Leuna,DEE0,15,4461.6,3135.9
-chlor,Electroquimica  Hernani Hernani,ES21,15,3350.8,2317.4
-chlor,MicroBio Fermoy,IE05,9,3085.0,3382.1
-chlor,Kapachim Inofita,EL64,4,5514.7,1797.7
-chlor,MSSA Pomblière,FRK2,42,4051.8,2493.6
-chlor,Bayer  MaterialScience Brunsbuttel,DEF0,210,4264.4,3421.4
+industry,name,country,nuts2,lat,lon,status,capacity_kt,basis,output_kt,source
+steel,voestalpine Linz,AT,AT31,48.29,14.33,operating,5500.0,capacity,4125.0,hand-compiled list (data/manual)
+steel,voestalpine Donawitz,AT,AT22,47.37,15.07,operating,1600.0,capacity,1200.0,hand-compiled list (data/manual)
+steel,ArcelorMittal Gent,BE,BE23,51.18,3.81,operating,5000.0,capacity,3750.0,hand-compiled list (data/manual)
+steel,Třinec,CZ,CZ08,49.68,18.67,operating,2500.0,capacity,1875.0,hand-compiled list (data/manual)
+steel,Liberty Ostrava,CZ,CZ08,49.81,18.27,idle,3000.0,capacity,0.0,hand-compiled list (data/manual)
+steel,thyssenkrupp Duisburg,DE,DEA1,51.49,6.74,operating,11500.0,capacity,8625.0,hand-compiled list (data/manual)
+steel,HKM Duisburg-Huckingen,DE,DEA1,51.37,6.73,operating,4000.0,capacity,3000.0,hand-compiled list (data/manual)
+steel,Salzgitter,DE,DE91,52.15,10.33,operating,4700.0,capacity,3525.0,hand-compiled list (data/manual)
+steel,SHS Dillingen/Völklingen,DE,DEC0,49.35,6.73,operating,4500.0,capacity,3375.0,hand-compiled list (data/manual)
+steel,ArcelorMittal Bremen,DE,DE50,53.12,8.7,operating,3500.0,capacity,2625.0,hand-compiled list (data/manual)
+steel,ArcelorMittal Eisenhüttenstadt,DE,DE40,52.15,14.67,operating,2000.0,capacity,1500.0,hand-compiled list (data/manual)
+steel,ArcelorMittal Asturias,ES,ES12,43.55,-5.8,operating,4500.0,capacity,3375.0,hand-compiled list (data/manual)
+steel,SSAB Raahe,FI,FI1D,64.68,24.47,operating,2600.0,capacity,1950.0,hand-compiled list (data/manual)
+steel,ArcelorMittal Dunkerque,FR,FRE1,51.03,2.27,operating,6800.0,capacity,5100.0,hand-compiled list (data/manual)
+steel,ArcelorMittal Fos-sur-Mer,FR,FRL0,43.44,4.95,operating,4000.0,capacity,3000.0,hand-compiled list (data/manual)
+steel,Dunaferr Dunaújváros,HU,HU21,46.98,18.91,idle,1600.0,capacity,0.0,hand-compiled list (data/manual)
+steel,Acciaierie d'Italia Taranto,IT,ITF4,40.48,17.23,operating,8000.0,capacity,6000.0,hand-compiled list (data/manual)
+steel,Tata Steel IJmuiden,NL,NL32,52.47,4.61,operating,7200.0,capacity,5400.0,hand-compiled list (data/manual)
+steel,ArcelorMittal Dąbrowa Górnicza,PL,PL22,50.33,19.27,operating,4500.0,capacity,3375.0,hand-compiled list (data/manual)
+steel,Liberty Galați,RO,RO22,45.44,28.02,operating,3000.0,capacity,2250.0,hand-compiled list (data/manual)
+steel,SSAB Luleå,SE,SE33,65.58,22.15,operating,2300.0,capacity,1725.0,hand-compiled list (data/manual)
+steel,SSAB Oxelösund,SE,SE12,58.67,17.12,operating,1500.0,capacity,1125.0,hand-compiled list (data/manual)
+steel,U.S. Steel Košice,SK,SK04,48.63,21.19,operating,4500.0,capacity,3375.0,hand-compiled list (data/manual)
+steel,British Steel Scunthorpe,UK,UKE1,53.58,-0.63,operating,3000.0,capacity,2250.0,hand-compiled list (data/manual)
+steel,Tata Steel Port Talbot,UK,UKL1,51.57,-3.77,closed,5000.0,capacity,0.0,hand-compiled list (data/manual)
+aluminium,Alcoa San Ciprián,ES,ES11,43.7,-7.47,operating,228.0,capacity,193.79999999999998,hand-compiled list (data/manual)
+aluminium,Aluminium Dunkerque,FR,FRE1,51.04,2.38,operating,290.0,capacity,246.5,hand-compiled list (data/manual)
+aluminium,Trimet Saint-Jean-de-Maurienne,FR,FRK2,45.27,6.35,operating,145.0,capacity,123.25,hand-compiled list (data/manual)
+aluminium,Trimet Essen,DE,DEA1,51.45,7.01,operating,165.0,capacity,140.25,hand-compiled list (data/manual)
+aluminium,Trimet Hamburg,DE,DE60,53.5,9.97,operating,135.0,capacity,114.75,hand-compiled list (data/manual)
+aluminium,Trimet Voerde,DE,DEA1,51.6,6.68,operating,95.0,capacity,80.75,hand-compiled list (data/manual)
+aluminium,Speira Rheinwerk Neuss,DE,DEA1,51.2,6.7,operating,230.0,capacity,195.5,hand-compiled list (data/manual)
+aluminium,Alro Slatina,RO,RO41,44.43,24.36,operating,265.0,capacity,225.25,hand-compiled list (data/manual)
+aluminium,Slovalco Žiar nad Hronom,SK,SK03,48.58,18.86,operating,175.0,capacity,148.75,hand-compiled list (data/manual)
+aluminium,Kubal Sundsvall,SE,SE32,62.4,17.32,operating,135.0,capacity,114.75,hand-compiled list (data/manual)
+aluminium,Aluminium of Greece,EL,EL64,38.34,22.62,operating,190.0,capacity,161.5,hand-compiled list (data/manual)
+aluminium,Talum Kidričevo,SI,SI03,46.4,15.8,operating,85.0,capacity,72.25,hand-compiled list (data/manual)
+aluminium,Portovesme,IT,ITG2,39.2,8.4,idle,150.0,capacity,0.0,hand-compiled list (data/manual)
+aluminium,Aluminium Delfzijl,NL,NL11,53.33,6.92,idle,110.0,capacity,0.0,hand-compiled list (data/manual)
+aluminium,Hydro Sunndal,NO,NO0A,62.67,8.56,operating,400.0,capacity,340.0,hand-compiled list (data/manual)
+aluminium,Hydro Karmøy,NO,NO0A,59.33,5.3,operating,270.0,capacity,229.5,hand-compiled list (data/manual)
+aluminium,Hydro Årdal,NO,NO0A,61.24,7.7,operating,200.0,capacity,170.0,hand-compiled list (data/manual)
+aluminium,Hydro Husnes,NO,NO0A,59.87,5.76,operating,190.0,capacity,161.5,hand-compiled list (data/manual)
+aluminium,Hydro Høyanger,NO,NO0A,61.22,6.07,operating,60.0,capacity,51.0,hand-compiled list (data/manual)
+aluminium,Alcoa Mosjøen,NO,NO07,65.84,13.19,operating,190.0,capacity,161.5,hand-compiled list (data/manual)
+aluminium,Alcoa Lista,NO,NO09,58.1,6.66,operating,95.0,capacity,80.75,hand-compiled list (data/manual)
+aluminium,Alvance Lochaber (Fort William),UK,UKM6,56.83,-5.08,operating,45.0,capacity,38.25,hand-compiled list (data/manual)
+chemicals,"Antwerp (BASF, TotalEnergies, INEOS)",BE,BE21,51.29,4.3,operating,2200.0,capacity,1760.0,hand-compiled list (data/manual)
+chemicals,Shell Moerdijk,NL,NL41,51.69,4.58,operating,900.0,capacity,720.0,hand-compiled list (data/manual)
+chemicals,SABIC Geleen,NL,NL42,50.97,5.79,operating,1300.0,capacity,1040.0,hand-compiled list (data/manual)
+chemicals,Dow Terneuzen,NL,NL34,51.33,3.82,operating,1800.0,capacity,1440.0,hand-compiled list (data/manual)
+chemicals,BASF Ludwigshafen,DE,DEB3,49.5,8.43,operating,660.0,capacity,528.0,hand-compiled list (data/manual)
+chemicals,INEOS Köln,DE,DEA2,51.07,6.84,operating,1300.0,capacity,1040.0,hand-compiled list (data/manual)
+chemicals,LyondellBasell/Shell Wesseling,DE,DEA2,50.82,6.98,operating,1000.0,capacity,800.0,hand-compiled list (data/manual)
+chemicals,BP/Ineos Gelsenkirchen,DE,DEA3,51.58,7.03,operating,1100.0,capacity,880.0,hand-compiled list (data/manual)
+chemicals,LyondellBasell Münchsmünster,DE,DE21,48.76,11.66,operating,350.0,capacity,280.0,hand-compiled list (data/manual)
+chemicals,OMV Burghausen,DE,DE21,48.18,12.83,operating,450.0,capacity,360.0,hand-compiled list (data/manual)
+chemicals,Dow Böhlen,DE,DED5,51.2,12.38,operating,560.0,capacity,448.0,hand-compiled list (data/manual)
+chemicals,TotalEnergies Gonfreville,FR,FRD2,49.48,0.24,operating,520.0,capacity,416.0,hand-compiled list (data/manual)
+chemicals,INEOS Lavéra,FR,FRL0,43.39,5.02,operating,740.0,capacity,592.0,hand-compiled list (data/manual)
+chemicals,TotalEnergies Feyzin,FR,FRK2,45.68,4.86,operating,250.0,capacity,200.0,hand-compiled list (data/manual)
+chemicals,LyondellBasell Berre,FR,FRL0,43.48,5.17,operating,470.0,capacity,376.0,hand-compiled list (data/manual)
+chemicals,Versalis Brindisi,IT,ITF4,40.64,17.99,operating,450.0,capacity,360.0,hand-compiled list (data/manual)
+chemicals,Versalis Priolo,IT,ITG1,37.15,15.2,operating,490.0,capacity,392.0,hand-compiled list (data/manual)
+chemicals,Repsol/Dow Tarragona,ES,ES51,41.11,1.18,operating,1350.0,capacity,1080.0,hand-compiled list (data/manual)
+chemicals,Repsol Puertollano,ES,ES42,38.66,-4.1,operating,250.0,capacity,200.0,hand-compiled list (data/manual)
+chemicals,Repsol Sines,PT,PT1C,37.95,-8.83,operating,410.0,capacity,328.0,hand-compiled list (data/manual)
+chemicals,Borealis Stenungsund,SE,SE23,58.08,11.82,operating,625.0,capacity,500.0,hand-compiled list (data/manual)
+chemicals,Borealis Porvoo,FI,FI1B,60.31,25.55,operating,380.0,capacity,304.0,hand-compiled list (data/manual)
+chemicals,OMV Schwechat,AT,AT12,48.14,16.48,operating,500.0,capacity,400.0,hand-compiled list (data/manual)
+chemicals,Orlen Płock,PL,PL92,52.56,19.68,operating,700.0,capacity,560.0,hand-compiled list (data/manual)
+chemicals,Orlen Unipetrol Litvínov,CZ,CZ04,50.56,13.6,operating,500.0,capacity,400.0,hand-compiled list (data/manual)
+chemicals,MOL Tiszaújváros,HU,HU31,47.93,21.08,operating,880.0,capacity,704.0,hand-compiled list (data/manual)
+chemicals,Slovnaft Bratislava,SK,SK01,48.13,17.18,operating,220.0,capacity,176.0,hand-compiled list (data/manual)
+chemicals,Lukoil Neftochim Burgas,BG,BG34,42.53,27.38,operating,400.0,capacity,320.0,hand-compiled list (data/manual)
+chemicals,INEOS Rafnes,NO,NO09,59.07,9.62,operating,620.0,capacity,496.0,hand-compiled list (data/manual)
+chemicals,ExxonMobil Fife Ethylene (Mossmorran),UK,UKM7,56.1,-3.3,operating,830.0,capacity,664.0,hand-compiled list (data/manual)
+chemicals,INEOS Grangemouth,UK,UKM7,56.01,-3.7,operating,1000.0,capacity,800.0,hand-compiled list (data/manual)
+chemicals,SABIC Wilton (Teesside),UK,UKC1,54.58,-1.1,operating,865.0,capacity,692.0,hand-compiled list (data/manual)
+cement,Εργοστασιο Καμαριου Βοιωτιας,EL,EL30,38.04138888888889,23.54527777777778,operating,2078.977108433735,output,2078.977108433735,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Aalborg Portland A/S,DK,DK05,57.05,9.916666666666666,operating,2069.8927710843373,output,2069.8927710843373,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Górażdże Cement Spółka Akcyjna,PL,PL52,50.666666666666664,17.933333333333334,operating,1883.5048192771085,output,1883.5048192771085,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Cimpor - Centro De Produção De Alhandra,PT,PT1A,38.93333333333333,-9.016666666666667,operating,1772.6602409638554,output,1772.6602409638554,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Cementownia Warta S.A.,PL,PL71,51.130833333333335,18.924166666666668,operating,1748.4253012048193,output,1748.4253012048193,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Εργοστασιο Βολου,EL,EL61,39.369166666666665,22.940833333333334,operating,1557.0240963855422,output,1557.0240963855422,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Zementwerk Rüdersdorf,DE,DE40,52.47166666666667,13.784444444444444,operating,1526.0987951807228,output,1526.0987951807228,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Werk Lägerdorf,DE,DEF0,53.88333333333333,9.583333333333334,operating,1410.4578313253012,output,1410.4578313253012,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Cemex Hrvatska D.D.,HR,HR03,43.55,16.426111111111112,operating,1372.566265060241,output,1372.566265060241,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Centro De Produção De Souselas,PT,PT19,40.211111111111116,-8.429166666666665,operating,1358.0638554216866,output,1358.0638554216866,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Εργοστασιο Μυλακιου,EL,EL64,38.383622,24.061125,operating,1296.3843373493976,output,1296.3843373493976,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Εργοστασιο Θεσσαλονικης,EL,EL52,40.65,22.9,operating,1134.7024096385542,output,1134.7024096385542,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Drehofenanlage  Deuna,DE,DEG0,51.35,10.466666666666667,operating,1197.0373493975903,output,1197.0373493975903,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Cementos Molins Industrial S.A.,ES,ES51,41.39527777777778,2.0108333333333333,operating,1150.6012048192772,output,1150.6012048192772,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Fábrica Secil - Outão,PT,PT1B,38.53333333333333,-8.883333333333333,operating,1151.0939759036144,output,1151.0939759036144,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Cementownia Chełm Cemex,PL,PL81,51.15,23.483333333333334,operating,1133.0530120481928,output,1133.0530120481928,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Uniland Cementera S.A.Santa Margarida I ,ES,ES51,41.323055555555555,1.6647222222222222,operating,1104.7397590361445,output,1104.7397590361445,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Zementwerk Burglengenfeld,DE,DE23,49.2,12.033333333333333,operating,1087.8927710843373,output,1087.8927710843373,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Lafarge Ciments - Usine De Saint Pierre ,FR,FRG0,48.11555555555556,-1.024722222222222,operating,1019.6807228915662,output,1019.6807228915662,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Zementwerk Karsdorf,DE,DEA2,50.54083333333333,6.554444444444444,operating,1063.320481927711,output,1063.320481927711,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Εργοστασιο Δρεπανου Αχαϊας,EL,EL63,38.32083333333334,21.855555555555558,operating,1062.4096385542168,output,1062.4096385542168,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Zementwerk Schelklingen,DE,DE14,48.37555555555556,9.7325,operating,968.467469879518,output,968.467469879518,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Dyckerhoff Polska Sp. Z O.O.,PL,PL72,50.81583333333333,20.55527777777778,operating,1028.6373493975905,output,1028.6373493975905,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Irish Cement Limited (Platin Works),IE,IE06,53.655,-6.416666666666667,operating,1013.7493975903615,output,1013.7493975903615,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Sc Holcim (Romania) Sa - Ciment Campulun,RO,RO31,45.28333333333333,25.083333333333332,operating,1007.6361445783133,output,1007.6361445783133,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Ciments Calcia - Usine De Couvrot,FR,FRF2,48.76027777777778,4.5725,operating,859.9686746987952,output,859.9686746987952,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,"Holcim España, S.A.- Instalación De Carb",ES,ES61,37.0,-1.8833333333333333,operating,935.166265060241,output,935.166265060241,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Prev. Na Výrobu Cement. Slinku V Rotačný,SK,SK01,48.439615465693755,17.19455025000002,operating,988.5361445783133,output,988.5361445783133,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Sc Holcim (Romania) Sa - Ciment Alesd,RO,RO11,47.03333333333333,22.383333333333333,operating,980.8072289156627,output,980.8072289156627,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Drehofenanlage 8 Lengerich,DE,DEA3,52.175,7.866666666666667,operating,912.4120481927711,output,912.4120481927711,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,"Cemex España Operaciones, S.L.U. - Alcan",ES,ES51,40.59527777777778,0.5705555555555556,operating,896.6819277108434,output,896.6819277108434,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Cemex España S.A.- San Vicente,ES,ES52,38.396388888888886,-0.5252777777777778,operating,893.1469879518072,output,893.1469879518072,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Werk Spz Rohrdorf,DE,DE21,47.79888888888889,12.167499999999999,operating,880.1108433734939,output,880.1108433734939,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Soc. Financiera Y Minera - Cementos Goli,ES,ES61,36.71944444444445,-4.42,operating,857.6807228915662,output,857.6807228915662,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,"Cementos Tudela Veguin, S.A. - La Robla",ES,ES41,42.8,-5.616666666666667,operating,829.4481927710843,output,829.4481927710843,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Schwenk Werk Bernburg,DE,DEE0,51.8,11.733333333333333,operating,810.5578313253012,output,810.5578313253012,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Chaux Et Dolomies Du Boulonnais,FR,FRE1,50.79805555555556,1.7755555555555556,operating,802.5036144578313,output,802.5036144578313,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Fábrica De Cementos De Aboño,ES,ES12,43.54861111111111,-5.789722222222222,operating,797.0036144578313,output,797.0036144578313,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Lafarge Ciment (Ro) Sa-Punct De Lucru Me,RO,RO22,44.250277777777775,28.261388888888888,operating,783.8072289156627,output,783.8072289156627,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Drehofen I Göllheim,DE,DEB3,49.592222222222226,8.048333333333334,operating,770.7036144578313,output,770.7036144578313,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,"Lafarge Cementos, S.A - Villaluenga De L",ES,ES42,40.030277777777776,-3.9102777777777775,operating,773.9722891566265,output,773.9722891566265,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Zementwerk Geseke,DE,DEA5,51.65,8.516666666666667,operating,770.6120481927711,output,770.6120481927711,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Lafarge Ciment (Ro) Sa-Punct De Lucru Ho,RO,RO12,45.983333333333334,25.3,operating,763.8409638554217,output,763.8409638554217,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Werk Höver,DE,DE92,52.316111111111105,9.964166666666666,operating,752.644578313253,output,752.644578313253,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Zementwerk Beckum-Kollenbach,DE,DEA3,51.755,8.040277777777778,operating,740.089156626506,output,740.089156626506,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Ciments Calcia - Usine D'Airvault,FR,FRI3,46.827222222222225,-0.1363888888888889,operating,705.5951807228915,output,705.5951807228915,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Drehrohrofen 7,DE,DE27,48.766666666666666,10.666666666666666,operating,730.4710843373495,output,730.4710843373495,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Scotchtown Cement Works,IE,IE04,53.93333333333333,-7.483333333333333,operating,729.6602409638555,output,729.6602409638555,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,"Cemex España Operaciones, S.L.U.-Buñol",ES,ES52,39.419444444444444,-0.7905555555555556,operating,722.7457831325302,output,722.7457831325302,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,"Lafarge Cementos, S.A - Instalación De S",ES,ES52,39.67638888888889,-0.2733333333333333,operating,722.0168674698796,output,722.0168674698796,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Lafarge Perlmooser Mannersdorf,AT,AT12,47.96666666666667,16.6,operating,715.6795180722892,output,715.6795180722892,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Sc Carpatcement Holding Sa-Sucursala Bic,RO,RO21,46.91083333333333,26.09111111111111,operating,720.633734939759,output,720.633734939759,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Zementwerk Lengfurt,DE,DE26,49.8,9.6,operating,710.8927710843374,output,710.8927710843374,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Schwenk Werk Karlstadt,DE,DE26,49.96027777777778,9.772222222222224,operating,707.3060240963855,output,707.3060240963855,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Spenner Zement Drehrohrofenanlage,DE,DEA5,51.61666666666667,8.35,operating,706.2060240963856,output,706.2060240963856,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,"Považská Cementáreň, A.S. - Ladce",SK,SK02,49.03333333333333,18.283333333333335,operating,689.9493975903614,output,689.9493975903614,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Lafarge Ciments - Usine Du Havre,FR,FRD2,49.483333333333334,0.1,operating,615.8722891566265,output,615.8722891566265,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Sc Carpatcement Holding Sa-Sucursala Fie,RO,RO31,45.12222222222222,25.418333333333333,operating,681.9746987951808,output,681.9746987951808,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Cementos Cosmos S.A. - Instalación De Le,ES,ES41,42.553405,-6.769661,operating,669.6674698795181,output,669.6674698795181,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Schwenk Wgs Standort Mergelstetten,DE,DE11,48.67611111111111,10.154444444444445,operating,650.2385542168674,output,650.2385542168674,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,"Holcim España, S.A. - Instalación De Gád",ES,ES61,36.95,-2.4833333333333334,operating,643.7819277108433,output,643.7819277108433,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Zementwerk Ennigerloh,DE,DEA3,51.836666666666666,8.025555555555556,operating,537.5409638554216,output,537.5409638554216,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Zementwerk Hannover,DE,DE92,52.36666666666667,9.716666666666667,operating,538.8518072289156,output,538.8518072289156,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Ciments Calcia - Usine De Bussac-Forêt,FR,FRI3,45.21333333333334,-0.3686111111111111,operating,552.9096385542168,output,552.9096385542168,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Lafarge Ciments - Usine De La Couronne,FR,FRI3,45.608333333333334,0.10083333333333334,operating,541.2795180722892,output,541.2795180722892,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Schwenk Wgs Standort Allmendingen,DE,DE14,48.32805555555556,9.720555555555556,operating,597.4638554216867,output,597.4638554216867,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Klinkerproduktionsanlage,DE,DEA5,51.61666666666667,8.35,operating,551.2361445783132,output,551.2361445783132,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Našicecement D.D.,HR,HR02,45.49,18.09,operating,588.5855421686747,output,588.5855421686747,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Zementwerk Wössingen,DE,DE12,49.01166666666666,8.6075,operating,582.2518072289157,output,582.2518072289157,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Sc Carpatcement Holding Sa-Sucursala Dev,RO,RO42,45.91694444444444,22.889722222222222,operating,578.7012048192771,output,578.7012048192771,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Instalación De Jerez De La Frontera,ES,ES61,36.7,-6.116666666666666,operating,578.6,output,578.6,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Lafarge Ciments - Usine Du Teil,FR,FRK2,44.545833333333334,4.683055555555556,operating,515.9168674698795,output,515.9168674698795,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Ciments Calcia - Usine De Beaucaire,FR,FRJ1,43.808055555555555,4.644166666666666,operating,566.9144578313253,output,566.9144578313253,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Zementwerk Leimen,DE,DE12,49.34805555555556,8.69111111111111,operating,503.48072289156624,output,503.48072289156624,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Lagan Cement,IE,IE06,53.5,-7.5,operating,522.0590361445783,output,522.0590361445783,EU ETS verified emissions 2014 (Tröndle et al. 2019)
+cement,Colacem Gubbio,IT,ITI2,43.33,12.58,operating,1200.0,capacity,900.0,hand-compiled list (data/manual)
+cement,Buzzi Robilante,IT,ITC1,44.29,7.51,operating,1100.0,capacity,825.0,hand-compiled list (data/manual)
+cement,Buzzi Trino,IT,ITC1,45.19,8.3,operating,900.0,capacity,675.0,hand-compiled list (data/manual)
+cement,Heidelberg Calusco d'Adda,IT,ITC4,45.69,9.48,operating,1100.0,capacity,825.0,hand-compiled list (data/manual)
+cement,Heidelberg Rezzato,IT,ITC4,45.51,10.32,operating,900.0,capacity,675.0,hand-compiled list (data/manual)
+cement,Heidelberg Matera,IT,ITF5,40.67,16.6,operating,800.0,capacity,600.0,hand-compiled list (data/manual)
+cement,Heidelberg Isola delle Femmine,IT,ITG1,38.2,13.25,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Heidelberg Samatzai,IT,ITG2,39.48,9.03,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Colleferro,IT,ITI4,41.73,13.0,operating,600.0,capacity,450.0,hand-compiled list (data/manual)
+cement,Buzzi Barletta,IT,ITF4,41.31,16.27,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Buzzi Augusta,IT,ITG1,37.24,15.2,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Cementir Taranto,IT,ITF4,40.48,17.2,operating,800.0,capacity,600.0,hand-compiled list (data/manual)
+cement,Monselice,IT,ITH3,45.24,11.75,operating,800.0,capacity,600.0,hand-compiled list (data/manual)
+cement,Buzzi Vernasca,IT,ITH5,44.8,9.83,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Buzzi Guidonia,IT,ITI4,42.0,12.73,operating,800.0,capacity,600.0,hand-compiled list (data/manual)
+cement,Holcim Obourg,BE,BE32,50.47,4.01,operating,1400.0,capacity,1050.0,hand-compiled list (data/manual)
+cement,CBR Lixhe,BE,BE33,50.75,5.68,operating,1400.0,capacity,1050.0,hand-compiled list (data/manual)
+cement,CBR Antoing,BE,BE32,50.57,3.45,operating,1200.0,capacity,900.0,hand-compiled list (data/manual)
+cement,CCB Gaurain,BE,BE32,50.59,3.49,operating,1300.0,capacity,975.0,hand-compiled list (data/manual)
+cement,Mokrá,CZ,CZ06,49.22,16.75,operating,900.0,capacity,675.0,hand-compiled list (data/manual)
+cement,Radotín,CZ,CZ01,49.99,14.36,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Čížkovice,CZ,CZ04,50.48,14.03,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Prachovice,CZ,CZ05,49.9,15.62,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Hranice,CZ,CZ07,49.55,17.73,operating,600.0,capacity,450.0,hand-compiled list (data/manual)
+cement,Beremend,HU,HU23,45.79,18.43,operating,800.0,capacity,600.0,hand-compiled list (data/manual)
+cement,Királyegyháza,HU,HU23,46.0,17.97,operating,900.0,capacity,675.0,hand-compiled list (data/manual)
+cement,Vác,HU,HU12,47.78,19.13,operating,600.0,capacity,450.0,hand-compiled list (data/manual)
+cement,Lábatlan,HU,HU21,47.75,18.5,operating,500.0,capacity,375.0,hand-compiled list (data/manual)
+cement,Devnya,BG,BG33,43.22,27.57,operating,1000.0,capacity,750.0,hand-compiled list (data/manual)
+cement,Beli Izvor,BG,BG31,43.28,23.1,operating,600.0,capacity,450.0,hand-compiled list (data/manual)
+cement,Zlatna Panega,BG,BG31,43.07,24.17,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Cementa Slite,SE,SE21,57.71,18.8,operating,1600.0,capacity,1200.0,hand-compiled list (data/manual)
+cement,Cementa Skövde,SE,SE23,58.39,13.86,operating,500.0,capacity,375.0,hand-compiled list (data/manual)
+cement,Cementa Degerhamn,SE,SE21,56.35,16.41,operating,400.0,capacity,300.0,hand-compiled list (data/manual)
+cement,Finnsementti Parainen,FI,FI1C,60.3,22.3,operating,600.0,capacity,450.0,hand-compiled list (data/manual)
+cement,Finnsementti Lappeenranta,FI,FI1C,61.06,28.19,operating,400.0,capacity,300.0,hand-compiled list (data/manual)
+cement,Kunda Nordic,EE,EE00,59.5,26.53,operating,500.0,capacity,375.0,hand-compiled list (data/manual)
+cement,Schwenk Brocēni,LV,LV00,56.68,22.57,operating,800.0,capacity,600.0,hand-compiled list (data/manual)
+cement,Akmenės cementas,LT,LT02,56.25,22.75,operating,1000.0,capacity,750.0,hand-compiled list (data/manual)
+cement,Salonit Anhovo,SI,SI04,46.07,13.63,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Lafarge Trbovlje,SI,SI03,46.15,15.05,operating,400.0,capacity,300.0,hand-compiled list (data/manual)
+cement,Lafarge Retznei,AT,AT22,46.73,15.57,operating,500.0,capacity,375.0,hand-compiled list (data/manual)
+cement,Kirchdorf,AT,AT31,47.9,14.12,operating,500.0,capacity,375.0,hand-compiled list (data/manual)
+cement,Gmunden,AT,AT31,47.92,13.8,operating,400.0,capacity,300.0,hand-compiled list (data/manual)
+cement,Wietersdorf,AT,AT21,46.83,14.53,operating,400.0,capacity,300.0,hand-compiled list (data/manual)
+cement,Lafarge Kujawy,PL,PL61,52.78,18.3,operating,1500.0,capacity,1125.0,hand-compiled list (data/manual)
+cement,Ożarów,PL,PL72,50.89,21.66,operating,1600.0,capacity,1200.0,hand-compiled list (data/manual)
+cement,Małogoszcz,PL,PL72,50.81,20.26,operating,1200.0,capacity,900.0,hand-compiled list (data/manual)
+cement,Rejowiec,PL,PL81,51.1,23.29,operating,400.0,capacity,300.0,hand-compiled list (data/manual)
+cement,Odra Opole,PL,PL52,50.66,17.93,operating,500.0,capacity,375.0,hand-compiled list (data/manual)
+cement,Vassiliko,CY,CY00,34.72,33.32,operating,1600.0,capacity,1200.0,hand-compiled list (data/manual)
+cement,Cimalux Rumelange,LU,LU00,49.49,6.06,operating,600.0,capacity,450.0,hand-compiled list (data/manual)
+cement,Holcim Koromačno,HR,HR03,44.97,14.12,operating,500.0,capacity,375.0,hand-compiled list (data/manual)
+cement,Halyps Aspropyrgos,EL,EL30,38.04,23.58,operating,500.0,capacity,375.0,hand-compiled list (data/manual)
+cement,Vicat Montalieu,FR,FRK2,45.82,5.4,operating,900.0,capacity,675.0,hand-compiled list (data/manual)
+cement,Lafarge Martres-Tolosane,FR,FRJ2,43.2,1.01,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Lafarge Port-la-Nouvelle,FR,FRJ1,43.02,3.04,operating,500.0,capacity,375.0,hand-compiled list (data/manual)
+cement,Calcia Gargenville,FR,FR10,48.99,1.81,operating,800.0,capacity,600.0,hand-compiled list (data/manual)
+cement,Calcia Ranville,FR,FRD1,49.23,-0.26,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Calcia Héming,FR,FRF3,48.7,6.97,operating,500.0,capacity,375.0,hand-compiled list (data/manual)
+cement,Secil Maceira-Liz,PT,PT19,39.69,-8.88,operating,800.0,capacity,600.0,hand-compiled list (data/manual)
+cement,Cimpor Loulé,PT,PT15,37.15,-8.03,operating,600.0,capacity,450.0,hand-compiled list (data/manual)
+cement,Irish Cement Limerick,IE,IE05,52.63,-8.7,operating,600.0,capacity,450.0,hand-compiled list (data/manual)
+cement,Breedon Hope,UK,UKF1,53.34,-1.74,operating,1300.0,capacity,975.0,hand-compiled list (data/manual)
+cement,Hanson Padeswood,UK,UKL2,53.15,-3.06,operating,800.0,capacity,600.0,hand-compiled list (data/manual)
+cement,Hanson Ketton,UK,UKF2,52.63,-0.55,operating,1300.0,capacity,975.0,hand-compiled list (data/manual)
+cement,Hanson Ribblesdale,UK,UKD4,53.87,-2.39,operating,800.0,capacity,600.0,hand-compiled list (data/manual)
+cement,Cemex Rugby,UK,UKG1,52.37,-1.27,operating,1300.0,capacity,975.0,hand-compiled list (data/manual)
+cement,Tarmac Tunstead,UK,UKF1,53.27,-1.84,operating,900.0,capacity,675.0,hand-compiled list (data/manual)
+cement,Tarmac Cauldon,UK,UKG2,53.04,-1.88,operating,900.0,capacity,675.0,hand-compiled list (data/manual)
+cement,Tarmac Dunbar,UK,UKM7,55.98,-2.48,operating,800.0,capacity,600.0,hand-compiled list (data/manual)
+cement,Tarmac Aberthaw,UK,UKL2,51.39,-3.38,operating,500.0,capacity,375.0,hand-compiled list (data/manual)
+cement,Mannok Derrylin,UK,UKN0,54.2,-7.57,operating,900.0,capacity,675.0,hand-compiled list (data/manual)
+cement,Heidelberg Materials Brevik,NO,NO09,59.05,9.7,operating,900.0,capacity,675.0,hand-compiled list (data/manual)
+cement,Heidelberg Materials Kjøpsvik,NO,NO07,68.1,16.38,operating,400.0,capacity,300.0,hand-compiled list (data/manual)
+cement,Holcim Eclépens,CH,CH01,46.65,6.54,operating,800.0,capacity,600.0,hand-compiled list (data/manual)
+cement,Holcim Siggenthal,CH,CH03,47.52,8.24,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Holcim Untervaz,CH,CH05,46.93,9.53,operating,700.0,capacity,525.0,hand-compiled list (data/manual)
+cement,Jura Cement Wildegg,CH,CH03,47.42,8.16,operating,650.0,capacity,487.5,hand-compiled list (data/manual)
+cement,Vigier Péry,CH,CH02,47.19,7.25,operating,650.0,capacity,487.5,hand-compiled list (data/manual)
+cement,Juracime Cornaux,CH,CH02,47.04,7.02,operating,500.0,capacity,375.0,hand-compiled list (data/manual)
+ammonia,Yara Sluiskil,NL,NL34,51.27186,3.84896,operating,1700.0,capacity,1275.0,PyPSA-Eur ammonia_plants.csv
+ammonia,OCI Geleen,NL,NL42,50.99738,5.78497,operating,550.0,capacity,412.5,PyPSA-Eur ammonia_plants.csv
+ammonia,CF Fertilisers Billingham,UK,UKD6,53.28149,-2.79744,operating,590.0,capacity,442.5,PyPSA-Eur ammonia_plants.csv
+ammonia,Yara Tertre,BE,BE32,50.47842,3.80285,operating,420.0,capacity,315.0,PyPSA-Eur ammonia_plants.csv
+ammonia,BASF Antwerp,BE,BE21,51.35583,4.27811,operating,650.0,capacity,487.5,PyPSA-Eur ammonia_plants.csv
+ammonia,Yara Gonfreville,FR,FRD2,49.47982,0.19587,operating,400.0,capacity,300.0,PyPSA-Eur ammonia_plants.csv
+ammonia,Borealis Rouen,FR,FRD2,49.41916,1.02584,operating,300.0,capacity,225.0,capacity from data/manual/ammonia_capacity_fills.csv
+ammonia,BASF Ludwigshafen,DE,DEB3,49.51171,8.42009,operating,880.0,capacity,660.0,PyPSA-Eur ammonia_plants.csv
+ammonia,SKW,DE,DEE0,51.87746,12.5858,operating,1300.0,capacity,975.0,PyPSA-Eur ammonia_plants.csv
+ammonia,Yara Brunsbuettel,DE,DEF0,53.91152,9.20982,operating,750.0,capacity,562.5,PyPSA-Eur ammonia_plants.csv
+ammonia,Yara Porsgrunn,NO,NO09,59.12444,9.61922,operating,500.0,capacity,375.0,PyPSA-Eur ammonia_plants.csv
+ammonia,Fertiberia Puertollano,ES,ES42,38.67276,-4.0608,operating,400.0,capacity,300.0,PyPSA-Eur ammonia_plants.csv
+ammonia,Fertiberia Huelva,ES,ES61,37.22572,-6.94742,operating,200.0,capacity,150.0,PyPSA-Eur ammonia_plants.csv
+ammonia,Yara Ferrara,IT,ITH5,44.86206,11.57922,operating,600.0,capacity,450.0,PyPSA-Eur ammonia_plants.csv
+ammonia,Petrokemija,HR,HR02,45.46977,16.78944,operating,450.0,capacity,337.5,capacity from data/manual/ammonia_capacity_fills.csv
+ammonia,Neochim,BG,BG34,42.20514,25.61547,operating,450.0,capacity,337.5,PyPSA-Eur ammonia_plants.csv
+ammonia,Agopolychim,BG,BG33,43.20652,27.65983,operating,400.0,capacity,300.0,capacity from data/manual/ammonia_capacity_fills.csv
+ammonia,Azomures,RO,RO12,46.76187,24.42361,operating,1600.0,capacity,1200.0,PyPSA-Eur ammonia_plants.csv
+ammonia,Nitrogenmuvek,HU,HU21,47.16691,18.12844,operating,497.0,capacity,372.75,PyPSA-Eur ammonia_plants.csv
+ammonia,DUSLO,SK,SK02,48.18705,17.9301,operating,530.0,capacity,397.5,PyPSA-Eur ammonia_plants.csv
+ammonia,Grupa Azoty,PL,PL81,51.45179,21.98174,operating,524.0,capacity,393.0,PyPSA-Eur ammonia_plants.csv
+ammonia,Anwil,PL,PL61,52.70438,18.96606,operating,500.0,capacity,375.0,capacity from data/manual/ammonia_capacity_fills.csv
+ammonia,Achema,LT,LT02,55.081,24.32377,operating,1100.0,capacity,825.0,PyPSA-Eur ammonia_plants.csv
+ammonia,LAT Nitrogen Linz GmbH,AT,AT31,48.28861,14.32533,operating,1500.0,capacity,1125.0,PyPSA-Eur ammonia_plants.csv
+ammonia,Kothla-Järve,EE,EE00,59.40741,27.23381,operating,180.0,capacity,135.0,PyPSA-Eur ammonia_plants.csv
+ammonia,Kavala Fertilizers,EL,EL51,40.94997,24.46868,operating,165.0,capacity,123.75,PyPSA-Eur ammonia_plants.csv
+ammonia,Grupa Azoty Police,PL,PL42,53.57,14.57,operating,400.0,capacity,300.0,hand-compiled list (data/manual)
+ammonia,Grupa Azoty Kędzierzyn,PL,PL52,50.35,18.2,operating,500.0,capacity,375.0,hand-compiled list (data/manual)
+ammonia,Grupa Azoty Tarnów,PL,PL21,50.01,20.95,operating,300.0,capacity,225.0,hand-compiled list (data/manual)

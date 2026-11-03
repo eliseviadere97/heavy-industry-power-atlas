@@ -22,17 +22,6 @@
   "bytes": 47381
  },
  {
-  "file": "nuts2json/nutsbn_3_2024_3035_20M.json",
-  "url": "https://raw.githubusercontent.com/eurostat/Nuts2json/8186be451525164ea24b43560cb943fda7c5520c/pub/v2/2024/3035/20M/nutsbn_3.json",
-  "provider": "Eurostat GISCO via Nuts2json",
-  "description": "NUTS 2024 level-3 boundaries with coastal flag",
-  "used_in": "Step 4 coastline length and sea basin",
-  "licence": "© EuroGeographics for the administrative boundaries (GISCO terms of use)",
-  "retrieved": "2026-10-21",
-  "sha256": "a19538e4c05c58f2a01ca89432ffb99b21cb4a02af3516e6cc214cedb80f2f4a",
-  "bytes": 1147481
- },
- {
   "file": "nuts2json/cntrg_2024_3035_20M.json",
   "url": "https://raw.githubusercontent.com/eurostat/Nuts2json/8186be451525164ea24b43560cb943fda7c5520c/pub/v2/2024/3035/20M/cntrg.json",
   "provider": "Eurostat GISCO via Nuts2json",
@@ -44,22 +33,11 @@
   "bytes": 209073
  },
  {
-  "file": "powerplantmatching/powerplants.csv",
-  "url": "https://raw.githubusercontent.com/PyPSA/powerplantmatching/2889ad9d1754a7ee4368b9282d7af835bf572ca2/powerplants.csv",
-  "provider": "powerplantmatching (PyPSA)",
-  "description": "Matched European power plant database: fuel, technology, capacity, dates, coordinates",
-  "used_in": "Step 6 existing wind, solar and hydro by region",
-  "licence": "See provider repository for licence terms",
-  "retrieved": "2026-10-21",
-  "sha256": "ceccce02edd33813216a264fe6c8e3281ce2249435a259c1b1a1b729ce4f3d78",
-  "bytes": 39779419
- },
- {
   "file": "pypsa_eur/ammonia_plants.csv",
   "url": "https://raw.githubusercontent.com/PyPSA/pypsa-eur/0989251c65c81c7515100fdae7056240a3a9086d/data/ammonia_plants.csv",
   "provider": "PyPSA-Eur",
   "description": "European ammonia plants with capacities and coordinates (sources cited per row)",
-  "used_in": "Step 7 ammonia sites",
+  "used_in": "Step 5 ammonia sites",
   "licence": "See provider repository for licence terms",
   "retrieved": "2026-10-21",
   "sha256": "1c60c531339cca5ce92b0df220392943d6da1e2f6848536ff5db835d53cba5d5",
@@ -70,7 +48,7 @@
   "url": "https://raw.githubusercontent.com/PyPSA/pypsa-eur/0989251c65c81c7515100fdae7056240a3a9086d/data/entsoegridkit/buses.csv",
   "provider": "PyPSA-Eur (GridKit extract of the ENTSO-E interactive map)",
   "description": "Transmission substations with voltage and coordinates",
-  "used_in": "Step 5 substations per region",
+  "used_in": "Step 4 substations >=330 kV per region",
   "licence": "See provider repository for licence terms",
   "retrieved": "2026-10-21",
   "sha256": "c52bab913d17585908798e28b02924e17cf05ed03ffb699d3cd24dcf025ecfb0",
@@ -81,7 +59,7 @@
   "url": "https://raw.githubusercontent.com/PyPSA/pypsa-eur/0989251c65c81c7515100fdae7056240a3a9086d/data/entsoegridkit/lines.csv",
   "provider": "PyPSA-Eur (GridKit extract of the ENTSO-E interactive map)",
   "description": "Transmission lines with voltage and geometry",
-  "used_in": "Step 5 lines drawn on the map",
+  "used_in": "Step 4 lines drawn on the map",
   "licence": "See provider repository for licence terms",
   "retrieved": "2026-10-21",
   "sha256": "ad46bd0093a0fdffdd11b721f510929d2f6f98c1b48a19ccb0ac9162245eda9a",
@@ -92,21 +70,54 @@
   "url": "https://raw.githubusercontent.com/timtroendle/possibility-for-electricity-autarky/a3d3c99ef90bbccd7232e2170317a259a77661d3/data/electricity-intensive-industry/energy-intensive-industries.xlsx",
   "provider": "Tröndle et al. (2019), 'Home-made or imported: on the possibility for renewable electricity autarky on all scales in Europe'",
   "description": "EU ETS installations (2013-14 verified emissions) for cement, steel, aluminium; chlor-alkali sites (Euro Chlor), with coordinates",
-  "used_in": "Step 7 cement kilns and chlor-alkali clusters",
+  "used_in": "Step 5 cement kilns (EU ETS 2013-14)",
   "licence": "See provider repository for licence terms",
   "retrieved": "2026-10-21",
   "sha256": "1b03271493e3d80ae70ef68f16c8b308595672ecb04eada48f6c5e0b8316c6ba",
   "bytes": 167521
  },
  {
-  "file": "geonames/cities15000_eu27.csv",
-  "url": "geonamescache 3.0.2 (Python package) -> GeoNames cities15000",
-  "provider": "GeoNames, packaged by geonamescache 3.0.2",
-  "description": "Towns above 15,000 inhabitants in EU27 countries: name, coordinates, population",
-  "used_in": "Step 2 population and urban share by region",
-  "licence": "GeoNames data, CC BY 4.0",
-  "retrieved": "2026-10-21",
-  "sha256": "9ff89bc69c4d4e0d30b67d47d891124a34a85ea74f50a4191d5e5f2cd31e7f8f",
-  "bytes": 243185
+  "file": "nuts2json/nutsrg_2_2016_3035_20M.json",
+  "url": "https://raw.githubusercontent.com/eurostat/Nuts2json/8186be451525164ea24b43560cb943fda7c5520c/pub/v2/2016/3035/20M/nutsrg_2.json",
+  "provider": "Eurostat GISCO via Nuts2json",
+  "description": "NUTS 2016 level-2 region polygons, EPSG:3035, 1:20M (used for the UK only)",
+  "used_in": "Step 1 regions; map geometry",
+  "licence": "© EuroGeographics for the administrative boundaries (GISCO terms of use)",
+  "retrieved": "2026-11-03",
+  "sha256": "35bb5565a46ae4ec50da191792e26b3801a43e6e2bc428d7d26200639f05235a",
+  "bytes": 316119
+ },
+ {
+  "file": "nuts2json/nutspt_2_2016_4326.json",
+  "url": "https://raw.githubusercontent.com/eurostat/Nuts2json/8186be451525164ea24b43560cb943fda7c5520c/pub/v2/2016/4326/nutspt_2.json",
+  "provider": "Eurostat GISCO via Nuts2json",
+  "description": "NUTS 2016 level-2 label points (WGS84) with region area (m²) (used for the UK only)",
+  "used_in": "Step 1 centroids and areas",
+  "licence": "© EuroGeographics for the administrative boundaries (GISCO terms of use)",
+  "retrieved": "2026-11-03",
+  "sha256": "26f0b36a6e08a5aa42118ef14f5854517fc3c46d539fee0ecac00e43166d852d",
+  "bytes": 52016
+ },
+ {
+  "file": "eurostat/demo_r_d2jan_nuts2_2024.json",
+  "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_r_d2jan?format=JSON&lang=EN&sex=T&age=TOTAL&geoLevel=nuts2&time=2024",
+  "provider": "Eurostat",
+  "description": "Population on 1 January 2024 by NUTS-2 region (demo_r_d2jan)",
+  "used_in": "Step 2 population",
+  "licence": "Eurostat copyright notice (free reuse with acknowledgement)",
+  "retrieved": "2026-11-03",
+  "sha256": "47717976e8042a16634c9d9c4156c0866c122d8b9cbba4ef4325d2ce4497dc30",
+  "bytes": 20789
+ },
+ {
+  "file": "eurostat/demo_r_d2jan_nuts2_2019.json",
+  "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_r_d2jan?format=JSON&lang=EN&sex=T&age=TOTAL&geoLevel=nuts2&time=2019",
+  "provider": "Eurostat",
+  "description": "Population on 1 January 2019 by NUTS-2 region (demo_r_d2jan); last year with UK data",
+  "used_in": "Step 2 population (UK)",
+  "licence": "Eurostat copyright notice (free reuse with acknowledgement)",
+  "retrieved": "2026-11-03",
+  "sha256": "00c1f6ce53ed3b493e786bc38263502371d4a3c6fc295832bd30bf31b65dcc58",
+  "bytes": 20859
  }
 ]

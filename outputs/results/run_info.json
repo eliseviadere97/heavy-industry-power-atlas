@@ -1,6 +1,6 @@
 {
- "generated": "2026-10-27T09:28:35.760Z",
- "seconds": 8.497,
+ "generated": "2026-11-03T16:06:01.632Z",
+ "seconds": 51.283,
  "defaults": {
   "mix": {
    "wacc": 0.06,
@@ -10,9 +10,6 @@
    "wCapex": 1400,
    "wOm": 0.025,
    "wLife": 25,
-   "offOm": 0.03,
-   "offLife": 25,
-   "offshore": true,
    "batOn": true,
    "batKwh": 200,
    "batOm": 0.02,
@@ -23,16 +20,14 @@
    "elCapex": 1800,
    "elOm": 0.03,
    "elLife": 20,
-   "cavSeas": 35,
-   "cavShort": 10,
-   "tankSeas": 250,
-   "tankShort": 30,
+   "h2PerMwhEl": 0.63,
+   "h2StoreKwh": 15,
+   "h2StoreOm": 0.02,
+   "h2StoreLife": 30,
    "h2StoreEff": 0.97,
-   "h2PerMwhEl": 0.7,
    "smrOn": true,
    "smrBans": true,
    "smrCapex": 8000,
-   "smrWacc": 0.07,
    "smrFom": 110,
    "smrVar": 12,
    "smrLife": 60,
@@ -40,45 +35,114 @@
    "ccsOn": true,
    "ccsCapex": 2000,
    "ccsFom": 50,
+   "ccsVom": 4,
    "ccsEff": 0.5,
    "ccsCapture": 0.9,
    "ccsTs": 40,
    "ccsLife": 30,
    "ccsAvail": 0.9,
-   "ccsVom": 4,
-   "gasOn": true,
-   "gasCapex": 900,
-   "gasFom": 25,
-   "gasEff": 0.58,
-   "gasLife": 30,
-   "gasVom": 3,
-   "fossilCap": 0.1,
    "gasPrice": 40,
    "co2": 100,
-   "gasEf": 0.202,
-   "impOn": false,
-   "impPrice": 130
+   "gasEf": 0.202
   },
   "plan": {
-   "pvLand": 0.015,
+   "landShare": 0.035,
    "pvDens": 50,
-   "wLand": 0.02,
    "wDens": 20,
-   "offDens": 10,
-   "reserve": 7,
-   "relocPrem": 0,
-   "unserved": 300,
    "urbanDensity": 3000,
+   "relocPrem": 0,
    "cGrid": true,
-   "cCong": true,
-   "h380": 500,
-   "h220": 150,
-   "bigMW": 300,
-   "cRE": true,
-   "reK": 1.5,
    "cEco": true,
-   "ecoMode": "same",
-   "alpha": 0.5
-  }
+   "alpha": 0.5,
+   "infeasible": 1000
+  },
+  "sectors": [
+   {
+    "k": "steel",
+    "name": "Steel",
+    "unit": "kt crude steel",
+    "route": "Hydrogen DRI + electric arc furnace",
+    "mwh_per_t": 3.48,
+    "flex_share": 0.75,
+    "utilisation": 0.75,
+    "source": {
+     "label": "Vogl, Åhman & Nilsson (2018), Journal of Cleaner Production 203 (open-access copy): hydrogen direct reduction steelmaking needs 3.48 MWh of electricity per tonne of liquid steel",
+     "url": "https://zenodo.org/records/2669111/files/Vogl%20et%20al.%20(2018).pdf",
+     "find": [
+      "3.48 MWh"
+     ],
+     "calc": ""
+    }
+   },
+   {
+    "k": "cement",
+    "name": "Cement",
+    "unit": "kt clinker",
+    "route": "Electrified kiln + carbon capture",
+    "mwh_per_t": 0.74,
+    "flex_share": 0,
+    "utilisation": 0.75,
+    "source": {
+     "label": "JRC, European Commission (2023), Decarbonisation options for the cement industry: an electric kiln has a specific energy intensity of 2.68 GJ per tonne of clinker. Grinding, other plant electricity and CO2 capture are not included",
+     "url": "https://publications.jrc.ec.europa.eu/repository/bitstream/JRC131246/JRC131246_01.pdf",
+     "find": [
+      "2.68 GJ/t clinker"
+     ],
+     "calc": "2.68 GJ ÷ 3.6 = 0.74 MWh"
+    }
+   },
+   {
+    "k": "ammonia",
+    "name": "Fertiliser (ammonia)",
+    "unit": "kt NH₃",
+    "route": "Electrolytic hydrogen + Haber-Bosch",
+    "mwh_per_t": 10,
+    "flex_share": 0.9,
+    "utilisation": 0.75,
+    "source": {
+     "label": "IRENA (2022), Innovation Outlook: Renewable Ammonia: about 10 MWh per tonne of ammonia for current alkaline electrolyser technologies",
+     "url": "https://www.irena.org/-/media/Files/IRENA/Agency/Publication/2022/May/IRENA_Innovation_Outlook_Ammonia_2022.pdf",
+     "find": [
+      "10 MWh per tonne"
+     ],
+     "calc": ""
+    }
+   },
+   {
+    "k": "chemicals",
+    "name": "Chemicals (olefins)",
+    "unit": "kt ethylene",
+    "route": "Electric steam crackers",
+    "mwh_per_t": 7.1,
+    "flex_share": 0,
+    "utilisation": 0.8,
+    "source": {
+     "label": "PBL Netherlands Environmental Assessment Agency and TNO (2021), MIDDEN report on SABIC Geleen: fully electric cracking furnaces need 29.5 PJ of electricity a year (Table 19) for 1,150 kt of ethylene a year (Table 3)",
+     "url": "https://www.pbl.nl/sites/default/files/downloads/pbl-2021-decarbonisation-options-for-large-volume-organic-chemicals-production-sabic-geleen_3718.pdf",
+     "find": [
+      "29.5",
+      "1,150"
+     ],
+     "calc": "29.5 PJ = 8.19 TWh; ÷ 1.15 Mt = 7.1 MWh/t"
+    }
+   },
+   {
+    "k": "aluminium",
+    "name": "Aluminium",
+    "unit": "kt primary Al",
+    "route": "Inert anodes + electrified alumina",
+    "mwh_per_t": 13.2,
+    "flex_share": 0,
+    "utilisation": 0.85,
+    "source": {
+     "label": "JRC, European Commission (2024), Decarbonisation options for the aluminium industry: around 13.2 MWh was used per tonne of primary aluminium in 2022 (global). This is the smelter's own use; alumina is refined at separate plants and is not included",
+     "url": "https://publications.jrc.ec.europa.eu/repository/bitstream/JRC136525/JRC136525_01.pdf",
+     "find": [
+      "13.2 MWh"
+     ],
+     "calc": ""
+    }
+   }
+  ]
  }
 }

@@ -13,8 +13,7 @@ import steps  # noqa: E402
 
 warnings.filterwarnings("ignore", message="Unknown extension")  # openpyxl notice on the source workbook
 
-STEPS = [steps.s1_regions, steps.s2_population, steps.s3_weather, steps.s4_coast, steps.s5_grid,
-         steps.s6_renewables, steps.s7_plants, steps.s8_policy]
+STEPS = [steps.s1_regions, steps.s2_population, steps.s3_weather, steps.s4_grid, steps.s5_plants, steps.s6_policy]
 
 
 def main():
@@ -24,7 +23,7 @@ def main():
         t = time.time()
         ctx = fn(ctx)
         print(f"  {fn.__name__:<16} {time.time() - t:5.1f} s")
-    ctx = steps.s9_export(ctx, PROCESSED)
+    ctx = steps.s7_export(ctx, PROCESSED, ROOT / "outputs" / "review")
     out = ROOT / "outputs"
     out.mkdir(exist_ok=True)
     (out / "qa_report.md").write_text("\n".join(ctx["qa"]) + "\n", encoding="utf-8")
