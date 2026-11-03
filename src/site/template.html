@@ -4,6 +4,7 @@
     __CONFIG__    config/model_config.json  (model section is read by the scripts below)
     __MIX__       src/model/mix.js
     __PLAN__      src/model/plan.js
+    __CER_LOGO__    data: URI of src/site/cer-logo.png (the CER logo cropped from cer.eu)
     __REPO_BUTTON__ button linking to the GitHub repository (from $GITHUB_REPOSITORY in Actions, else the git remote)
   The file is written as a page fragment (head elements first, then the body), as Claude artifacts expect;
   build_site.py wraps it in a full HTML document for GitHub Pages.
@@ -55,6 +56,10 @@ input[type=range]{accent-color:var(--accent);width:100%;margin:0}
 select,input[type=number],input[type=search]{font:13px var(--f-body);color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:3px;padding:5px 7px;min-width:0}
 input[type=number]{width:74px;text-align:right;font-variant-numeric:tabular-nums}
 button{font:inherit;color:inherit}
+
+/* CER logo strip: the logo is white on CER navy, so the strip keeps its navy in both themes */
+.cerbar{align-self:flex-start;display:block;background:#00467f;border-radius:3px;padding:6px 14px;line-height:0}
+.cerbar img{display:block;max-width:100%;height:auto}
 
 /* header */
 .top{display:block;border-bottom:1px solid var(--rule)}
@@ -208,6 +213,7 @@ table.data tbody tr:hover td{background:var(--paper)}
 </style>
 
 <div class="app">
+  <a class="cerbar" href="https://www.cer.eu" target="_blank" rel="noopener" aria-label="Centre for European Reform"><img src="__CER_LOGO__" alt="Centre for European Reform" width="174" height="60"></a>
   <header class="top">
     <div class="brand">
       <h1>Heavy Industry Power Atlas</h1>
